@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Utils.h"
+#include "GameData.h"
 #include <iostream>
 #include <SDL.h>
 #include <cmath>
@@ -17,7 +18,18 @@ void Player::move(Point movement) {
 
 }
 
-Point Player::receiveInput(std::map<eKey, bool>& keys_down_){
+Point Player::receiveInput(std::map<eKey, bool>& keys_down_,
+        std::array<bool, 255>& mouse_buttons_down_,
+        GameData* game_data_,
+        Point& camera_){
+  if(mouse_buttons_down_[SDL_BUTTON_LEFT]){
+    int mouse_x;
+    int mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    float angle = std::atan2(mouse_y - pos.y + camera_.y, mouse_x - pos.x + camera_.x);
+    game_data_->createProjectile(pos, angle);
+    
+  }
   Point movement{0,0};
   float speed = 500 * g_delta_t;
   float speed_diagonal = sqrt((speed * speed)/2);

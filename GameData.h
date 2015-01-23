@@ -25,8 +25,11 @@ public:
               std::map<eTexture, Size>& textures_render_size_,
               float zoom_level_);
   Player& getPlayer();
-  void receiveInput(std::map<eKey, bool>& keys_down_);
+  void receiveInput(std::map<eKey, bool>& keys_down_,
+              std::array<bool, 255>& mouse_buttons_down_);
+  
   void update();
+  void createProjectile(Point origin_, float angle_);
 private:
   Player player;
   std::map<eTexture, Size> textures_render_size;

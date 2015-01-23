@@ -22,6 +22,7 @@ public:
 private:
 	SDL_Event e;
   std::map<SDL_Scancode, eKey> keymap;
+  std::array<bool, 255> mouse_buttons_down;
   std::map<eKey, bool> keys_down;
   std::map<eKey, bool> keys_up;
 };

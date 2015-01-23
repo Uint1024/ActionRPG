@@ -12,7 +12,7 @@ camera{0,0}{
   npcs_vector.push_back(std::make_unique<Zombie>(200, 200, "John John"));
   npcs_vector.push_back(std::make_unique<Zombie>(230, 280, "John John"));
   
-  projectiles_vector.emplace_back(Projectile(300, 300, false, 300, 0, 0, eElement::Fire));
+
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
@@ -33,8 +33,10 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
   }
 }
 
-void GameData::receiveInput(std::map<eKey, bool>& keys_down_){
-  Point camera_movement = player.receiveInput(keys_down_);
+void GameData::receiveInput(std::map<eKey, bool>& keys_down_,
+        std::array<bool, 255>& mouse_buttons_down_){
+  Point camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
+          this, camera);
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
   
@@ -47,4 +49,7 @@ void GameData::update(){
   }
 }
 
-Player& GameData::getPlayer() { return player; }
+void GameData::createProjectile(Point origin_, float angle_){
+    projectiles_vector.emplace_back(
+            Projectile(origin_.x, origin_.y, false, 300, angle_, 0, eElement::Fire));
+}

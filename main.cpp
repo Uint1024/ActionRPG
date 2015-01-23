@@ -58,12 +58,7 @@ int main(int argc, char **argv)
   
     diff_ms = std::chrono::milliseconds(0);
     last = current;
-	}
-  
- 
-  
-  
-	
+	}	
 
 	return 0;
 }
