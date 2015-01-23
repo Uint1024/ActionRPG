@@ -3,7 +3,7 @@
 #include "Utils.h"
 
 GameData::GameData(){
-  player = Player("John", 50, 43, eTexture::PLAYER);
+  player = Player("John", 50, 43);
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,

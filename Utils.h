@@ -20,7 +20,7 @@ struct Rect{
   int h;
 };
 
-enum class eTexture { PLAYER };
+enum class eTexture { Player, Zombie };
 
 enum class eKey { Up, Down, Left, Right, Main_Menu };
 

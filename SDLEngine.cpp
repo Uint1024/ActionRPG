@@ -39,7 +39,7 @@ SDLEngine::SDLEngine(const char* window_name_,
   }
   
   
-  texture_src_rect.emplace(eTexture::PLAYER, SDL_Rect{0, 0, 128, 128});
+  texture_src_rect.emplace(eTexture::Player, SDL_Rect{0, 0, 128, 128});
 }
         
 SDLEngine::~SDLEngine(){

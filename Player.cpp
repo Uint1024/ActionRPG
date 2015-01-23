@@ -4,14 +4,14 @@
 #include <SDL.h>
 #include <cmath>
 
-Player::Player() : BaseObject(){
+Player::Player() : Character(){
 
 }
 
-Player::Player(std::string name_, int x_, int y_, eTexture texture_id_) : 
-BaseObject(x_, y_, texture_id_),
-name(name_){
+Player::Player(std::string name_, int x_, int y_) : 
+Character(x_, y_, name_){
   std::cout << "Calling Player constructor" << std::endl;
+  texture_id = eTexture::Player;
 }
 
 void Player::move(Point movement) {
@@ -48,10 +48,3 @@ void Player::receiveInput(std::map<eKey, bool> keys_down_){
   
 }
 
-void Player::render(SDL_Renderer* renderer_, SDL_Texture* texture_, 
-        std::map<eTexture, SDL_Rect>& texture_src_rect_){
-  SDL_Rect dest_rect = SDL_Rect{(int)pos.x, (int)pos.y, 128, 128};
-  SDL_RenderCopy(renderer_, texture_, 
-          &texture_src_rect_[texture_id], 
-          &dest_rect);
-}
