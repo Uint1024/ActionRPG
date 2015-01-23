@@ -1,0 +1,7 @@
+Player{
+	tex_pos = {0, 0};
+	tex_size = {128, 128};
+	
+	hp = 50;
+	mp = 50;
+}

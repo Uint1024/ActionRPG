@@ -4,6 +4,11 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
+bin/
+build/
+dist/
+nbproject/
+images/*.xcf 
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
