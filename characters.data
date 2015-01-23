@@ -5,3 +5,11 @@ Player{
 	hp = 50;
 	mp = 50;
 }
+
+Zombie{
+	tex_pos = {128, 0};
+	tex_size = {128, 128};
+	
+	hp = 50;
+	mp = 50;
+}

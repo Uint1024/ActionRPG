@@ -27,10 +27,13 @@ struct Rect{
   uint h;
 };
 
-enum class eTexture { Player, Zombie };
+enum class eTexture { Player, Zombie, Projectile };
 
 enum class eKey { Up, Down, Left, Right, Main_Menu };
 
+//ultra original set of elemental powers
+enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
+                      
 extern float g_delta_t;
 #endif	/* UTILS_H */
 
