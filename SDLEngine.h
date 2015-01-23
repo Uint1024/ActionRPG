@@ -21,14 +21,17 @@ public:
             const int window_height_);
   ~SDLEngine();
   void render(GameData& game_data_);
+  
 private:
   SDL_Window* window;
   SDL_Renderer* renderer;
   Uint32 pixel_format; //pixel format of the window, used with SDL_RenderCopy
   SDL_Texture* characters_texture;
   
-  std::map<eTexture, SDL_Rect> texture_src_rect; //eTexture is an enum!
-  
+  //eTexture is an enum of all the textures
+  std::map<eTexture, Size> textures_render_size;
+  std::map<eTexture, SDL_Rect> texture_src_rect;
+  float zoom_level;
 };
 
 

@@ -9,7 +9,7 @@ Player::Player() : Character(){
 }
 
 Player::Player(std::string name_, int x_, int y_) : 
-Character(x_, y_, name_){
+        Character(x_, y_, name_){
   std::cout << "Calling Player constructor" << std::endl;
   texture_id = eTexture::Player;
 }
@@ -18,9 +18,9 @@ void Player::move(Point movement) {
 
 }
 
-void Player::receiveInput(std::map<eKey, bool> keys_down_){
+Point Player::receiveInput(std::map<eKey, bool>& keys_down_){
   Point movement{0,0};
-  float speed = 1000 * g_delta_t;
+  float speed = 500 * g_delta_t;
   float speed_diagonal = sqrt((speed * speed)/2);
   
   if(( keys_down_[eKey::Down] && keys_down_[eKey::Right]) ||
@@ -46,5 +46,6 @@ void Player::receiveInput(std::map<eKey, bool> keys_down_){
   pos.x += movement.x;
   pos.y += movement.y;
   
+  return movement;
 }
 

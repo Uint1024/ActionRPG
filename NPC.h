@@ -6,10 +6,10 @@
 
 class NPC : public Character{
 public:
+  virtual void runAI() = 0;
+protected:
   NPC();
   NPC(int x_, int y_, std::string name_);
-  virtual void runAI() = 0;
-private:
   bool angry;
 };
 

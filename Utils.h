@@ -8,16 +8,23 @@
 #ifndef UTILS_H
 #define	UTILS_H
 
+using uint = unsigned int;
+
 struct Point{
   float x;
   float y;
 };
 
+struct Size{
+  uint x;
+  uint y;
+};
+
 struct Rect{
   int x;
   int y;
-  int w;
-  int h;
+  uint w;
+  uint h;
 };
 
 enum class eTexture { Player, Zombie };

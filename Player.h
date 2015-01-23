@@ -20,7 +20,9 @@ public:
   Player();
   Player(std::string name_, int x_, int y_);
   void move(Point movement_);
-  void receiveInput(std::map<eKey, bool> keys_down_);
+  
+  //return movement
+  Point receiveInput(std::map<eKey, bool>& keys_down_);
 
 private:
 };

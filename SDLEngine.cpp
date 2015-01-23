@@ -9,7 +9,8 @@ SDLEngine::SDLEngine(){};
 
 SDLEngine::SDLEngine(const char* window_name_, 
         const int window_width, 
-        const int window_height){
+        const int window_height) :
+zoom_level(1){
   if (SDL_Init(SDL_INIT_VIDEO) != 0){
     throw std::runtime_error (SDL_GetError());
   }
@@ -40,6 +41,12 @@ SDLEngine::SDLEngine(const char* window_name_,
   
   
   texture_src_rect.emplace(eTexture::Player, SDL_Rect{0, 0, 128, 128});
+  texture_src_rect.emplace(eTexture::Zombie, SDL_Rect{128, 0, 128, 128});
+  
+  textures_render_size.emplace(eTexture::Player, Size{64, 64});
+  textures_render_size.emplace(eTexture::Zombie, Size{64, 64});
+  
+  
 }
         
 SDLEngine::~SDLEngine(){
@@ -52,21 +59,13 @@ SDLEngine::~SDLEngine(){
 }
 
 void SDLEngine::render(GameData& game_data_){
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+  SDL_SetRenderDrawColor(renderer, 210, 210, 210, 255);
   SDL_RenderClear(renderer);
 
   SDL_SetRenderDrawColor(renderer, 222, 0, 0, 255);
-  
-  //SDL_Rect src_rect{0, 0, 128, 128};
-  /*SDL_Rect dest_rect{game_data_.getPlayer().getX(), 
-          game_data.getPlayer().getPlayer().getY(), 
-          128, 
-          128};
-   * */
-  //SDL_RenderCopy(renderer, tex, &src_rect, &dest_rect);
-  game_data_.render(renderer, characters_texture, texture_src_rect);
-  
-  
+  game_data_.render(renderer, characters_texture, 
+          texture_src_rect, textures_render_size, zoom_level);
+
   SDL_RenderDrawLine(renderer, 50, 100, 100, 200);
 
   SDL_RenderPresent(renderer);

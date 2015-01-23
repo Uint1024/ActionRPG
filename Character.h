@@ -15,7 +15,7 @@ class Character : public PhysicalObject{
 public:
   Character();
   Character(int x_, int y_, std::string name_);
-private:
+protected:
   std::string name;
   int hp;
   int mp;

@@ -15,6 +15,7 @@ class Zombie : public NPC{
   public:
     Zombie();
     Zombie(int x_, int y_, std::string name_);
+    void runAI() override;
 };
 
 

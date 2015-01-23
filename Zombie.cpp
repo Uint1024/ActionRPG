@@ -8,3 +8,7 @@ NPC(x_, y_, name_){
   std::cout << "calling Zombie constructor" << std::endl;
   texture_id = eTexture::Zombie;
 }
+
+void Zombie::runAI(){
+  
+}

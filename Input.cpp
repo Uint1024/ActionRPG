@@ -26,8 +26,7 @@ bool Input::pollEvents(GameData& game_data_){
 
 			if (e.type == SDL_KEYDOWN){
         keydown = true;
-        keys_down[keymap[e.key.keysym.scancode]] = true;	
-        std::cout << e.key.keysym.scancode << std::endl;
+        keys_down[keymap[e.key.keysym.scancode]] = true;
 			}
       
       if (e.type == SDL_KEYUP){
@@ -36,7 +35,7 @@ bool Input::pollEvents(GameData& game_data_){
 		}
   
   
-  game_data_.getPlayer().receiveInput(keys_down);
+  game_data_.receiveInput(keys_down);
   
   return true;
 }
