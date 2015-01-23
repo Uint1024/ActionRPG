@@ -4,6 +4,9 @@
 #include <SDL_image.h>
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <cctype>
 
 SDLEngine::SDLEngine(){};
 
@@ -42,11 +45,11 @@ zoom_level(1){
   
   texture_src_rect.emplace(eTexture::Player, SDL_Rect{0, 0, 128, 128});
   texture_src_rect.emplace(eTexture::Zombie, SDL_Rect{128, 0, 128, 128});
+  texture_src_rect.emplace(eTexture::Projectile, SDL_Rect{256, 0, 32, 32});
   
   textures_render_size.emplace(eTexture::Player, Size{64, 64});
   textures_render_size.emplace(eTexture::Zombie, Size{64, 64});
-  
-  
+  textures_render_size.emplace(eTexture::Projectile, Size{16, 16});
 }
         
 SDLEngine::~SDLEngine(){

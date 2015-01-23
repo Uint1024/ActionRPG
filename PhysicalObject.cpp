@@ -4,8 +4,8 @@
 
 PhysicalObject::PhysicalObject(){}
 
-PhysicalObject::PhysicalObject(int x_, int y_) : 
-pos{(float)x_, (float)y_}{
+PhysicalObject::PhysicalObject(int x_, int y_, eTexture texture_id_) : 
+pos{(float)x_, (float)y_}, texture_id(texture_id_){
   std::cout << "Calling BaseObject constructor" << std::endl;
 }
 

@@ -9,6 +9,7 @@
 #define	GAMEDATA_H
 #include "Player.h"
 #include "Utils.h"
+#include "Projectile.h"
 #include "NPC.h"
 #include <SDL.h>
 #include <map>
@@ -25,11 +26,13 @@ public:
               float zoom_level_);
   Player& getPlayer();
   void receiveInput(std::map<eKey, bool>& keys_down_);
+  void update();
 private:
   Player player;
   std::map<eTexture, Size> textures_render_size;
   std::vector<std::unique_ptr<NPC>> npcs_vector;
   Point camera;
+  std::vector<Projectile> projectiles_vector;
 };
 
 #endif	/* GAMEDATA_H */

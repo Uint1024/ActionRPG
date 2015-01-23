@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     
     
     running = input_manager.pollEvents(game_data);
-
+    game_data.update();
     engine->render(game_data);
   
     diff_ms = std::chrono::milliseconds(0);

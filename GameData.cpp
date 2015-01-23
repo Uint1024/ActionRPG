@@ -11,6 +11,8 @@ camera{0,0}{
   textures_render_size.emplace(eTexture::Player, Size{64, 64});
   npcs_vector.push_back(std::make_unique<Zombie>(200, 200, "John John"));
   npcs_vector.push_back(std::make_unique<Zombie>(230, 280, "John John"));
+  
+  projectiles_vector.emplace_back(Projectile(300, 300, false, 300, 0, 0, eElement::Fire));
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
@@ -25,12 +27,24 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
           textures_render_size_, camera, zoom_level_);
   }
   
+  for (auto& i : projectiles_vector){
+    i.render(renderer_, texture_, texture_src_rect_, 
+          textures_render_size_, camera, zoom_level_);
+  }
 }
 
 void GameData::receiveInput(std::map<eKey, bool>& keys_down_){
   Point camera_movement = player.receiveInput(keys_down_);
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
+  
+  
+}
+
+void GameData::update(){
+  for(auto& i : projectiles_vector){
+    i.update();
+  }
 }
 
 Player& GameData::getPlayer() { return player; }

@@ -17,7 +17,7 @@ public:
 protected:
   //protected constructor ensure BaseObject can't be created alone
   PhysicalObject();
-  PhysicalObject(int x_, int y_);
+  PhysicalObject(int x_, int y_, eTexture texture_id_);
   eTexture texture_id;
   Point pos; 
 };

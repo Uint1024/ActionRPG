@@ -9,9 +9,8 @@ Player::Player() : Character(){
 }
 
 Player::Player(std::string name_, int x_, int y_) : 
-        Character(x_, y_, name_){
+        Character(x_, y_, name_, eTexture::Player){
   std::cout << "Calling Player constructor" << std::endl;
-  texture_id = eTexture::Player;
 }
 
 void Player::move(Point movement) {
