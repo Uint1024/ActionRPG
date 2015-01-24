@@ -8,9 +8,9 @@ bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second){
         second.bottom < first.top);
 }
 
-void updateBoundingBox(Rect& bounding_box, const Sizef& movement){
-  bounding_box.left += movement.w;
-  bounding_box.right += movement.w;
-  bounding_box.top += movement.h;
-  bounding_box.bottom += movement.h;
+void updateBoundingBox(Rect& bounding_box, const Vec2df& movement){
+  bounding_box.left += movement.x;
+  bounding_box.right += movement.x;
+  bounding_box.top += movement.y;
+  bounding_box.bottom += movement.y;
 }

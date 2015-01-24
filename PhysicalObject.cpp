@@ -5,20 +5,21 @@
 PhysicalObject::PhysicalObject(){}
 
 PhysicalObject::PhysicalObject(int x_, int y_, 
-        eTexture texture_id_, Sizei size_) : 
+        eTexture texture_id_, Vec2di size_) : 
         pos{(float)x_, (float)y_}, texture_id(texture_id_), size(size_){
   bounding_box = Rect{(float)x_, (float)y_, 
-          (float)(x_ + size_.w), (float)(y_ + size_.h)};
+          (float)(x_ + size_.x), (float)(y_ + size_.y)};
 }
 
 void PhysicalObject::render(SDL_Renderer* renderer_, SDL_Texture* texture_, 
         const std::map<eTexture,SDL_Rect>& texture_src_rect_, 
-        const std::map<eTexture,Sizei>& textures_render_size_, 
-        const Pointf& camera_, const float zoom_level_) const{
+        const std::map<eTexture,Vec2di>& textures_render_size_, 
+        const Vec2df& camera_, const float zoom_level_) const{
+  
   SDL_Rect dest_rect = SDL_Rect{(int)((pos.x - camera_.x) * zoom_level_), 
           (int)((pos.y - camera_.y) * zoom_level_), 
-          (int)(textures_render_size_.at(texture_id).w * zoom_level_), 
-          (int)(textures_render_size_.at(texture_id).h * zoom_level_)};
+          (int)(textures_render_size_.at(texture_id).x * zoom_level_), 
+          (int)(textures_render_size_.at(texture_id).y * zoom_level_)};
           
   SDL_RenderCopy(renderer_, texture_, 
           &texture_src_rect_.at(texture_id), 
@@ -26,7 +27,7 @@ void PhysicalObject::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
   
   SDL_Rect bbox = {(int)(bounding_box.left - camera_.x), 
                     (int)(bounding_box.top - camera_.y), 
-                    size.w, size.h};
+                    size.x, size.y};
   SDL_RenderDrawRect(renderer_, &bbox);
   
 }

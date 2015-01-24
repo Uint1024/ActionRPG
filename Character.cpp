@@ -3,7 +3,7 @@
 Character::Character(){};
 
 Character::Character(int x_, int y_, eTexture texture_id_,
-        Sizei size_, int hp_) :
+        Vec2di size_, int hp_) :
 PhysicalObject(x_, y_, texture_id_, size_), hp(hp_){
   std::cout << "Calling Character constructor" << std::endl;
 }

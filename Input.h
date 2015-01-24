@@ -25,7 +25,7 @@ private:
   std::array<bool, 255> mouse_buttons_down;
   std::map<eKey, bool> keys_down;
   std::map<eKey, bool> keys_up;
-  Pointi mouse_position;
+  Vec2di mouse_position;
 };
 
 #endif	/* INPUT_H */

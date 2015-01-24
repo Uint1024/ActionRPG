@@ -5,13 +5,15 @@
 #include "NPC.h"
 #include <vector>
 #include <algorithm>
+//#include <random>
+
 GameData::GameData(int screen_width_, int screen_height_) :
-camera{0,0}{
+camera{0,0}, wave(1){
 
     
-  textures_render_size.emplace(eTexture::Player, Sizei{64, 64});
-  textures_render_size.emplace(eTexture::Zombie, Sizei{64, 64});
-  textures_render_size.emplace(eTexture::Projectile, Sizei{16, 16});
+  textures_render_size.emplace(eTexture::Player, Vec2di{64, 64});
+  textures_render_size.emplace(eTexture::Zombie, Vec2di{64, 64});
+  textures_render_size.emplace(eTexture::Projectile, Vec2di{16, 16});
   
   player = Player("John", screen_width_/2 - 64/2, 
           screen_height_/2 - 64/2,
@@ -21,6 +23,7 @@ camera{0,0}{
           "John John", textures_render_size[eTexture::Zombie]));
   npcs_vector.push_back(std::make_unique<Zombie>(230, 280, 
           "John John", textures_render_size[eTexture::Zombie]));
+ 
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
@@ -42,11 +45,11 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
 
 void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_, 
-        const Pointi& mouse_position_){
-  Sizef camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
+        const Vec2di& mouse_position_){
+Vec2df camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
           this, camera, mouse_position_);
-  camera.x += camera_movement.w;
-  camera.y += camera_movement.h;
+  camera.x += camera_movement.x;
+  camera.y += camera_movement.y;
 }
 
 void GameData::update(){
@@ -77,15 +80,65 @@ void GameData::update(){
       npcs_vector.erase(npc);
     }
     else{
+      
       ++npc;
+    }
+  }
+  
+  
+  if(npcs_vector.empty()){
+    std::uniform_int_distribution<int> y_top(-300, 0);
+    std::uniform_int_distribution<int> x_top_bottom(-100, 900);
+    std::uniform_int_distribution<int> x_left(-300, -100);
+    std::uniform_int_distribution<int> x_right(900, 1100);
+    std::uniform_int_distribution<int> y_bottom(900, 1100);
+    std::uniform_int_distribution<int> y_left_right(0, 900);
+    std::uniform_int_distribution<int> which_side(0, 3);
+    int p = x_right(g_mt19937);
+    
+    switch(wave){
+      case 1:
+        for(int i = 0 ; i < 100 ; ++i){
+          int side = which_side(g_mt19937);
+          int x = 0;
+          int y = 0;
+          switch(side){
+            case 0://left
+              x = x_left(g_mt19937);
+              y = y_left_right(g_mt19937);
+              break;
+            case 1:
+              x = x_top_bottom(g_mt19937);
+              y = y_top(g_mt19937);
+              break;
+            case 2:
+              x = x_right(g_mt19937);
+              y = y_left_right(g_mt19937);
+              break;
+            case 3:
+              x = x_top_bottom(g_mt19937);
+              y = y_bottom(g_mt19937);
+              break;
+            default:
+              std::cout << "Wrong position" << std::endl;
+              break;  
+          }
+          
+          npcs_vector.emplace_back(std::make_unique<Zombie>(x, y, 
+                    "John John", textures_render_size[eTexture::Zombie]));
+        }
+        break;
+      default:
+        std::cout << "Out of waves, game over!" << std::endl;
+        break;
     }
   }
 }
 
-void GameData::createProjectile(Pointf origin_, float angle_){
+void GameData::createProjectile(Vec2df origin_, float angle_){
     projectiles_vector.emplace_back(
-            Projectile(origin_.x + textures_render_size[eTexture::Player].w/2, 
-            origin_.y + textures_render_size[eTexture::Player].h/2, 
-            false, 100, angle_, 5, eElement::Fire, 
+            Projectile(origin_.x + textures_render_size[eTexture::Player].x/2, 
+            origin_.y + textures_render_size[eTexture::Player].y/2, 
+            false, 700, angle_, 5, eElement::Fire, 
             textures_render_size[eTexture::Projectile]));
 }

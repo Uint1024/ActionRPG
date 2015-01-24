@@ -7,27 +7,18 @@
 
 #ifndef UTILS_H
 #define	UTILS_H
+#include <random>
 
 using uint = unsigned int;
 
-struct Pointf{
+struct Vec2df{
   float x;
   float y;
 };
 
-struct Pointi{
+struct Vec2di{
   int x;
   int y;
-};
-
-struct Sizei{
-  int w;
-  int h;
-};
-
-struct Sizef{
-  float w;
-  float h;
 };
 
 struct Rect{
@@ -45,8 +36,10 @@ enum class eKey { Up, Down, Left, Right, Main_Menu, All_keys };
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
                       
 extern float g_delta_t;
+extern std::random_device g_random_device;
+extern std::mt19937 g_mt19937;
 
 bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second);
-void updateBoundingBox(Rect& bounding_box, const Sizef& movement);
+void updateBoundingBox(Rect& bounding_box, const Vec2df& movement);
 #endif	/* UTILS_H */
 

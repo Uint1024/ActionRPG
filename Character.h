@@ -16,7 +16,7 @@ class Character : public PhysicalObject{
 public:
   Character();
   Character(int x_, int y_, eTexture texture_id_,
-          Sizei size_, int hp_);
+          Vec2di size_, int hp_);
   bool checkCollisionWithProjectile(Projectile& projectile_);
   bool isDead() const;
 protected:
