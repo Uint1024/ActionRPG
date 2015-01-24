@@ -19,6 +19,7 @@ public:
   void update();
   bool checkCollisionWithCharacter(const Rect& bounding_box_, int& hp);
   bool hasHit() const;
+  bool isDead() const;
   private:
   bool can_hurt_player;
   int speed;
@@ -26,6 +27,8 @@ public:
   int damage;
   eElement element_type;
   bool has_hit;
+  float distance_travelled;
+  bool dead;
 };
 
 

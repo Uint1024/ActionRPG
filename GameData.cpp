@@ -52,7 +52,7 @@ void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
 void GameData::update(){
   for(auto projectile = projectiles_vector.begin() ; 
           projectile != projectiles_vector.end() ;){
-    if(projectile->hasHit()){
+    if(projectile->isDead()){
        projectiles_vector.erase(projectile);
     }
     else{
@@ -88,5 +88,4 @@ void GameData::createProjectile(Pointf origin_, float angle_){
             origin_.y + textures_render_size[eTexture::Player].h/2, 
             false, 100, angle_, 5, eElement::Fire, 
             textures_render_size[eTexture::Projectile]));
-    std::cout << angle_ << std::endl;
 }
