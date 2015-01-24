@@ -10,21 +10,31 @@
 
 using uint = unsigned int;
 
-struct Point{
+struct Pointf{
   float x;
   float y;
 };
 
-struct Size{
-  uint x;
-  uint y;
+struct Pointi{
+  int x;
+  int y;
+};
+
+struct Sizei{
+  int w;
+  int h;
+};
+
+struct Sizef{
+  float w;
+  float h;
 };
 
 struct Rect{
-  int x;
-  int y;
-  uint w;
-  uint h;
+  float left;
+  float top;
+  float right;
+  float bottom;
 };
 
 enum class eTexture { Player, Zombie, Projectile };
@@ -35,5 +45,8 @@ enum class eKey { Up, Down, Left, Right, Main_Menu };
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
                       
 extern float g_delta_t;
+
+bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second);
+void updateBoundingBox(Rect& bounding_box, const Sizef& movement);
 #endif	/* UTILS_H */
 

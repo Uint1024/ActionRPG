@@ -11,13 +11,19 @@ public:
   void render(SDL_Renderer* renderer_,
           SDL_Texture* texture_,
           std::map<eTexture, SDL_Rect>& texture_src_rect_,
-          std::map<eTexture, Size>& textures_render_size_,
-          Point& camera_,
+          std::map<eTexture, Sizei>& textures_render_size_,
+          Pointf& camera_,
           float zoom_level_);
-protected:
+//protected:
   //protected constructor ensure BaseObject can't be created alone
   PhysicalObject();
-  PhysicalObject(int x_, int y_, eTexture texture_id_);
+  PhysicalObject(int x_, int y_, eTexture texture_id_, Sizei size_);
+  bool checkCollision(PhysicalObject& other_);
+  bool checkCollision(Rect& bounding_box_);
+  
+  
   eTexture texture_id;
-  Point pos; 
+  Pointf pos; 
+  Sizei size;
+  Rect bounding_box;
 };

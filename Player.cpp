@@ -9,28 +9,29 @@ Player::Player() : Character(){
 
 }
 
-Player::Player(std::string name_, int x_, int y_) : 
-        Character(x_, y_, name_, eTexture::Player){
+Player::Player(std::string name_, int x_, int y_, Sizei size_) : 
+        Character(x_, y_, eTexture::Player, size_){
   std::cout << "Calling Player constructor" << std::endl;
 }
 
-void Player::move(Point movement) {
+void Player::move(Pointf movement) {
 
 }
 
-Point Player::receiveInput(std::map<eKey, bool>& keys_down_,
+Sizef Player::receiveInput(std::map<eKey, bool>& keys_down_,
         std::array<bool, 255>& mouse_buttons_down_,
         GameData* game_data_,
-        Point& camera_){
+        Pointf& camera_, Pointi& mouse_position_){
+  
   if(mouse_buttons_down_[SDL_BUTTON_LEFT]){
-    int mouse_x;
-    int mouse_y;
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-    float angle = std::atan2(mouse_y - pos.y + camera_.y, mouse_x - pos.x + camera_.x);
-    game_data_->createProjectile(pos, angle);
     
+    //TODO center angle
+    float angle = std::atan2(mouse_position_.y - pos.y + camera_.y, 
+            mouse_position_.x - pos.x + camera_.x);
+    game_data_->createProjectile(pos, angle);
   }
-  Point movement{0,0};
+  
+  Sizef movement{0,0};
   float speed = 500 * g_delta_t;
   float speed_diagonal = sqrt((speed * speed)/2);
   
@@ -42,21 +43,22 @@ Point Player::receiveInput(std::map<eKey, bool>& keys_down_,
   }
  
   if(keys_down_[eKey::Down]){
-    movement.y += speed;
+    movement.h += speed;
   }
   if(keys_down_[eKey::Up]){
-    movement.y -= speed;
+    movement.h -= speed;
   }
   if(keys_down_[eKey::Left]){
-    movement.x -= speed;
+    movement.w -= speed;
   }
   if(keys_down_[eKey::Right]){
-    movement.x += speed;
+    movement.w += speed;
   }
   
-  pos.x += movement.x;
-  pos.y += movement.y;
+  pos.x += movement.w;
+  pos.y += movement.h;
   
+  updateBoundingBox(bounding_box, movement);
   return movement;
 }
 

@@ -7,49 +7,68 @@
 
 GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}{
-  player = Player("John", screen_width_/2 - 64/2, screen_height_/2 - 64/2);
-  textures_render_size.emplace(eTexture::Player, Size{64, 64});
-  npcs_vector.push_back(std::make_unique<Zombie>(200, 200, "John John"));
-  npcs_vector.push_back(std::make_unique<Zombie>(230, 280, "John John"));
-  
 
+    
+  textures_render_size.emplace(eTexture::Player, Sizei{64, 64});
+  textures_render_size.emplace(eTexture::Zombie, Sizei{64, 64});
+  textures_render_size.emplace(eTexture::Projectile, Sizei{16, 16});
+  
+  player = Player("John", screen_width_/2 - 64/2, 
+          screen_height_/2 - 64/2,
+          textures_render_size[eTexture::Player]);
+    
+  npcs_vector.push_back(std::make_unique<Zombie>(200, 200, 
+          "John John", textures_render_size[eTexture::Zombie]));
+  npcs_vector.push_back(std::make_unique<Zombie>(230, 280, 
+          "John John", textures_render_size[eTexture::Zombie]));
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
         std::map<eTexture, SDL_Rect>& texture_src_rect_,
-        std::map<eTexture, Size>& textures_render_size_,
         float zoom_level_){
   player.render(renderer_, texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   
   for(auto &npc : npcs_vector){
     npc->render(renderer_, texture_, texture_src_rect_, 
-          textures_render_size_, camera, zoom_level_);
+          textures_render_size, camera, zoom_level_);
   }
   
   for (auto& i : projectiles_vector){
     i.render(renderer_, texture_, texture_src_rect_, 
-          textures_render_size_, camera, zoom_level_);
+          textures_render_size, camera, zoom_level_);
   }
 }
 
 void GameData::receiveInput(std::map<eKey, bool>& keys_down_,
-        std::array<bool, 255>& mouse_buttons_down_){
-  Point camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
-          this, camera);
-  camera.x += camera_movement.x;
-  camera.y += camera_movement.y;
-  
-  
+        std::array<bool, 255>& mouse_buttons_down_, 
+        Pointi& mouse_position_){
+  Sizef camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
+          this, camera, mouse_position_);
+  camera.x += camera_movement.w;
+  camera.y += camera_movement.h;
 }
 
 void GameData::update(){
-  for(auto& i : projectiles_vector){
-    i.update();
+  for(auto i = projectiles_vector.begin() ; i != projectiles_vector.end() ;){
+    if(i->hasHit()){
+       projectiles_vector.erase(i);
+    }
+    else{
+      i->update();
+      for(auto& npc : npcs_vector){
+        npc->checkCollisionWithProjectile(*i);
+      }
+      ++i;
+    }
   }
 }
 
-void GameData::createProjectile(Point origin_, float angle_){
+void GameData::createProjectile(Pointf origin_, float angle_){
     projectiles_vector.emplace_back(
-            Projectile(origin_.x, origin_.y, false, 300, angle_, 0, eElement::Fire));
+            Projectile(origin_.x + textures_render_size[eTexture::Player].w/2, 
+            origin_.y + textures_render_size[eTexture::Player].h/2, 
+            false, 300, angle_, 5, eElement::Fire, 
+            textures_render_size[eTexture::Projectile]));
+    std::cout << angle_ << std::endl;
 }

@@ -29,7 +29,7 @@ private:
   SDL_Texture* characters_texture;
   
   //eTexture is an enum of all the textures
-  std::map<eTexture, Size> textures_render_size;
+  //std::map<eTexture, Size> textures_render_size;
   std::map<eTexture, SDL_Rect> texture_src_rect;
   float zoom_level;
 };

@@ -15,14 +15,17 @@ class Projectile : public PhysicalObject{
 public:
   Projectile();
   Projectile(int x_, int y_, bool can_hurt_player_, int speed_, float angle_, 
-          int damage_, eElement element_type_);
+          int damage_, eElement element_type_, Sizei size_);
   void update();
+  bool checkCollisionWithCharacter(Rect& bounding_box_, int& hp);
+  bool hasHit();
   private:
   bool can_hurt_player;
   int speed;
   float angle;
   int damage;
   eElement element_type;
+  bool has_hit;
 };
 
 

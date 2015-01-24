@@ -18,7 +18,7 @@ Input::Input(){
  Return false if the user asks to quit the game
  Else return true*/
 bool Input::pollEvents(GameData& game_data_){
-  //keys_down.clear();
+  SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
   
   bool keydown = false;
   while (SDL_PollEvent(&e) != 0)
@@ -46,7 +46,7 @@ bool Input::pollEvents(GameData& game_data_){
       }
 		}
   
-  game_data_.receiveInput(keys_down, mouse_buttons_down);
+  game_data_.receiveInput(keys_down, mouse_buttons_down, mouse_position);
   
   return true;
 }

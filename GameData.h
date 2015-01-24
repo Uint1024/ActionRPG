@@ -15,26 +15,25 @@
 #include <map>
 #include <vector>
 #include <memory>
-//class Player;
 
 class GameData{
 public:
   GameData(int screen_width_, int screen_height_);
   void render(SDL_Renderer* renderer_, SDL_Texture* texture_, 
               std::map<eTexture, SDL_Rect>& texture_src_rect_,
-              std::map<eTexture, Size>& textures_render_size_,
               float zoom_level_);
   Player& getPlayer();
   void receiveInput(std::map<eKey, bool>& keys_down_,
-              std::array<bool, 255>& mouse_buttons_down_);
+              std::array<bool, 255>& mouse_buttons_down_,
+              Pointi& mouse_position_);
   
   void update();
-  void createProjectile(Point origin_, float angle_);
+  void createProjectile(Pointf origin_, float angle_);
 private:
   Player player;
-  std::map<eTexture, Size> textures_render_size;
+  std::map<eTexture, Sizei> textures_render_size;
   std::vector<std::unique_ptr<NPC>> npcs_vector;
-  Point camera;
+  Pointf camera;
   std::vector<Projectile> projectiles_vector;
 };
 

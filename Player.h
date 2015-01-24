@@ -13,18 +13,18 @@
 #include <SDL.h>
 #include <map>
 class GameData;
-struct Point;
+struct Pointf;
 
 class Player : public Character{
 public:
   Player();
-  Player(std::string name_, int x_, int y_);
-  void move(Point movement_);
+  Player(std::string name_, int x_, int y_, Sizei size_);
+  void move(Pointf movement_);
   
   //return movement
-  Point receiveInput(std::map<eKey, bool>& keys_down_,
+  Sizef receiveInput(std::map<eKey, bool>& keys_down_,
             std::array<bool, 255>& mouse_buttons_down_, GameData* game_data_,
-            Point& camera_);
+            Pointf& camera_, Pointi& mouse_position_);
 
 private:
 };
