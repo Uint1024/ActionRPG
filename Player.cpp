@@ -18,10 +18,10 @@ void Player::move(Pointf movement) {
 
 }
 
-Sizef Player::receiveInput(std::map<eKey, bool>& keys_down_,
-        std::array<bool, 255>& mouse_buttons_down_,
+Sizef Player::receiveInput(const std::map<eKey, bool>& keys_down_,
+        const std::array<bool, 255>& mouse_buttons_down_,
         GameData* game_data_,
-        Pointf& camera_, Pointi& mouse_position_){
+        const Pointf& camera_, const Pointi& mouse_position_){
   
   if(mouse_buttons_down_[SDL_BUTTON_LEFT]){
     
@@ -35,23 +35,23 @@ Sizef Player::receiveInput(std::map<eKey, bool>& keys_down_,
   float speed = 500 * g_delta_t;
   float speed_diagonal = sqrt((speed * speed)/2);
   
-  if(( keys_down_[eKey::Down] && keys_down_[eKey::Right]) ||
-      (keys_down_[eKey::Down] && keys_down_[eKey::Left]) ||
-      (keys_down_[eKey::Up] && keys_down_[eKey::Right]) ||
-      (keys_down_[eKey::Up] && keys_down_[eKey::Left])){
+  if( (keys_down_.at(eKey::Down) && keys_down_.at(eKey::Right) ) ||
+      (keys_down_.at(eKey::Down) && keys_down_.at(eKey::Left) ) ||
+      (keys_down_.at(eKey::Up) && keys_down_.at(eKey::Right) ) ||
+      (keys_down_.at(eKey::Up) && keys_down_.at(eKey::Left) ) ){
     speed = speed_diagonal;
   }
  
-  if(keys_down_[eKey::Down]){
+  if(keys_down_.at(eKey::Down)){
     movement.h += speed;
   }
-  if(keys_down_[eKey::Up]){
+  if(keys_down_.at(eKey::Up)){
     movement.h -= speed;
   }
-  if(keys_down_[eKey::Left]){
+  if(keys_down_.at(eKey::Left)){
     movement.w -= speed;
   }
-  if(keys_down_[eKey::Right]){
+  if(keys_down_.at(eKey::Right)){
     movement.w += speed;
   }
   

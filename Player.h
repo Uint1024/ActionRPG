@@ -22,9 +22,9 @@ public:
   void move(Pointf movement_);
   
   //return movement
-  Sizef receiveInput(std::map<eKey, bool>& keys_down_,
-            std::array<bool, 255>& mouse_buttons_down_, GameData* game_data_,
-            Pointf& camera_, Pointi& mouse_position_);
+  Sizef receiveInput(const std::map<eKey, bool>& keys_down_,
+            const std::array<bool, 255>& mouse_buttons_down_, GameData* game_data_,
+            const Pointf& camera_, const Pointi& mouse_position_);
 
 private:
 };

@@ -20,12 +20,11 @@ class GameData{
 public:
   GameData(int screen_width_, int screen_height_);
   void render(SDL_Renderer* renderer_, SDL_Texture* texture_, 
-              std::map<eTexture, SDL_Rect>& texture_src_rect_,
+              const std::map<eTexture, SDL_Rect>& texture_src_rect_,
               float zoom_level_);
-  Player& getPlayer();
-  void receiveInput(std::map<eKey, bool>& keys_down_,
-              std::array<bool, 255>& mouse_buttons_down_,
-              Pointi& mouse_position_);
+  void receiveInput(const std::map<eKey, bool>& keys_down_,
+              const std::array<bool, 255>& mouse_buttons_down_,
+              const Pointi& mouse_position_);
   
   void update();
   void createProjectile(Pointf origin_, float angle_);

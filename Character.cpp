@@ -12,6 +12,6 @@ bool Character::checkCollisionWithProjectile(Projectile& projectile_){
   return projectile_.checkCollisionWithCharacter(bounding_box, hp);
 }
 
-bool Character::isDead(){
+bool Character::isDead() const{
   return (hp <= 0);
 }

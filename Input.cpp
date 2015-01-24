@@ -9,6 +9,16 @@ Input::Input(){
   keymap.emplace(SDL_SCANCODE_A, eKey::Left);
   keymap.emplace(SDL_SCANCODE_D, eKey::Right);
   
+  /*keys_down.emplace(eKey::Up, false);
+  keys_down.emplace(eKey::Down, false);
+  keys_down.emplace(eKey::Left, false);
+  keys_down.emplace(eKey::Up, false);*/
+  
+  for(int i = 0 ; i < (int)eKey::All_keys ; i++){
+    keys_down.emplace((eKey)i, false);
+    keys_up.emplace((eKey)i, false);
+  }
+  
   for(auto &i : mouse_buttons_down){
     i = false;
   }

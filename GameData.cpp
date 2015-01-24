@@ -24,7 +24,7 @@ camera{0,0}{
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
-        std::map<eTexture, SDL_Rect>& texture_src_rect_,
+        const std::map<eTexture, SDL_Rect>& texture_src_rect_,
         float zoom_level_){
   player.render(renderer_, texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
@@ -40,9 +40,9 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
   }
 }
 
-void GameData::receiveInput(std::map<eKey, bool>& keys_down_,
-        std::array<bool, 255>& mouse_buttons_down_, 
-        Pointi& mouse_position_){
+void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
+        const std::array<bool, 255>& mouse_buttons_down_, 
+        const Pointi& mouse_position_){
   Sizef camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
           this, camera, mouse_position_);
   camera.x += camera_movement.w;
@@ -86,7 +86,7 @@ void GameData::createProjectile(Pointf origin_, float angle_){
     projectiles_vector.emplace_back(
             Projectile(origin_.x + textures_render_size[eTexture::Player].w/2, 
             origin_.y + textures_render_size[eTexture::Player].h/2, 
-            false, 300, angle_, 5, eElement::Fire, 
+            false, 100, angle_, 5, eElement::Fire, 
             textures_render_size[eTexture::Projectile]));
     std::cout << angle_ << std::endl;
 }

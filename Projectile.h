@@ -17,8 +17,8 @@ public:
   Projectile(int x_, int y_, bool can_hurt_player_, int speed_, float angle_, 
           int damage_, eElement element_type_, Sizei size_);
   void update();
-  bool checkCollisionWithCharacter(Rect& bounding_box_, int& hp);
-  bool hasHit();
+  bool checkCollisionWithCharacter(const Rect& bounding_box_, int& hp);
+  bool hasHit() const;
   private:
   bool can_hurt_player;
   int speed;

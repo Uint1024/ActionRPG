@@ -18,7 +18,7 @@ public:
   Character(int x_, int y_, eTexture texture_id_,
           Sizei size_, int hp_);
   bool checkCollisionWithProjectile(Projectile& projectile_);
-  bool isDead();
+  bool isDead() const;
 protected:
   std::string name;
   int hp;

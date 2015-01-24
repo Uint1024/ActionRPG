@@ -22,7 +22,7 @@ void Projectile::update(){
   updateBoundingBox(bounding_box, movement);
 }
 
-bool Projectile::checkCollisionWithCharacter(Rect& bounding_box_, int& hp){
+bool Projectile::checkCollisionWithCharacter(const Rect& bounding_box_, int& hp){
   if(checkCollisionBetweenBoxes(bounding_box, bounding_box_)){
 
     hp -= damage;
@@ -32,4 +32,4 @@ bool Projectile::checkCollisionWithCharacter(Rect& bounding_box_, int& hp){
   return false;
 }
 
-bool Projectile::hasHit(){ return has_hit; };
+bool Projectile::hasHit() const{ return has_hit; };
