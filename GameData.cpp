@@ -4,7 +4,7 @@
 #include "Zombie.h"
 #include "NPC.h"
 #include <vector>
-
+#include <algorithm>
 GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}{
 
@@ -50,16 +50,34 @@ void GameData::receiveInput(std::map<eKey, bool>& keys_down_,
 }
 
 void GameData::update(){
-  for(auto i = projectiles_vector.begin() ; i != projectiles_vector.end() ;){
-    if(i->hasHit()){
-       projectiles_vector.erase(i);
+  for(auto projectile = projectiles_vector.begin() ; 
+          projectile != projectiles_vector.end() ;){
+    if(projectile->hasHit()){
+       projectiles_vector.erase(projectile);
     }
     else{
-      i->update();
+      projectile->update();
+      
       for(auto& npc : npcs_vector){
-        npc->checkCollisionWithProjectile(*i);
+        npc->checkCollisionWithProjectile(*projectile);
       }
-      ++i;
+      ++projectile;
+    }
+  }
+  
+  /*npcs_vector.erase(
+        std::remove_if(npcs_vector.begin(), npcs_vector.end(),
+                  [](auto& c){ 
+                    return c->isDead();
+                    //return false;
+                  }),
+        npcs_vector.end());*/
+  for(auto npc = npcs_vector.begin() ; npc != npcs_vector.end() ;){
+    if((*npc)->isDead()){
+      npcs_vector.erase(npc);
+    }
+    else{
+      ++npc;
     }
   }
 }

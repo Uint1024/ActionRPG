@@ -2,9 +2,9 @@
 
 NPC::NPC(){};
 
-NPC::NPC(int x_, int y_, std::string name_, eTexture texture_id_, Sizei size_) : 
-Character(x_, y_, texture_id_, size_){
-  hp = 10;
+NPC::NPC(int x_, int y_, std::string name_, eTexture texture_id_, Sizei size_,
+        int hp_) : 
+Character(x_, y_, texture_id_, size_, hp_){
 };
 
 void NPC::runAI(){

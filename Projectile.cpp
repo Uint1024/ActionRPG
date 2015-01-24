@@ -24,6 +24,7 @@ void Projectile::update(){
 
 bool Projectile::checkCollisionWithCharacter(Rect& bounding_box_, int& hp){
   if(checkCollisionBetweenBoxes(bounding_box, bounding_box_)){
+
     hp -= damage;
     has_hit = true;
     return true;

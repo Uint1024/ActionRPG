@@ -10,7 +10,7 @@ Player::Player() : Character(){
 }
 
 Player::Player(std::string name_, int x_, int y_, Sizei size_) : 
-        Character(x_, y_, eTexture::Player, size_){
+        Character(x_, y_, eTexture::Player, size_, 100){
   std::cout << "Calling Player constructor" << std::endl;
 }
 

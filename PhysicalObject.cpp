@@ -7,7 +7,6 @@ PhysicalObject::PhysicalObject(){}
 PhysicalObject::PhysicalObject(int x_, int y_, 
         eTexture texture_id_, Sizei size_) : 
         pos{(float)x_, (float)y_}, texture_id(texture_id_), size(size_){
-  std::cout << "Calling BaseObject constructor" << std::endl;
   bounding_box = Rect{x_, y_, x_ + (int)size_.w, y_ + (int)size_.h};
 }
 
