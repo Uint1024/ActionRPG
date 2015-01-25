@@ -25,13 +25,13 @@ void Player::move(Vec2df movement) {
 Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_,
         GameData* game_data_,
-        const Vec2df& camera_, const Vec2di& mouse_position_){
+        const Vec2df& camera_, const Vec2di& mouse_position_in_world_){
   
   if(mouse_buttons_down_[SDL_BUTTON_LEFT] ){
-    if(differenceTimes(currentTime(), last_shot) > 500){
+    if(differenceTimes(currentTime(), last_shot) > 100){
       float angle = std::atan2(
-              mouse_position_.y - (pos.y + size.y / 2.0f) + camera_.y, 
-              mouse_position_.x - (pos.x + size.x / 2.0f) + camera_.x);
+              mouse_position_in_world_.y - (pos.y + size.y / 2.0f), 
+              mouse_position_in_world_.x - (pos.x + size.x / 2.0f));
       game_data_->createProjectile(pos, angle);
       last_shot = currentTime();
     }

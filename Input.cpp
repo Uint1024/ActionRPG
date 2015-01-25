@@ -30,6 +30,9 @@ Input::Input(){
 bool Input::pollEvents(GameData& game_data_){
   SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
   
+  mouse_position_in_world.x = mouse_position.x + game_data_.getCamera().x;
+  mouse_position_in_world.y = mouse_position.y + game_data_.getCamera().y;
+  
   bool keydown = false;
   while (SDL_PollEvent(&e) != 0)
 		{
@@ -56,7 +59,8 @@ bool Input::pollEvents(GameData& game_data_){
       }
 		}
   
-  game_data_.receiveInput(keys_down, mouse_buttons_down, mouse_position);
+  game_data_.receiveInput(keys_down, mouse_buttons_down, mouse_position,
+          mouse_position_in_world);
   
   return true;
 }

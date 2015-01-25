@@ -25,7 +25,8 @@ private:
   std::array<bool, 255> mouse_buttons_down;
   std::map<eKey, bool> keys_down;
   std::map<eKey, bool> keys_up;
-  Vec2di mouse_position;
+  Vec2di mouse_position; //mouse position in the window
+  Vec2di mouse_position_in_world;
 };
 
 #endif	/* INPUT_H */

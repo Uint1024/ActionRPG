@@ -45,9 +45,10 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
 
 void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_, 
-        const Vec2di& mouse_position_){
+        const Vec2di& mouse_position_, 
+        const Vec2di& mouse_position_in_world_){
 Vec2df camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
-          this, camera, mouse_position_);
+          this, camera, mouse_position_in_world_);
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
 }
@@ -80,13 +81,14 @@ void GameData::update(){
       npcs_vector.erase(npc);
     }
     else{
-      
+      (*npc)->update(player);
       ++npc;
     }
   }
   
   
   if(npcs_vector.empty()){
+    //++wave;
     std::uniform_int_distribution<int> y_top(-300, 0);
     std::uniform_int_distribution<int> x_top_bottom(-100, 900);
     std::uniform_int_distribution<int> x_left(-300, -100);
@@ -135,10 +137,14 @@ void GameData::update(){
   }
 }
 
-void GameData::createProjectile(Vec2df origin_, float angle_){
+void GameData::createProjectile(const Vec2df origin_, const float angle_){
     projectiles_vector.emplace_back(
             Projectile(origin_.x + textures_render_size[eTexture::Player].x/2, 
             origin_.y + textures_render_size[eTexture::Player].y/2, 
-            false, 700, angle_, 5, eElement::Fire, 
+            false, 1500, angle_, 5, eElement::Fire, 
             textures_render_size[eTexture::Projectile]));
+}
+
+const Vec2df& GameData::getCamera() const{
+  return camera;
 }

@@ -10,3 +10,4 @@ Character(x_, y_, texture_id_, size_, hp_){
 void NPC::runAI(){
   
 }
+

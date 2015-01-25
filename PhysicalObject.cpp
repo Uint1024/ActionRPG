@@ -44,3 +44,11 @@ bool PhysicalObject::checkCollision(const Rect& bounding_box_) const{
           bounding_box_.top > bounding_box.bottom ||
           bounding_box_.bottom < bounding_box.top);
 }
+
+const Vec2df& PhysicalObject::getPos() const{
+  return pos;
+}
+
+const Vec2di& PhysicalObject::getSize() const{
+  return size;
+}

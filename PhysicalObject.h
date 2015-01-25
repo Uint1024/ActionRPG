@@ -14,6 +14,10 @@ public:
           const std::map<eTexture, Vec2di>& textures_render_size_,
           const Vec2df& camera_,
           const float zoom_level_) const;
+  
+  const Vec2df& getPos() const;
+  const Vec2di& getSize() const;
+  
 protected:
   //protected constructor ensures BaseObject can't be created alone
   PhysicalObject();
