@@ -11,6 +11,7 @@
 
 #include "PhysicalObject.h"
 #include <string>
+#include <chrono>
 
 class Character : public PhysicalObject{
 public:
@@ -24,5 +25,6 @@ protected:
   int hp;
   int mp;
   int speed;
+
 };
 #endif	/* CHARACTER_H */

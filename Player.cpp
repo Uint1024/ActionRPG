@@ -5,12 +5,16 @@
 #include <SDL.h>
 #include <cmath>
 
+std::chrono::system_clock::time_point (&currentTime)() = 
+        std::chrono::system_clock::now;
+
 Player::Player() : Character(){
 
 }
 
 Player::Player(std::string name_, int x_, int y_, Vec2di size_) : 
-        Character(x_, y_, eTexture::Player, size_, 100){
+        Character(x_, y_, eTexture::Player, size_, 100),
+        last_shot(std::chrono::system_clock::now()){
   std::cout << "Calling Player constructor" << std::endl;
 }
 
@@ -23,11 +27,15 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         GameData* game_data_,
         const Vec2df& camera_, const Vec2di& mouse_position_){
   
-  if(mouse_buttons_down_[SDL_BUTTON_LEFT]){
-    float angle = std::atan2(
-            mouse_position_.y - (pos.y + size.y / 2.0f) + camera_.y, 
-            mouse_position_.x - (pos.x + size.x / 2.0f) + camera_.x);
-    game_data_->createProjectile(pos, angle);
+  if(mouse_buttons_down_[SDL_BUTTON_LEFT] ){
+    if(differenceTimes(currentTime(), last_shot) > 500){
+      float angle = std::atan2(
+              mouse_position_.y - (pos.y + size.y / 2.0f) + camera_.y, 
+              mouse_position_.x - (pos.x + size.x / 2.0f) + camera_.x);
+      game_data_->createProjectile(pos, angle);
+      last_shot = currentTime();
+    }
+    
   }
   
   Vec2df movement{0,0};

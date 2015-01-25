@@ -27,6 +27,7 @@ public:
             const Vec2df& camera_, const Vec2di& mouse_position_);
 
 private:
+    std::chrono::system_clock::time_point last_shot;
 };
 
 #endif	/* PLAYER_H */

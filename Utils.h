@@ -8,7 +8,7 @@
 #ifndef UTILS_H
 #define	UTILS_H
 #include <random>
-
+#include <chrono>
 using uint = unsigned int;
 
 struct Vec2df{
@@ -41,5 +41,14 @@ extern std::mt19937 g_mt19937;
 
 bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second);
 void updateBoundingBox(Rect& bounding_box, const Vec2df& movement);
+
+/*std::chrono::system_clock::time_point getTimeNow() {
+  return std::chrono::system_clock::now();
+};*/
+
+//const auto& getTimeNow = std::chrono::system_clock::now;
+
+int differenceTimes(std::chrono::system_clock::time_point now, 
+        std::chrono::system_clock::time_point before);
 #endif	/* UTILS_H */
 

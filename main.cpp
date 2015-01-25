@@ -6,7 +6,10 @@
 #include <iostream>
 #include <memory>
 #include <chrono>
+#include <random>
 
+std::random_device g_random_device;
+std::mt19937 g_mt19937(g_random_device()); 
 float g_delta_t = 0.1f;
 
 //TODO: global delta_t
