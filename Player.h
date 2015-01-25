@@ -26,8 +26,6 @@ public:
             GameData* game_data_,
             const Vec2df& camera_, const Vec2di& mouse_position_in_world_,
             const std::vector<Wall> walls_vector_);
-  const Wall* checkCollisionWithWall(const Rect& future_bbox, const Wall& wall_, 
-                                      eDirection& direction_);
   
 private:
     std::chrono::system_clock::time_point last_shot;

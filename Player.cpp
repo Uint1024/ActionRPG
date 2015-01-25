@@ -63,122 +63,43 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
   Rect future_bbox = bounding_box;
   updateBoundingBox(future_bbox, movement);
   
-  const Wall* wall_direction[4] = {nullptr, nullptr, nullptr, nullptr};
-  
-  Wall* wall_down = nullptr;
-  Wall* wall_up = nullptr;
-  Wall* wall_left = nullptr;
-  Wall* wall_right = nullptr;
+  const Rect* wall_direction[4] = {nullptr, nullptr, nullptr, nullptr};
   
   eDirection blocked_direction = eDirection::None;
   
   for(auto &wall : walls_vector_){
-    //blocked_direction = eDirection::None;
-    const Wall* blocked_by = checkCollisionWithWall(future_bbox, wall, blocked_direction);
+    const Rect* blocked_by = checkCollisionWithObject(future_bbox, 
+                                            wall.getBoundingBox(), 
+                                            blocked_direction);
     if(blocked_direction != eDirection::None){
       wall_direction[(int)blocked_direction] = blocked_by;
     }
   }
   
   if(wall_direction[(int)eDirection::Right]){
-    movement.x = wall_direction[(int)eDirection::Right]->getBoundingBox().left -
+    movement.x = wall_direction[(int)eDirection::Right]->left -
             bounding_box.right;
   }
   if(wall_direction[(int)eDirection::Left]){
     movement.x = 
-            wall_direction[(int)eDirection::Left]->getBoundingBox().right -
+            wall_direction[(int)eDirection::Left]->right -
             bounding_box.left; 
   }
   if(wall_direction[(int)eDirection::Up]){
     movement.y = 
-            wall_direction[(int)eDirection::Up]->getBoundingBox().bottom -
+            wall_direction[(int)eDirection::Up]->bottom -
             bounding_box.top;
             
   }
   if(wall_direction[(int)eDirection::Down]){
-    movement.y = wall_direction[(int)eDirection::Down]->getBoundingBox().top -
+    movement.y = wall_direction[(int)eDirection::Down]->top -
             bounding_box.bottom;
   }
   
   pos.x += movement.x;
   pos.y += movement.y;
   
-  
-  /*if( (movement.x > 0 && !wall_direction[(int)eDirection::Right]) ||
-      (movement.x < 0 && !wall_direction[(int)eDirection::Left]) ){
-    pos.x += movement.x;
-  }
-  else{
-    if(wall_direction[(int)eDirection::Right])){
-      
-    }
-    movement.x = 0;
-  }
-  
-  if( (movement.y > 0 && !wall_direction[(int)eDirection::Down]) ||
-      (movement.y < 0 && !wall_direction[(int)eDirection::Up]) ){
-    pos.y += movement.y;
-  }
-  else{
-    movement.y = 0;
-  }*/
-  
+ 
   updateBoundingBox(bounding_box, movement);
   return movement;
-}
-
-const Wall* Player::checkCollisionWithWall(const Rect& future_bbox, 
-        const Wall& wall_, eDirection& direction_){
-  eDirection current_position = eDirection::None;
-  
-  const Rect* wall_bbox = &wall_.getBoundingBox();
-  
-  if(bounding_box.right <= wall_bbox->left){
-    current_position = eDirection::Left;
-  }
-  else if(bounding_box.left >= wall_bbox->right){
-    current_position = eDirection::Right;
-  }
-  else if(bounding_box.bottom <= wall_bbox->top){
-    current_position = eDirection::Up;
-  }
-  else if(bounding_box.top >= wall_bbox->bottom){
-    current_position = eDirection::Down;
-  }
-  
-  
-  if(current_position == eDirection::Up &&
-          future_bbox.bottom > wall_bbox->top &&
-          future_bbox.top < wall_bbox->top &&
-          future_bbox.right > wall_bbox->left &&
-          future_bbox.left < wall_bbox->right){
-    direction_ = eDirection::Down;
-    return &wall_;
-  }
-  else if(current_position == eDirection::Down &&
-          future_bbox.top < wall_bbox->bottom &&
-          future_bbox.bottom > wall_bbox->bottom &&
-          future_bbox.right > wall_bbox->left &&
-          future_bbox.left < wall_bbox->right){
-    direction_ = eDirection::Up;
-    return &wall_;
-  }
-  else if(current_position == eDirection::Left &&
-          future_bbox.right > wall_bbox->left &&
-          future_bbox.left < wall_bbox->left &&
-          future_bbox.bottom > wall_bbox->top &&
-          future_bbox.top < wall_bbox->bottom){
-    direction_ = eDirection::Right;
-    return &wall_;
-  }
-  else if(current_position == eDirection::Right &&
-          future_bbox.left < wall_bbox->right &&
-          future_bbox.right > wall_bbox->right &&
-          future_bbox.bottom > wall_bbox->top &&
-          future_bbox.top < wall_bbox->bottom){
-    direction_ = eDirection::Left;
-    return &wall_;
-  }
-  direction_ = eDirection::None;
-  return nullptr;
 }

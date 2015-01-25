@@ -12,9 +12,9 @@ Projectile::Projectile(int x_, int y_, bool can_hurt_player_, int speed_,
         has_hit(false), distance_travelled(0.0f), dead(false){
 }
 
-void Projectile::update(){
+void Projectile::update(const std::vector<Wall>& walls_vector){
   float real_speed = speed * g_delta_t;
-  Vec2df movement = move(angle, real_speed);
+  Vec2df movement = move(angle, real_speed, walls_vector);
   
   distance_travelled += std::sqrt((movement.x * movement.x) + 
           (movement.y * movement.y));

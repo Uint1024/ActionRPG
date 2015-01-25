@@ -1,6 +1,6 @@
 #include "Zombie.h"
 #include "PhysicalObject.h"
-
+#include "Wall.h"
 Zombie::Zombie(){};
 
 Zombie::Zombie(int x_, int y_, std::string name_, Vec2di size_):
@@ -12,7 +12,7 @@ void Zombie::runAI(){
   
 }
 
-void Zombie::update(const Player& player){
+void Zombie::update(const Player& player, const std::vector<Wall>& walls_vector){
   float angle_to_player = std::atan2(
               player.getPos().y + player.getSize().y / 2.0f - 
               (pos.y + size.y / 2.0f), 
@@ -20,6 +20,6 @@ void Zombie::update(const Player& player){
               (pos.x + size.x / 2.0f));
   
   float speed = 100 * g_delta_t;
-  move(angle_to_player, speed);
+  move(angle_to_player, speed, walls_vector);
   //player.checkCollisionWithNPC(bounding_box, size, strength);
 }

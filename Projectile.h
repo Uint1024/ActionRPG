@@ -16,7 +16,7 @@ public:
   Projectile();
   Projectile(int x_, int y_, bool can_hurt_player_, int speed_, float angle_, 
           int damage_, eElement element_type_, Vec2di size_);
-  void update();
+  void update(const std::vector<Wall>& walls_vector);
   bool checkCollisionWithCharacter(const Rect& bounding_box_, int& hp);
   bool hasHit() const;
   bool isDead() const;

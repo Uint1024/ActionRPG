@@ -11,7 +11,8 @@ class Player;
 class NPC : public Character{
 public:
   virtual void runAI() = 0;
-  virtual void update(const Player& player_) = 0;
+  virtual void update(const Player& player_, 
+                      const std::vector<Wall>& walls_vector) = 0;
 protected:
   NPC();
   NPC(int x_, int y_, std::string name_, eTexture texture_id_, Vec2di size_,

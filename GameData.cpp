@@ -71,7 +71,7 @@ void GameData::update(){
        projectiles_vector.erase(projectile);
     }
     else{
-      projectile->update();
+      projectile->update(walls_vector);
       
       for(auto& npc : npcs_vector){
         npc->checkCollisionWithProjectile(*projectile);
@@ -92,7 +92,7 @@ void GameData::update(){
       npcs_vector.erase(npc);
     }
     else{
-      (*npc)->update(player);
+      (*npc)->update(player, walls_vector);
       ++npc;
     }
   }
