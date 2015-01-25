@@ -45,6 +45,20 @@ bool PhysicalObject::checkCollision(const Rect& bounding_box_) const{
           bounding_box_.bottom < bounding_box.top);
 }
 
+/*Move PhysicalObject and update its bounding box
+ return the movement*/
+const Vec2df PhysicalObject::move(const float angle_, const int speed) {
+  Vec2df movement = { std::cos(angle_) * speed,
+                    std::sin(angle_) * speed };
+  pos.x += movement.x;
+  pos.y += movement.y;
+ 
+  updateBoundingBox(bounding_box, movement);
+  
+  return movement;
+}
+
+
 const Vec2df& PhysicalObject::getPos() const{
   return pos;
 }

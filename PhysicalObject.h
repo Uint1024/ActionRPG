@@ -17,6 +17,7 @@ public:
   
   const Vec2df& getPos() const;
   const Vec2di& getSize() const;
+  const Vec2df move(const float angle_, const int speed);
   
 protected:
   //protected constructor ensures BaseObject can't be created alone

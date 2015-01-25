@@ -19,12 +19,6 @@ void Zombie::update(const Player& player){
               player.getPos().x + player.getSize().x / 2.0f - 
               (pos.x + size.x / 2.0f));
   
-  float speed = 200 * g_delta_t;
-  
-  Vec2df movement = { std::cos(angle_to_player) * speed,
-                    std::sin(angle_to_player) * speed };
-  pos.x += movement.x;
-  pos.y += movement.y;
- 
-  updateBoundingBox(bounding_box, movement);
+  float speed = 100 * g_delta_t;
+  move(angle_to_player, speed);
 }

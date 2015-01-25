@@ -14,12 +14,7 @@ Projectile::Projectile(int x_, int y_, bool can_hurt_player_, int speed_,
 
 void Projectile::update(){
   float real_speed = speed * g_delta_t;
-  Vec2df movement = { std::cos(angle) * real_speed,
-                    std::sin(angle) * real_speed };
-  pos.x += movement.x;
-  pos.y += movement.y;
-  
-  updateBoundingBox(bounding_box, movement);
+  Vec2df movement = move(angle, real_speed);
   
   distance_travelled += std::sqrt((movement.x * movement.x) + 
           (movement.y * movement.y));

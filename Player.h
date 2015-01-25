@@ -19,8 +19,6 @@ class Player : public Character{
 public:
   Player();
   Player(std::string name_, int x_, int y_, Vec2di size_);
-  void move(Vec2df movement_);
-  
   //return movement
   Vec2df receiveInput(const std::map<eKey, bool>& keys_down_,
             const std::array<bool, 255>& mouse_buttons_down_, GameData* game_data_,

@@ -18,10 +18,6 @@ Player::Player(std::string name_, int x_, int y_, Vec2di size_) :
   std::cout << "Calling Player constructor" << std::endl;
 }
 
-void Player::move(Vec2df movement) {
-
-}
-
 Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_,
         GameData* game_data_,
