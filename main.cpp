@@ -1,6 +1,7 @@
 #include "SDLEngine.h"
 #include "Input.h"
 #include "GameData.h"
+#include "UI.h"
 #include <SDL.h>
 
 #include <iostream>
@@ -11,16 +12,26 @@
 std::random_device g_random_device;
 std::mt19937 g_mt19937(g_random_device()); 
 float g_delta_t = 0.1f;
+UI g_UI;
 
 //TODO: global delta_t
 int main(int argc, char **argv)
 {
-  int screen_width = 800;
-  int screen_height = 600;
+  int screen_width = 1200;
+  int screen_height = 720;
   
   //the engine contains the SDL stuff, the textures, and is in charge of
   //printing objects and UI on the screen
   auto engine = std::unique_ptr<SDLEngine>();
+  
+  try{
+    engine = std::make_unique<SDLEngine>("ActionRPG", 
+            screen_width, screen_height);
+  }
+  catch (const std::runtime_error& e)
+  {
+    std::cout << e.what() << std::endl;
+  }
   
   //game_data contains all the objects of the game
   //and the objects templates loaded from the config files
@@ -31,14 +42,7 @@ int main(int argc, char **argv)
    
   auto running = true;
    
-  try{
-    engine = std::make_unique<SDLEngine>("ActionRPG", 
-            screen_width, screen_height);
-  }
-  catch (const std::exception& e)
-  {
-    std::cout << e.what() << std::endl;
-  }
+
  
   /*Used to calculate delta_t*/
   auto current =  std::chrono::high_resolution_clock::now();

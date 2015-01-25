@@ -2,6 +2,7 @@
 #include "GameData.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -14,12 +15,23 @@ SDLEngine::SDLEngine(const char* window_name_,
         const int window_width, 
         const int window_height) :
 zoom_level(1){
+  std::cout << "Starting Engine" << std::endl;
   if (SDL_Init(SDL_INIT_VIDEO) != 0){
     throw std::runtime_error (SDL_GetError());
   }
+ //IMG_Init(IMG_INIT_PNG);
+  //std::cout << IMG_Init(IMG_INIT_PNG) << std::endl;
+  if(IMG_Init(IMG_INIT_PNG) < 0){
+    throw std::runtime_error (SDL_GetError());
+  }
   
-  IMG_Init(IMG_INIT_PNG);
-
+  if(TTF_Init() < 0){
+    throw std::runtime_error (SDL_GetError());
+  }
+  else{
+    std::cout << "TTF initialized" << std::endl;
+  }
+  
 	window = SDL_CreateWindow(window_name_,
 											SDL_WINDOWPOS_UNDEFINED,
 											SDL_WINDOWPOS_UNDEFINED,
@@ -46,6 +58,8 @@ zoom_level(1){
   texture_src_rect.emplace(eTexture::Player, SDL_Rect{0, 0, 128, 128});
   texture_src_rect.emplace(eTexture::Zombie, SDL_Rect{128, 0, 128, 128});
   texture_src_rect.emplace(eTexture::Projectile, SDL_Rect{256, 0, 32, 32});
+  
+
 
 }
         
@@ -54,6 +68,7 @@ SDLEngine::~SDLEngine(){
   SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 
+  TTF_Quit();
   IMG_Quit();
 	SDL_Quit();
 }
@@ -65,7 +80,7 @@ void SDLEngine::render(GameData& game_data_){
   SDL_SetRenderDrawColor(renderer, 110, 233, 0, 255);
   game_data_.render(renderer, characters_texture, 
           texture_src_rect, zoom_level);
-
+  g_UI.render(renderer);
   SDL_RenderDrawLine(renderer, 50, 100, 100, 200);
 
   SDL_RenderPresent(renderer);

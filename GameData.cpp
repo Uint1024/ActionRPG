@@ -3,14 +3,14 @@
 #include "Utils.h"
 #include "Zombie.h"
 #include "NPC.h"
+#include "UI.h"
 #include <vector>
 #include <algorithm>
-//#include <random>
 
 GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}, wave(1){
-
-    
+  std::cout << "Starting GameData" << std::endl;
+  
   textures_render_size.emplace(eTexture::Player, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Zombie, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Projectile, Vec2di{16, 16});
@@ -23,6 +23,8 @@ camera{0,0}, wave(1){
           "John John", textures_render_size[eTexture::Zombie]));
   npcs_vector.push_back(std::make_unique<Zombie>(230, 280, 
           "John John", textures_render_size[eTexture::Zombie]));
+  
+  g_UI.initUI(&player);
  
 }
 

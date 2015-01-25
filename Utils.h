@@ -7,6 +7,7 @@
 
 #ifndef UTILS_H
 #define	UTILS_H
+#include "UI.h"
 #include <random>
 #include <chrono>
 using uint = unsigned int;
@@ -38,6 +39,7 @@ enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
 extern float g_delta_t;
 extern std::random_device g_random_device;
 extern std::mt19937 g_mt19937;
+extern UI g_UI;
 
 bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second);
 void updateBoundingBox(Rect& bounding_box, const Vec2df& movement);

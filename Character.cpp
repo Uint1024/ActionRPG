@@ -15,3 +15,11 @@ bool Character::checkCollisionWithProjectile(Projectile& projectile_){
 bool Character::isDead() const{
   return (hp <= 0);
 }
+
+const int Character::getHp() const{
+  return hp;
+}
+
+const int Character::getMp() const{
+  return mp;
+}

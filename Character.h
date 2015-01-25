@@ -20,6 +20,8 @@ public:
           Vec2di size_, int hp_);
   bool checkCollisionWithProjectile(Projectile& projectile_);
   bool isDead() const;
+  const int getHp() const;
+  const int getMp() const;
 protected:
   std::string name;
   int hp;
