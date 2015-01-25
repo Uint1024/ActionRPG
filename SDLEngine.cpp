@@ -54,10 +54,18 @@ zoom_level(1){
      throw std::runtime_error (SDL_GetError());
   }
   
+  walls_texture = IMG_LoadTexture(renderer, "images/walls.png");
+  if(walls_texture == NULL){
+     throw std::runtime_error (SDL_GetError());
+  }
   
+  //characters.png
   texture_src_rect.emplace(eTexture::Player, SDL_Rect{0, 0, 128, 128});
   texture_src_rect.emplace(eTexture::Zombie, SDL_Rect{128, 0, 128, 128});
   texture_src_rect.emplace(eTexture::Projectile, SDL_Rect{256, 0, 32, 32});
+  
+  //walls.png
+  texture_src_rect.emplace(eTexture::Wall, SDL_Rect{0, 0, 128, 128});
   
 
 
@@ -79,7 +87,7 @@ void SDLEngine::render(GameData& game_data_){
 
   SDL_SetRenderDrawColor(renderer, 110, 233, 0, 255);
   game_data_.render(renderer, characters_texture, 
-          texture_src_rect, zoom_level);
+          walls_texture, texture_src_rect, zoom_level);
   g_UI.render(renderer);
   SDL_RenderDrawLine(renderer, 50, 100, 100, 200);
 

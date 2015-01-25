@@ -66,3 +66,7 @@ const Vec2df& PhysicalObject::getPos() const{
 const Vec2di& PhysicalObject::getSize() const{
   return size;
 }
+
+const Rect& PhysicalObject::getBoundingBox() const{
+  return bounding_box;
+}

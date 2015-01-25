@@ -4,6 +4,7 @@
 #include "Zombie.h"
 #include "NPC.h"
 #include "UI.h"
+
 #include <vector>
 #include <algorithm>
 
@@ -13,6 +14,7 @@ camera{0,0}, wave(1){
   
   textures_render_size.emplace(eTexture::Player, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Zombie, Vec2di{64, 64});
+  textures_render_size.emplace(eTexture::Wall, Vec2di{64,64});
   textures_render_size.emplace(eTexture::Projectile, Vec2di{16, 16});
   
   player = Player("John", screen_width_/2 - 64/2, 
@@ -24,23 +26,30 @@ camera{0,0}, wave(1){
   npcs_vector.push_back(std::make_unique<Zombie>(230, 280, 
           "John John", textures_render_size[eTexture::Zombie]));
   
+  walls_vector.emplace_back(Wall(Vec2df{500.0f, 500.0f}));
   g_UI.initUI(&player);
  
 }
 
-void GameData::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
+void GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
+        SDL_Texture* walls_texture_,
         const std::map<eTexture, SDL_Rect>& texture_src_rect_,
         float zoom_level_){
-  player.render(renderer_, texture_, texture_src_rect_, 
+  player.render(renderer_, characters_texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   
   for(auto &npc : npcs_vector){
-    npc->render(renderer_, texture_, texture_src_rect_, 
+    npc->render(renderer_, characters_texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
   
   for (auto& i : projectiles_vector){
-    i.render(renderer_, texture_, texture_src_rect_, 
+    i.render(renderer_, characters_texture_, texture_src_rect_, 
+          textures_render_size, camera, zoom_level_);
+  }
+  
+  for(auto &wall : walls_vector){
+    wall.render(renderer_, walls_texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
 }
@@ -50,7 +59,7 @@ void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
         const Vec2di& mouse_position_, 
         const Vec2di& mouse_position_in_world_){
 Vec2df camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
-          this, camera, mouse_position_in_world_);
+          this, camera, mouse_position_in_world_, walls_vector);
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
 }
@@ -87,7 +96,7 @@ void GameData::update(){
       ++npc;
     }
   }
-  
+   
   
   if(npcs_vector.empty()){
     //++wave;

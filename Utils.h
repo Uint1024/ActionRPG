@@ -29,9 +29,11 @@ struct Rect{
   float bottom;
 };
 
-enum class eTexture { Player, Zombie, Projectile };
+enum class eTexture { Player, Zombie, Projectile, Wall };
 
 enum class eKey { Up, Down, Left, Right, Main_Menu, All_keys };
+
+enum class eDirection { Up, Down, Left, Right, None };
 
 //ultra original set of elemental powers
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };

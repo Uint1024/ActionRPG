@@ -27,6 +27,7 @@ private:
   SDL_Renderer* renderer;
   Uint32 pixel_format; //pixel format of the window, used with SDL_RenderCopy
   SDL_Texture* characters_texture;
+  SDL_Texture* walls_texture;
   
   //eTexture is an enum of all the textures
   //std::map<eTexture, Size> textures_render_size;
