@@ -8,9 +8,12 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+int p = 0;
 
 GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}, wave(1){
+  walls_size = 64;
+  map_size = {32, 32};
   std::cout << "Starting GameData" << std::endl;
   
   textures_render_size.emplace(eTexture::Player, Vec2di{64, 64});
@@ -29,8 +32,14 @@ camera{0,0}, wave(1){
   npcs_vector.emplace_back(std::make_unique<Zombie>(400, 200, 
           "John John", textures_render_size[eTexture::Zombie]));
   
-  walls_vector.emplace_back(std::make_unique<Wall>(Vec2df{500.0f, 500.0f}));
+  walls_vector.reserve(map_size.x * map_size.y);
+  for(int i = 0 ; i < map_size.x * map_size.y ; i++){
+    walls_vector.emplace_back(std::unique_ptr<Wall>());
+  }  
+  
   g_UI.initUI(&player);
+  
+ 
   
   projectiles_vector.reserve(512);
   for(int i = 0 ; i < 512 ; i++){
@@ -57,8 +66,10 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
   }
   
   for(auto &wall : walls_vector){
-    wall->render(renderer_, walls_texture_, texture_src_rect_, 
-          textures_render_size, camera, zoom_level_);
+    if(wall){
+      wall->render(renderer_, walls_texture_, texture_src_rect_, 
+            textures_render_size, camera, zoom_level_);
+    }
   }
 }
 
@@ -70,15 +81,29 @@ void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
           this, camera, mouse_position_in_world_, walls_vector);
   
   if(mouse_buttons_down_[SDL_BUTTON_RIGHT]){
-    walls_vector.emplace_back(
-            std::make_unique<Wall>(Vec2df{(float)mouse_position_in_world_.x,
-                                          (float)mouse_position_in_world_.y} ));
+    createWall(mouse_position_in_world_);
   }
-
-
+ 
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
 }
+
+void GameData::createWall(const Vec2di& mouse_position_in_world_){
+  Vec2di tile = {mouse_position_in_world_.x / walls_size,
+                  mouse_position_in_world_.y / walls_size};
+  
+  
+  if (tile.x > 0 && tile.x < map_size.x && tile.y > 0 && tile.y < map_size.y){
+    int position_in_array = tile.y * map_size.x + tile.x;
+    /*walls_vector.emplace_back(
+            std::make_unique<Wall>(tile * ,
+                                   mouse_position_in_world_.y ));*/
+    std::cout << position_in_array << std::endl;
+    Vec2di position_of_wall = {tile.x * walls_size, tile.y * walls_size};
+    walls_vector[position_in_array] = std::make_unique<Wall>(position_of_wall);
+  }
+ }
+
 
 void GameData::update(){
   for(auto projectile = projectiles_vector.begin() ; 
@@ -96,6 +121,7 @@ void GameData::update(){
                     //return false;
                   }),
         npcs_vector.end());*/
+  
   for(auto npc = npcs_vector.begin() ; npc != npcs_vector.end() ;){
     if((*npc)->isDead()){
       npcs_vector.erase(npc);
@@ -177,8 +203,6 @@ void GameData::createProjectile(const Vec2df origin_, const float angle_){
               false, 1500, angle_, 5, eElement::Fire, 
               textures_render_size[eTexture::Projectile]));
   }
-                                
-  std::cout << projectiles_vector.size() << std::endl;
 }
 
 const Vec2df& GameData::getCamera() const{

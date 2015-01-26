@@ -19,7 +19,7 @@ public:
           const Vec2df& camera_,
           const float zoom_level_) const;
   
-  const Vec2df move(const float angle_, const int speed, 
+  const Vec2df move(const float angle_, const float speed, 
                     const std::vector<std::unique_ptr<Wall>>& walls_vector_,
                     const std::vector<std::unique_ptr<NPC>>& npcs_vector_);
   

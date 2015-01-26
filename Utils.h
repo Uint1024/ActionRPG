@@ -20,6 +20,7 @@ struct Vec2df{
 struct Vec2di{
   int x;
   int y;
+  operator Vec2df() const { return Vec2df{(float)x, (float)y}; }
 };
 
 struct Rect{
