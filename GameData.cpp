@@ -31,7 +31,12 @@ camera{0,0}, wave(1){
   
   walls_vector.emplace_back(std::make_unique<Wall>(Vec2df{500.0f, 500.0f}));
   g_UI.initUI(&player);
- 
+  
+  projectiles_vector.reserve(512);
+  for(int i = 0 ; i < 512 ; i++){
+    projectiles_vector.emplace_back(
+              std::make_unique<Projectile>(true));
+  }
 }
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
@@ -61,25 +66,26 @@ void GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_, 
         const Vec2di& mouse_position_, 
         const Vec2di& mouse_position_in_world_){
-Vec2df camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
+  Vec2df camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
           this, camera, mouse_position_in_world_, walls_vector);
+  
+  if(mouse_buttons_down_[SDL_BUTTON_RIGHT]){
+    walls_vector.emplace_back(
+            std::make_unique<Wall>(Vec2df{(float)mouse_position_in_world_.x,
+                                          (float)mouse_position_in_world_.y} ));
+  }
+
+
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
 }
 
 void GameData::update(){
   for(auto projectile = projectiles_vector.begin() ; 
-          projectile != projectiles_vector.end() ;){
-    if((*projectile)->isDead()){
-       projectiles_vector.erase(projectile);
-    }
-    else{
+          projectile != projectiles_vector.end() ;
+          ++projectile){
+    if(!(*projectile)->isDead()){
       (*projectile)->update(walls_vector, npcs_vector);
-      
-      for(auto& npc : npcs_vector){
-        npc->checkCollisionWithProjectile(*projectile);
-      }
-      ++projectile;
     }
   }
   
@@ -151,11 +157,28 @@ void GameData::update(){
 }
 
 void GameData::createProjectile(const Vec2df origin_, const float angle_){
-    projectiles_vector.emplace_back(
-            std::make_unique<Projectile>(origin_.x + textures_render_size[eTexture::Player].x/2, 
-            origin_.y + textures_render_size[eTexture::Player].y/2, 
-            false, 1500, angle_, 5, eElement::Fire, 
-            textures_render_size[eTexture::Projectile]));
+  float x = origin_.x + textures_render_size[eTexture::Player].x/2;
+  float y = origin_.y + textures_render_size[eTexture::Player].y/2;
+  
+  auto dead_projectile = std::find_if(projectiles_vector.begin(), 
+                                projectiles_vector.end(), 
+                                [](auto &projec) {
+                                  return projec->isDead(); 
+                                });
+                                
+                                
+  if(dead_projectile != projectiles_vector.end()){
+    (*dead_projectile)->renew(x, y, false, 1500, angle_, 5, eElement::Fire,
+            textures_render_size[eTexture::Projectile]);
+  }
+  else{                                
+      projectiles_vector.emplace_back(
+              std::make_unique<Projectile>(x, y, 
+              false, 1500, angle_, 5, eElement::Fire, 
+              textures_render_size[eTexture::Projectile]));
+  }
+                                
+  std::cout << projectiles_vector.size() << std::endl;
 }
 
 const Vec2df& GameData::getCamera() const{

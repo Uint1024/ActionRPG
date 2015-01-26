@@ -60,7 +60,7 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
     movement.x += speed;
   }
   
-  //checkCollisionWithStuff(walls_vector_, movement, bounding_box);
+  checkCollisionWithStuff(walls_vector_, movement, bounding_box);
   
   pos.x += movement.x;
   pos.y += movement.y;

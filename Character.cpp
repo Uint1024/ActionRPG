@@ -10,7 +10,7 @@ PhysicalObject(x_, y_, texture_id_, size_), hp(hp_), strength(strength_){
 }
 
 bool Character::checkCollisionWithProjectile(
-              std::unique_ptr<Projectile>& projectile_){
+              Projectile* projectile_){
   return projectile_->checkCollisionWithCharacter(bounding_box, hp);
 }
 
