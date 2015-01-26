@@ -30,11 +30,34 @@ struct Rect{
   float bottom;
 };
 
-enum class eTexture { Player, Zombie, Projectile, Wall };
+
+
+enum class eTexture { 
+  Player, 
+  Zombie,
+  Projectile, 
+  Wall,
+  None 
+};
+  
+/*struct Texture{
+  eTexture front;
+  eTexture back;
+};*/
 
 enum class eKey { Up, Down, Left, Right, Main_Menu, All_keys };
 
-enum class eDirection { Up, Down, Left, Right, None };
+enum class eDirection { Up, Down, Left, Right, DownLeft, DownRight,
+                        UpLeft, UpRight, Front, Back, None };
+
+enum class eState { Burning, Freezing, Healing, Confused };
+
+struct ObjectState{
+  eState type;
+  int time_left;
+  int effect_power;
+};
+
 
 //ultra original set of elemental powers
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };

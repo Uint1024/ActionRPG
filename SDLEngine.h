@@ -29,9 +29,13 @@ private:
   SDL_Texture* characters_texture;
   SDL_Texture* walls_texture;
   
-  //eTexture is an enum of all the textures
-  //std::map<eTexture, Size> textures_render_size;
-  std::map<eTexture, SDL_Rect> texture_src_rect;
+  std::map<eTexture, std::map<eDirection, SDL_Rect>> dynamic_texture_src_rect;
+  std::map<eTexture, SDL_Rect> static_texture_src_rect;
+  
+  //link an eTexture enum to a Texture struct that contains front and back
+  //texture enums
+  //std::map<eTexture, eTexture> texture_front;
+  //std::map<eTexture, eTexture> texture_back;
   float zoom_level;
 };
 

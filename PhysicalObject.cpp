@@ -8,24 +8,47 @@ PhysicalObject::PhysicalObject(){}
 
 PhysicalObject::PhysicalObject(int x_, int y_, 
         eTexture texture_id_, Vec2di size_) : 
-        pos{(float)x_, (float)y_}, texture_id(texture_id_), size(size_){
+        pos{(float)x_, (float)y_}, texture_id(texture_id_), size(size_),
+        direction_facing(eDirection::Left){
+          
   bounding_box = Rect{(float)x_, (float)y_, 
           (float)(x_ + size_.x), (float)(y_ + size_.y)};
 }
 
-void PhysicalObject::render(SDL_Renderer* renderer_, SDL_Texture* texture_, 
-        const std::map<eTexture,SDL_Rect>& texture_src_rect_, 
-        const std::map<eTexture,Vec2di>& textures_render_size_, 
-        const Vec2df& camera_, const float zoom_level_) const{
+void PhysicalObject::render_dynamic(SDL_Renderer* renderer_, SDL_Texture* texture_, 
+                      const std::map<eTexture, std::map<eDirection, SDL_Rect>>& 
+                          dynamic_texture_src_rect_,
+                      const std::map<eTexture,Vec2di>& textures_render_size_, 
+                      const Vec2df& camera_, const float zoom_level_) const{
   
   SDL_Rect dest_rect = SDL_Rect{(int)((pos.x - camera_.x) * zoom_level_), 
           (int)((pos.y - camera_.y) * zoom_level_), 
           (int)(textures_render_size_.at(texture_id).x * zoom_level_), 
           (int)(textures_render_size_.at(texture_id).y * zoom_level_)};
           
-  SDL_RenderCopy(renderer_, texture_, 
-          &texture_src_rect_.at(texture_id), 
-          &dest_rect);
+  
+  if(direction_facing == eDirection::DownLeft){
+    SDL_RenderCopy(renderer_, texture_, 
+            &dynamic_texture_src_rect_.at(texture_id).at(eDirection::Front), 
+            &dest_rect);
+  }
+  else if(direction_facing == eDirection::DownRight){
+    SDL_RenderCopyEx(renderer_, texture_, 
+          &dynamic_texture_src_rect_.at(texture_id).at(eDirection::Front), 
+          &dest_rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+  }
+  else if(direction_facing == eDirection::UpLeft){
+    SDL_RenderCopy(renderer_, texture_, 
+            &dynamic_texture_src_rect_.at(texture_id).at(eDirection::Back), 
+            &dest_rect);
+  }
+  else if(direction_facing == eDirection::UpRight){
+    SDL_RenderCopyEx(renderer_, texture_, 
+          &dynamic_texture_src_rect_.at(texture_id).at(eDirection::Back), 
+          &dest_rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+  }
+         
+         
   
   SDL_Rect bbox = {(int)(bounding_box.left - camera_.x), 
                     (int)(bounding_box.top - camera_.y), 
@@ -33,6 +56,22 @@ void PhysicalObject::render(SDL_Renderer* renderer_, SDL_Texture* texture_,
   SDL_RenderDrawRect(renderer_, &bbox);
   
 }
+
+void PhysicalObject::render_static(SDL_Renderer* renderer_, 
+        SDL_Texture* texture_, 
+        const std::map<eTexture, SDL_Rect>& static_texture_src_rect, 
+        const std::map<eTexture, Vec2di>& textures_render_size_, 
+        const Vec2df& camera_, const float zoom_level_) const {
+   SDL_Rect dest_rect = SDL_Rect{(int)((pos.x - camera_.x) * zoom_level_), 
+          (int)((pos.y - camera_.y) * zoom_level_), 
+          (int)(textures_render_size_.at(texture_id).x * zoom_level_), 
+          (int)(textures_render_size_.at(texture_id).y * zoom_level_)};
+          
+  SDL_RenderCopy(renderer_, texture_, 
+            &static_texture_src_rect.at(texture_id), 
+            &dest_rect);
+}
+
 
 
 bool PhysicalObject::checkCollision(const PhysicalObject& other_) const{
@@ -62,7 +101,7 @@ const Vec2df PhysicalObject::move(const float angle_, const float speed,
   
   pos.x += movement.x;
   pos.y += movement.y;
- 
+  setDirectionFacing(movement);
   updateBoundingBox(bounding_box, movement);
   
   return movement;
@@ -170,6 +209,21 @@ const Rect* PhysicalObject::checkCollisionWithBoundingBox(
   return nullptr;
 }
 
+void PhysicalObject::setDirectionFacing(const Vec2df& movement_){
+  if(movement_.x < 0 && movement_.y < 0){
+    direction_facing = eDirection::UpLeft;
+  }
+  if(movement_.x < 0 && movement_.y >= 0){
+    direction_facing = eDirection::DownLeft;
+  }
+  
+  if(movement_.x > 0 && movement_.y < 0){
+    direction_facing = eDirection::UpRight;
+  }
+  if(movement_.x > 0 && movement_.y >= 0){
+    direction_facing = eDirection::DownRight;
+  }
+}
 
 const Vec2df& PhysicalObject::getPos() const{
   return pos;

@@ -23,7 +23,9 @@ public:
   GameData(int screen_width_, int screen_height_);
   void render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
               SDL_Texture* walls_texture_,
-              const std::map<eTexture, SDL_Rect>& texture_src_rect_,
+              const std::map<eTexture, std::map<eDirection, SDL_Rect>>&
+                  dynamic_texture_src_rect_,
+              const std::map<eTexture, SDL_Rect>& static_texture_src_rect,
               float zoom_level_);
   void receiveInput(const std::map<eKey, bool>& keys_down_,
               const std::array<bool, 255>& mouse_buttons_down_,

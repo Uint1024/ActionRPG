@@ -59,13 +59,24 @@ zoom_level(1){
      throw std::runtime_error (SDL_GetError());
   }
   
-  //characters.png
-  texture_src_rect.emplace(eTexture::Player, SDL_Rect{0, 0, 128, 128});
-  texture_src_rect.emplace(eTexture::Zombie, SDL_Rect{128, 0, 128, 128});
-  texture_src_rect.emplace(eTexture::Projectile, SDL_Rect{256, 0, 32, 32});
   
+
   //walls.png
-  texture_src_rect.emplace(eTexture::Wall, SDL_Rect{0, 0, 128, 128});
+  static_texture_src_rect.emplace(eTexture::Wall, SDL_Rect{0, 0, 128, 128});
+  
+  //characters.png
+  dynamic_texture_src_rect[eTexture::Player][eDirection::Front] = 
+          SDL_Rect{0, 0, 128, 128};
+  dynamic_texture_src_rect[eTexture::Player][eDirection::Back] = 
+          SDL_Rect{0, 0, 128, 128};
+  dynamic_texture_src_rect[eTexture::Zombie][eDirection::Front] = 
+          SDL_Rect{128, 0, 128, 128};
+  dynamic_texture_src_rect[eTexture::Zombie][eDirection::Back] = 
+          SDL_Rect{128, 128, 128, 128};
+  dynamic_texture_src_rect[eTexture::Projectile][eDirection::Front] = 
+          SDL_Rect{256, 0, 32, 32};
+  dynamic_texture_src_rect[eTexture::Projectile][eDirection::Back] = 
+          SDL_Rect{256, 0, 32, 32};
   
 
 
@@ -87,7 +98,8 @@ void SDLEngine::render(GameData& game_data_){
 
   SDL_SetRenderDrawColor(renderer, 110, 233, 0, 255);
   game_data_.render(renderer, characters_texture, 
-          walls_texture, texture_src_rect, zoom_level);
+          walls_texture, dynamic_texture_src_rect, static_texture_src_rect,
+          zoom_level);
   g_UI.render(renderer);
   SDL_RenderDrawLine(renderer, 50, 100, 100, 200);
 

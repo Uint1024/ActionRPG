@@ -50,24 +50,27 @@ camera{0,0}, wave(1){
 
 void GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
         SDL_Texture* walls_texture_,
-        const std::map<eTexture, SDL_Rect>& texture_src_rect_,
+        const std::map<eTexture, std::map<eDirection, SDL_Rect>>&
+                  dynamic_texture_src_rect_,
+        const std::map<eTexture, SDL_Rect>& static_texture_src_rect,
         float zoom_level_){
-  player.render(renderer_, characters_texture_, texture_src_rect_, 
+  
+  player.render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   
   for(auto &npc : npcs_vector){
-    npc->render(renderer_, characters_texture_, texture_src_rect_, 
+    npc->render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
   
   for (auto& i : projectiles_vector){
-    i->render(renderer_, characters_texture_, texture_src_rect_, 
+    i->render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
   
   for(auto &wall : walls_vector){
     if(wall){
-      wall->render(renderer_, walls_texture_, texture_src_rect_, 
+      wall->render_static(renderer_, walls_texture_, static_texture_src_rect, 
             textures_render_size, camera, zoom_level_);
     }
   }

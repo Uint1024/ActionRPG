@@ -65,7 +65,7 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
   pos.x += movement.x;
   pos.y += movement.y;
   
- 
+  setDirectionFacing(movement);
   updateBoundingBox(bounding_box, movement);
   return movement;
 }

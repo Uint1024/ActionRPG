@@ -52,8 +52,10 @@ void Projectile::renew(int x_, int y_, bool can_hurt_player_, int speed_,
           (float)(x_ + size_.x), (float)(y_ + size_.y)};
 }
 
-bool Projectile::checkCollisionWithCharacter(const Rect& bounding_box_, int& hp){
+bool Projectile::checkCollisionWithCharacter(const Rect& bounding_box_, 
+        int& hp){
   if(checkCollisionBetweenBoxes(bounding_box, bounding_box_)){
+    
     hp -= damage;
     dead = true;
     return true;
