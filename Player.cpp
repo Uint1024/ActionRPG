@@ -23,7 +23,7 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_,
         GameData* game_data_,
         const Vec2df& camera_, const Vec2di& mouse_position_in_world_,
-        const std::vector<Wall> walls_vector_){
+        const std::vector<std::unique_ptr<Wall>>& walls_vector_){
   
   if(mouse_buttons_down_[SDL_BUTTON_LEFT] ){
     if(differenceTimes(currentTime(), last_shot) > 100){
@@ -60,41 +60,7 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
     movement.x += speed;
   }
   
-  Rect future_bbox = bounding_box;
-  updateBoundingBox(future_bbox, movement);
-  
-  const Rect* wall_direction[4] = {nullptr, nullptr, nullptr, nullptr};
-  
-  eDirection blocked_direction = eDirection::None;
-  
-  for(auto &wall : walls_vector_){
-    const Rect* blocked_by = checkCollisionWithObject(future_bbox, 
-                                            wall.getBoundingBox(), 
-                                            blocked_direction);
-    if(blocked_direction != eDirection::None){
-      wall_direction[(int)blocked_direction] = blocked_by;
-    }
-  }
-  
-  if(wall_direction[(int)eDirection::Right]){
-    movement.x = wall_direction[(int)eDirection::Right]->left -
-            bounding_box.right;
-  }
-  if(wall_direction[(int)eDirection::Left]){
-    movement.x = 
-            wall_direction[(int)eDirection::Left]->right -
-            bounding_box.left; 
-  }
-  if(wall_direction[(int)eDirection::Up]){
-    movement.y = 
-            wall_direction[(int)eDirection::Up]->bottom -
-            bounding_box.top;
-            
-  }
-  if(wall_direction[(int)eDirection::Down]){
-    movement.y = wall_direction[(int)eDirection::Down]->top -
-            bounding_box.bottom;
-  }
+  //checkCollisionWithStuff(walls_vector_, movement, bounding_box);
   
   pos.x += movement.x;
   pos.y += movement.y;

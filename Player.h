@@ -9,12 +9,14 @@
 #define	PLAYER_H
 #include "Character.h"
 #include "Utils.h"
-#include "Wall.h"
+//#include "Wall.h"
 #include <string>
 #include <SDL.h>
 #include <map>
+#include <memory>
 class GameData;
 struct Vec2df;
+class Wall;
 
 class Player : public Character{
 public:
@@ -25,7 +27,7 @@ public:
             const std::array<bool, 255>& mouse_buttons_down_, 
             GameData* game_data_,
             const Vec2df& camera_, const Vec2di& mouse_position_in_world_,
-            const std::vector<Wall> walls_vector_);
+            const std::vector<std::unique_ptr<Wall>>& walls_vector_);
   
 private:
     std::chrono::system_clock::time_point last_shot;

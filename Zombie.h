@@ -11,16 +11,16 @@
 #include "Player.h"
 #include <string>
 #include <iostream>
-
+#include <memory>
 
 
 class Zombie : public NPC{
   public:
     Zombie();
     Zombie(int x_, int y_, std::string name_, Vec2di size_);
-    void runAI() override;
     void update(const Player& player, 
-                      const std::vector<Wall>& walls_vector) override;
+                const std::vector<std::unique_ptr<Wall>>& walls_vector_,
+                const std::vector<std::unique_ptr<NPC>>& npcs_vector_) override;
 };
 
 

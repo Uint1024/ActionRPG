@@ -37,9 +37,9 @@ private:
   Player player;
   std::map<eTexture, Vec2di> textures_render_size;
   std::vector<std::unique_ptr<NPC>> npcs_vector;
-  std::vector<Wall> walls_vector;
+  std::vector<std::unique_ptr<Wall>> walls_vector;
   Vec2df camera;
-  std::vector<Projectile> projectiles_vector;
+  std::vector<std::unique_ptr<Projectile>> projectiles_vector;
   uint wave;
   std::mt19937* mt19937_rng;
 };

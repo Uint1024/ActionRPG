@@ -1,6 +1,7 @@
 #include "PhysicalObject.h"
 #include "Utils.h"
 #include "Wall.h"
+#include "NPC.h"
 #include <iostream>
 
 PhysicalObject::PhysicalObject(){}
@@ -49,45 +50,14 @@ bool PhysicalObject::checkCollision(const Rect& bounding_box_) const{
 /*Move PhysicalObject and update its bounding box
  return the movement*/
 const Vec2df PhysicalObject::move(const float angle_, const int speed, 
-        const std::vector<Wall>& walls_vector_) {
+        const std::vector<std::unique_ptr<Wall>>& walls_vector_,
+        const std::vector<std::unique_ptr<NPC>>& npcs_vector_) {
   Vec2df movement = { std::cos(angle_) * speed,
                     std::sin(angle_) * speed };
   
-  Rect future_bbox = bounding_box;
-  updateBoundingBox(future_bbox, movement);
-  
-  const Rect* wall_direction[4] = {nullptr, nullptr, nullptr, nullptr};
-  
-  eDirection blocked_direction = eDirection::None;
-  
-  for(auto &wall : walls_vector_){
-    const Rect* blocked_by = checkCollisionWithObject(future_bbox, 
-                                            wall.getBoundingBox(), 
-                                            blocked_direction);
-    if(blocked_direction != eDirection::None){
-      wall_direction[(int)blocked_direction] = blocked_by;
-    }
-  }
-  
-  if(wall_direction[(int)eDirection::Right]){
-    movement.x = wall_direction[(int)eDirection::Right]->left -
-            bounding_box.right;
-  }
-  if(wall_direction[(int)eDirection::Left]){
-    movement.x = 
-            wall_direction[(int)eDirection::Left]->right -
-            bounding_box.left; 
-  }
-  if(wall_direction[(int)eDirection::Up]){
-    movement.y = 
-            wall_direction[(int)eDirection::Up]->bottom -
-            bounding_box.top;
-            
-  }
-  if(wall_direction[(int)eDirection::Down]){
-    movement.y = wall_direction[(int)eDirection::Down]->top -
-            bounding_box.bottom;
-  }
+  checkCollisionWithStuff(walls_vector_, movement, bounding_box);
+  checkCollisionWithStuff(npcs_vector_, movement, bounding_box);
+
   pos.x += movement.x;
   pos.y += movement.y;
  
@@ -96,8 +66,52 @@ const Vec2df PhysicalObject::move(const float angle_, const int speed,
   return movement;
 }
 
+template <typename T>
+void PhysicalObject::checkCollisionWithStuff(
+      const std::vector<T>& stuff_vector_, 
+       Vec2df& movement_, 
+       const Rect& bounding_box_) {
 
-const Rect* PhysicalObject::checkCollisionWithObject(const Rect& future_bbox_, 
+  Rect future_bbox = bounding_box_;
+  updateBoundingBox(future_bbox, movement_);
+  
+  const Rect* stuff_direction[4] = {nullptr, nullptr, nullptr, nullptr};
+  
+  eDirection blocked_direction = eDirection::None;
+  
+  for(auto &stuff : stuff_vector_){   
+    const Rect* blocked_by = checkCollisionWithBoundingBox(future_bbox, 
+                                            stuff->getBoundingBox(), 
+                                            blocked_direction);
+    if(blocked_direction != eDirection::None){
+      stuff_direction[(int)blocked_direction] = blocked_by;
+    }
+  }
+  
+  if(stuff_direction[(int)eDirection::Right]){
+    movement_.x = stuff_direction[(int)eDirection::Right]->left -
+            bounding_box.right;
+  }
+  if(stuff_direction[(int)eDirection::Left]){
+    movement_.x = 
+            stuff_direction[(int)eDirection::Left]->right -
+            bounding_box.left; 
+  }
+  if(stuff_direction[(int)eDirection::Up]){
+    movement_.y = 
+            stuff_direction[(int)eDirection::Up]->bottom -
+            bounding_box.top;
+            
+  }
+  if(stuff_direction[(int)eDirection::Down]){
+    movement_.y = stuff_direction[(int)eDirection::Down]->top -
+            bounding_box.bottom;
+  }
+  
+}
+
+const Rect* PhysicalObject::checkCollisionWithBoundingBox(
+        const Rect& future_bbox_, 
         const Rect& other_bbox_, eDirection& direction_){
   eDirection current_position = eDirection::None;
   

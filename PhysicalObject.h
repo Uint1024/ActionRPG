@@ -3,11 +3,13 @@
 
 #pragma once
 #include "Utils.h"
+class NPC;
 class Wall;
 
 #include <SDL.h>
 #include <map>
 #include <iostream>
+#include <memory>
 class PhysicalObject{
 public:
   void render(SDL_Renderer* renderer_,
@@ -18,9 +20,14 @@ public:
           const float zoom_level_) const;
   
   const Vec2df move(const float angle_, const int speed, 
-                    const std::vector<Wall>& walls_vector_);
+                    const std::vector<std::unique_ptr<Wall>>& walls_vector_,
+                    const std::vector<std::unique_ptr<NPC>>& npcs_vector_);
   
-  const Rect* checkCollisionWithObject(const Rect& future_bbox_, 
+  template <typename T>
+  void checkCollisionWithStuff(const std::vector<T>& stuff_vector_,
+                                Vec2df& movement_,
+                                const Rect& bounding_box_);
+  const Rect* checkCollisionWithBoundingBox(const Rect& future_bbox_, 
                           const Rect& other_bbox, eDirection& direction_);
   
   const Vec2df& getPos() const;

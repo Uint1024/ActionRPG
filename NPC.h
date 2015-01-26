@@ -5,14 +5,15 @@
 #include "Projectile.h"
 #include "Utils.h"
 #include <string>
-
+#include <memory>
+class Wall;
 class Player;
 
 class NPC : public Character{
 public:
-  virtual void runAI() = 0;
   virtual void update(const Player& player_, 
-                      const std::vector<Wall>& walls_vector) = 0;
+                      const std::vector<std::unique_ptr<Wall>>& walls_vector_,
+                      const std::vector<std::unique_ptr<NPC>>& npcs_vector_) = 0;
 protected:
   NPC();
   NPC(int x_, int y_, std::string name_, eTexture texture_id_, Vec2di size_,

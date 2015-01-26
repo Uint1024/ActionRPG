@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Projectile.h"
 
 Character::Character(){};
 
@@ -8,8 +9,9 @@ PhysicalObject(x_, y_, texture_id_, size_), hp(hp_), strength(strength_){
   std::cout << "Calling Character constructor" << std::endl;
 }
 
-bool Character::checkCollisionWithProjectile(Projectile& projectile_){
-  return projectile_.checkCollisionWithCharacter(bounding_box, hp);
+bool Character::checkCollisionWithProjectile(
+              std::unique_ptr<Projectile>& projectile_){
+  return projectile_->checkCollisionWithCharacter(bounding_box, hp);
 }
 
 bool Character::isDead() const{

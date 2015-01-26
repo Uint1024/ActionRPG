@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}, wave(1){
@@ -21,12 +22,14 @@ camera{0,0}, wave(1){
           screen_height_/2 - 64/2,
           textures_render_size[eTexture::Player]);
     
-  npcs_vector.push_back(std::make_unique<Zombie>(200, 200, 
+  npcs_vector.emplace_back(std::make_unique<Zombie>(200, 200, 
           "John John", textures_render_size[eTexture::Zombie]));
-  npcs_vector.push_back(std::make_unique<Zombie>(230, 280, 
+ npcs_vector.emplace_back(std::make_unique<Zombie>(300, 200, 
+          "John John", textures_render_size[eTexture::Zombie]));
+  npcs_vector.emplace_back(std::make_unique<Zombie>(400, 200, 
           "John John", textures_render_size[eTexture::Zombie]));
   
-  walls_vector.emplace_back(Wall(Vec2df{500.0f, 500.0f}));
+  walls_vector.emplace_back(std::make_unique<Wall>(Vec2df{500.0f, 500.0f}));
   g_UI.initUI(&player);
  
 }
@@ -44,12 +47,12 @@ void GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
   }
   
   for (auto& i : projectiles_vector){
-    i.render(renderer_, characters_texture_, texture_src_rect_, 
+    i->render(renderer_, characters_texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
   
   for(auto &wall : walls_vector){
-    wall.render(renderer_, walls_texture_, texture_src_rect_, 
+    wall->render(renderer_, walls_texture_, texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
 }
@@ -67,11 +70,11 @@ Vec2df camera_movement = player.receiveInput(keys_down_, mouse_buttons_down_,
 void GameData::update(){
   for(auto projectile = projectiles_vector.begin() ; 
           projectile != projectiles_vector.end() ;){
-    if(projectile->isDead()){
+    if((*projectile)->isDead()){
        projectiles_vector.erase(projectile);
     }
     else{
-      projectile->update(walls_vector);
+      (*projectile)->update(walls_vector, npcs_vector);
       
       for(auto& npc : npcs_vector){
         npc->checkCollisionWithProjectile(*projectile);
@@ -92,14 +95,13 @@ void GameData::update(){
       npcs_vector.erase(npc);
     }
     else{
-      (*npc)->update(player, walls_vector);
+      (*npc)->update(player, walls_vector, npcs_vector);
       ++npc;
     }
   }
    
   
   if(npcs_vector.empty()){
-    //++wave;
     std::uniform_int_distribution<int> y_top(-300, 0);
     std::uniform_int_distribution<int> x_top_bottom(-100, 900);
     std::uniform_int_distribution<int> x_left(-300, -100);
@@ -150,7 +152,7 @@ void GameData::update(){
 
 void GameData::createProjectile(const Vec2df origin_, const float angle_){
     projectiles_vector.emplace_back(
-            Projectile(origin_.x + textures_render_size[eTexture::Player].x/2, 
+            std::make_unique<Projectile>(origin_.x + textures_render_size[eTexture::Player].x/2, 
             origin_.y + textures_render_size[eTexture::Player].y/2, 
             false, 1500, angle_, 5, eElement::Fire, 
             textures_render_size[eTexture::Projectile]));
