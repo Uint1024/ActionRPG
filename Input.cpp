@@ -8,6 +8,9 @@ Input::Input(){
   keymap.emplace(SDL_SCANCODE_S, eKey::Down);
   keymap.emplace(SDL_SCANCODE_A, eKey::Left);
   keymap.emplace(SDL_SCANCODE_D, eKey::Right);
+  keymap.emplace(SDL_SCANCODE_1, eKey::WeaponShotgun);
+  keymap.emplace(SDL_SCANCODE_2, eKey::WeaponFire);
+  keymap.emplace(SDL_SCANCODE_3, eKey::WeaponIce);
   
   /*keys_down.emplace(eKey::Up, false);
   keys_down.emplace(eKey::Down, false);

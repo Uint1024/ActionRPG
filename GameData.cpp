@@ -1,5 +1,6 @@
 #include "GameData.h"
 #include "Player.h"
+#include "Weapon.h"
 #include "Utils.h"
 #include "Zombie.h"
 #include "NPC.h"
@@ -24,7 +25,10 @@ camera{0,0}, wave(1){
   player = Player("John", screen_width_/2 - 64/2, 
           screen_height_/2 - 64/2,
           textures_render_size[eTexture::Player]);
-    
+ 
+  
+  player.addWeaponToInventory(eWeapon::Shotgun, {700, 1000, 5, 400.0f});
+  player.addWeaponToInventory(eWeapon::Fire, {100, 600, 5, 100.0f});
   npcs_vector.emplace_back(std::make_unique<Zombie>(200, 200, 
           "John John", textures_render_size[eTexture::Zombie]));
  npcs_vector.emplace_back(std::make_unique<Zombie>(300, 200, 
@@ -185,9 +189,10 @@ void GameData::update(){
   }
 }
 
-void GameData::createProjectile(const Vec2df origin_, const float angle_){
-  float x = origin_.x + textures_render_size[eTexture::Player].x/2;
-  float y = origin_.y + textures_render_size[eTexture::Player].y/2;
+void GameData::createProjectile(const Vec2df origin_, const float angle_,
+                                const int speed_, const int damage_){
+  //float x = origin_.x + textures_render_size[eTexture::Player].x/2;
+  //float y = origin_.y + textures_render_size[eTexture::Player].y/2;
   
   auto dead_projectile = std::find_if(projectiles_vector.begin(), 
                                 projectiles_vector.end(), 
@@ -197,14 +202,12 @@ void GameData::createProjectile(const Vec2df origin_, const float angle_){
                                 
                                 
   if(dead_projectile != projectiles_vector.end()){
-    (*dead_projectile)->renew(x, y, false, 1500, angle_, 5, eElement::Fire,
-            textures_render_size[eTexture::Projectile]);
+    (*dead_projectile)->renew(origin_.x, origin_.y, false, speed_, angle_, 
+                              damage_, eElement::Fire,
+                              textures_render_size[eTexture::Projectile]);
   }
-  else{                                
-      projectiles_vector.emplace_back(
-              std::make_unique<Projectile>(x, y, 
-              false, 1500, angle_, 5, eElement::Fire, 
-              textures_render_size[eTexture::Projectile]));
+  else{
+    std::cout << "No dead projectile available!" << std::endl;
   }
 }
 

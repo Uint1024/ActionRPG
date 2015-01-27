@@ -68,7 +68,7 @@ zoom_level(1){
   dynamic_texture_src_rect[eTexture::Player][eDirection::Front] = 
           SDL_Rect{0, 0, 128, 128};
   dynamic_texture_src_rect[eTexture::Player][eDirection::Back] = 
-          SDL_Rect{0, 0, 128, 128};
+          SDL_Rect{0, 128, 128, 128};
   dynamic_texture_src_rect[eTexture::Zombie][eDirection::Front] = 
           SDL_Rect{128, 0, 128, 128};
   dynamic_texture_src_rect[eTexture::Zombie][eDirection::Back] = 

@@ -34,7 +34,8 @@ public:
   void createWall(const Vec2di& mouse_position_in_world_);
   
   void update();
-  void createProjectile(const Vec2df origin_, const float angle_);
+  void createProjectile(const Vec2df origin_, const float angle_,
+                        const int speed_, const int damage_);
   const Vec2df& getCamera() const;
 private:
   Player player;

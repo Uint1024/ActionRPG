@@ -9,7 +9,7 @@ PhysicalObject::PhysicalObject(){}
 PhysicalObject::PhysicalObject(int x_, int y_, 
         eTexture texture_id_, Vec2di size_) : 
         pos{(float)x_, (float)y_}, texture_id(texture_id_), size(size_),
-        direction_facing(eDirection::Left){
+        direction_facing(eDirection::DownLeft){
           
   bounding_box = Rect{(float)x_, (float)y_, 
           (float)(x_ + size_.x), (float)(y_ + size_.y)};
@@ -94,14 +94,14 @@ const Vec2df PhysicalObject::move(const float angle_, const float speed,
         const std::vector<std::unique_ptr<NPC>>& npcs_vector_) {
   Vec2df movement = { std::cos(angle_) * speed,
                     std::sin(angle_) * speed };
-
+  setDirectionFacing(movement);
   checkCollisionWithStuff(walls_vector_, movement, bounding_box);
   checkCollisionWithStuff(npcs_vector_, movement, bounding_box);
   
   
   pos.x += movement.x;
   pos.y += movement.y;
-  setDirectionFacing(movement);
+  
   updateBoundingBox(bounding_box, movement);
   
   return movement;
@@ -209,20 +209,79 @@ const Rect* PhysicalObject::checkCollisionWithBoundingBox(
   return nullptr;
 }
 
-void PhysicalObject::setDirectionFacing(const Vec2df& movement_){
-  if(movement_.x < 0 && movement_.y < 0){
-    direction_facing = eDirection::UpLeft;
-  }
-  if(movement_.x < 0 && movement_.y >= 0){
-    direction_facing = eDirection::DownLeft;
+void PhysicalObject::setDirectionFacing(const Vec2df& movement_){ 
+  bool left, right, up, down = false;
+  
+  if(movement_.x < 0)
+    left = true;
+  if(movement_.x > 0)
+    right = true;
+  if(movement_.y < 0)
+    up = true;
+  if(movement_.y > 0)
+    down = true;
+  
+  
+  if(direction_facing == eDirection::UpLeft ||
+                direction_facing == eDirection::UpRight){
+    if(right){
+      if(down){
+        direction_facing = eDirection::DownRight;
+        return;
+      }
+      
+      direction_facing = eDirection::UpRight;
+      return;
+      
+    }
+
+    if(left){
+      if(down){
+        direction_facing = eDirection::DownLeft;
+        return;
+      }
+      
+      direction_facing = eDirection::UpLeft;
+      return;
+      
+    }
+    
+    if(down){
+      direction_facing = eDirection::DownLeft;
+      return;
+    }
   }
   
-  if(movement_.x > 0 && movement_.y < 0){
-    direction_facing = eDirection::UpRight;
+  if(direction_facing == eDirection::DownLeft ||
+                direction_facing == eDirection::DownRight){
+    if(right){
+      if(up){
+        direction_facing = eDirection::UpRight;
+        return;
+      }else{
+        direction_facing = eDirection::DownRight;
+        return;
+      }
+      
+    }
+
+    if(left){
+      if(up){
+        direction_facing = eDirection::UpLeft;
+        return;
+      }
+      else{
+        direction_facing = eDirection::DownLeft;
+        return;
+      }
+    }
+    
+    if(up){
+      direction_facing = eDirection::UpLeft;
+      return;
+    }
   }
-  if(movement_.x > 0 && movement_.y >= 0){
-    direction_facing = eDirection::DownRight;
-  }
+ 
 }
 
 const Vec2df& PhysicalObject::getPos() const{

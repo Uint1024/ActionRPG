@@ -45,7 +45,8 @@ enum class eTexture {
   eTexture back;
 };*/
 
-enum class eKey { Up, Down, Left, Right, Main_Menu, All_keys };
+enum class eKey { Up, Down, Left, Right, Main_Menu, WeaponShotgun,
+                  WeaponFire, WeaponIce, All_keys };
 
 enum class eDirection { Up, Down, Left, Right, DownLeft, DownRight,
                         UpLeft, UpRight, Front, Back, None };
@@ -58,6 +59,7 @@ struct ObjectState{
   int effect_power;
 };
 
+enum class eWeapon { Shotgun, Fire, Ice, Electricity, Poison, Earth };
 
 //ultra original set of elemental powers
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
