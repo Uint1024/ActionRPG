@@ -14,3 +14,9 @@ damage(damage_), spread(spread_)
 {
   
 }
+
+int 
+Weapon::getShootingDelay() const 
+{
+  return shooting_delay;
+}

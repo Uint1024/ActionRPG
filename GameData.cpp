@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "Utils.h"
+#include "Shotgun.h"
+
 #include "Zombie.h"
 #include "NPC.h"
 #include "UI.h"
@@ -25,10 +27,7 @@ camera{0,0}, wave(1){
   player = Player("John", screen_width_/2 - 64/2, 
           screen_height_/2 - 64/2,
           textures_render_size[eTexture::Player]);
- 
-  
-  player.addWeaponToInventory(eWeapon::Shotgun, {700, 1000, 5, 400.0f});
-  player.addWeaponToInventory(eWeapon::Fire, {100, 600, 5, 100.0f});
+
   npcs_vector.emplace_back(std::make_unique<Zombie>(200, 200, 
           "John John", textures_render_size[eTexture::Zombie]));
  npcs_vector.emplace_back(std::make_unique<Zombie>(300, 200, 
@@ -37,7 +36,8 @@ camera{0,0}, wave(1){
           "John John", textures_render_size[eTexture::Zombie]));
   
   walls_vector.reserve(map_size.x * map_size.y);
-  for(int i = 0 ; i < map_size.x * map_size.y ; i++){
+  for(int i = 0 ; i < map_size.x * map_size.y ; i++)
+  {
     walls_vector.emplace_back(std::unique_ptr<Wall>());
   }  
   

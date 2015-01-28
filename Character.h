@@ -25,10 +25,10 @@ public:
   Character(int x_, int y_, eTexture texture_id_,
             Vec2di size_, int hp_, int strength_);
   bool checkCollisionWithProjectile(Projectile* projectile_);
-  void addWeaponToInventory(eWeapon type_, Weapon weapon_);
+  void addWeaponToInventory(eWeapon type_, std::unique_ptr<Weapon> weapon_);
   bool isDead() const;
-  const int getHp() const;
-  const int getMp() const;
+  int getHp() const;
+  int getMp() const;
 protected:
   std::string name;
   int hp;
@@ -36,6 +36,8 @@ protected:
   int speed;
   int strength;
   eDirection shooting_direction;
-  std::map<eWeapon, Weapon> weapons_inventory;
+  //std::map<eWeapon, std::unique_ptr<Weapon>> weapons_inventory;
+  std::unique_ptr<Weapon> weapons_inventory[(int)eWeapon::Weapon_count];
+  
 };
 #endif	/* CHARACTER_H */

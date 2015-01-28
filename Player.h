@@ -29,13 +29,9 @@ public:
             const Vec2df& camera_, const Vec2di& mouse_position_in_world_,
             const std::vector<std::unique_ptr<Wall>>& walls_vector_);
   void shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_);
-  void shootShotgun(GameData* game_data_, const Vec2df& player_center_, 
-        const float angle_);
-  void shootFire(GameData* game_data_, const Vec2df& player_center_, 
-        const float angle_);
 private:
     std::chrono::system_clock::time_point last_shot;
-    eWeapon current_weapon;
+    Weapon* current_weapon;
 };
 
 #endif	/* PLAYER_H */

@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Utils.h"
+#include "Shotgun.h"
+#include "Fire.h"
 #include "GameData.h"
 #include <iostream>
 #include <SDL.h>
@@ -15,8 +17,12 @@ Player::Player() : Character(){
 Player::Player(std::string name_, int x_, int y_, Vec2di size_) : 
         Character(x_, y_, eTexture::Player, size_, 100, 0),
         last_shot(std::chrono::system_clock::now()), 
-        current_weapon(eWeapon::Shotgun){
+        current_weapon(nullptr){
   std::cout << "Calling Player constructor" << std::endl;
+  weapons_inventory[(int)eWeapon::Shotgun] = std::make_unique<Shotgun>();
+  weapons_inventory[(int)eWeapon::Fire] = std::make_unique<Fire>();
+  
+  current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
 }
 
 Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
@@ -53,13 +59,20 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
   {
     movement.x += speed;
   }
+  
   if(keys_down_.at(eKey::WeaponShotgun))
   {
-    current_weapon = eWeapon::Shotgun;
+    if(weapons_inventory[(int)eWeapon::Shotgun])
+    {
+      current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
+    }
   }
   if(keys_down_.at(eKey::WeaponFire))
   {
-    current_weapon = eWeapon::Fire;
+    if(weapons_inventory[(int)eWeapon::Fire])
+    {
+      current_weapon = &*weapons_inventory[(int)eWeapon::Fire];
+    }
   }
   
   checkCollisionWithStuff(walls_vector_, movement, bounding_box);
@@ -71,20 +84,22 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
   
   
   int difference_now_and_last_shot = differenceTimes(currentTime(), last_shot);
-  if(difference_now_and_last_shot > weapons_inventory[current_weapon].shooting_delay)
-  {
-    setDirectionFacing(movement);
-  }
   
-  if(mouse_buttons_down_[SDL_BUTTON_LEFT] )
-  {
-    if(difference_now_and_last_shot > 
-            weapons_inventory.at(current_weapon).shooting_delay)
+  bool enough_time_passed_to_shoot = difference_now_and_last_shot > 
+                          current_weapon->getShootingDelay();
+  
+  if(enough_time_passed_to_shoot)
+  {  
+    if(mouse_buttons_down_[SDL_BUTTON_LEFT])
     {
       shoot(game_data_, mouse_position_in_world_);
-    }  
+    }
+    else
+    {
+      setDirectionFacing(movement);
+    }
   }
-  
+ 
   return movement;
 }
 
@@ -99,6 +114,7 @@ void Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
   Vec2df player_center = {bounding_box.left + size.x/2.0f,
                           bounding_box.top +  size.y/2.0f};
   
+  current_weapon->shoot(game_data_, player_center, angle);
   if(mouse_position_in_world_.y >= player_center.y)
   {
     if(mouse_position_in_world_.x > player_center.x){
@@ -119,40 +135,8 @@ void Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
       direction_facing = eDirection::UpLeft;
     }
   }
-  
-
-  switch(current_weapon)
-  {
-    case eWeapon::Shotgun:
-      shootShotgun(game_data_, player_center, angle);
-      break;
-    case eWeapon::Fire:
-      shootFire(game_data_, player_center, angle);
-      break;
-    default:
-      std::cout << "Unknown weapon!" << std::endl;
-  }
 }
-
-void Player::shootShotgun(GameData* game_data_, const Vec2df& player_center_, 
-        const float angle_)
-{
-  Vec2df origin = {player_center_.x + std::cos(angle_) * 32,
-                   player_center_.y + std::sin(angle_) * 32};
-  std::uniform_int_distribution<int> rand(
-                                -weapons_inventory[current_weapon].spread,
-                                weapons_inventory[current_weapon].spread);
-  
-  for(int i = 0 ; i < 5 ; i++)
-  {
-    
-    float x = rand(g_mt19937) / 1000.0f;
-    game_data_->createProjectile(origin, angle_ + x, 
-                                 weapons_inventory[current_weapon].bullets_speed,
-                                 weapons_inventory[current_weapon].damage);
-  }
-}
-
+/*
 void Player::shootFire(GameData* game_data_, const Vec2df& player_center_, 
         const float angle_)
 {
@@ -163,4 +147,4 @@ void Player::shootFire(GameData* game_data_, const Vec2df& player_center_,
     game_data_->createProjectile(origin, angle_, 
                                  weapons_inventory[current_weapon].bullets_speed,
                                  weapons_inventory[current_weapon].damage);
-}
+}*/

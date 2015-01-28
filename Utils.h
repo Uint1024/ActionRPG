@@ -59,7 +59,15 @@ struct ObjectState{
   int effect_power;
 };
 
-enum class eWeapon { Shotgun, Fire, Ice, Electricity, Poison, Earth };
+enum class eWeapon { 
+  Shotgun = 0,
+  Fire, 
+  Ice, 
+  Electricity,
+  Poison, 
+  Earth,
+  Weapon_count
+};
 
 //ultra original set of elemental powers
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
