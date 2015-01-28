@@ -43,7 +43,6 @@ void Character::updateConditionState()
   {
     hp -= 1;
     conditions_states[State_Burning]->time_left -= (int)(g_delta_t * 100);
-    std::cout << conditions_states[State_Burning]->time_left << std::endl;
     if(conditions_states[State_Burning]->time_left <= 0)
     {
       delete conditions_states[State_Burning];

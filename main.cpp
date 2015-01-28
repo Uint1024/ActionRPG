@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     current = std::chrono::high_resolution_clock::now();
     diff = current - last;
     diff_ms = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
-    g_delta_t = diff_ms.count() / 100.0f;
+    g_delta_t = diff_ms.count();
     
     
     running = input_manager.pollEvents(game_data);

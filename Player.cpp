@@ -35,7 +35,7 @@ Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::vector<std::unique_ptr<Wall>>& walls_vector_)
 { 
   Vec2df movement{0,0};
-  float speed = 50 * g_delta_t;
+  float speed = 0.5f * g_delta_t;
   float speed_diagonal = sqrt((speed * speed)/2);
   
   if( (keys_down_.at(eKey::Down) && keys_down_.at(eKey::Right) ) ||

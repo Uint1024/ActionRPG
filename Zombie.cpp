@@ -20,6 +20,6 @@ Zombie::update(const Player& player,
               player.getPos().x + player.getSize().x / 2.0f - 
               (pos.x + size.x / 2.0f));
   
-  float speed = 10 * g_delta_t;
+  float speed = 0.2f * g_delta_t;
   move(angle_to_player, speed, walls_vector_, npcs_vector_);
 }

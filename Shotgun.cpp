@@ -3,7 +3,7 @@
 
 
 Shotgun::Shotgun() :
-Weapon(600, 150, 5, 400)
+Weapon(600, 1.0f, 5, 400)
 {
   
 }
