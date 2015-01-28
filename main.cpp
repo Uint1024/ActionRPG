@@ -24,7 +24,8 @@ int main(int argc, char **argv)
   //printing objects and UI on the screen
   auto engine = std::unique_ptr<SDLEngine>();
   
-  try{
+  try
+  {
     engine = std::make_unique<SDLEngine>("ActionRPG", 
             screen_width, screen_height);
   }

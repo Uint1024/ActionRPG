@@ -10,14 +10,16 @@
 std::chrono::system_clock::time_point (&currentTime)() = 
         std::chrono::system_clock::now;
 
-Player::Player() : Character(){
+Player::Player() : Character()
+{
 
 }
 
 Player::Player(std::string name_, int x_, int y_, Vec2di size_) : 
         Character(x_, y_, eTexture::Player, size_, 100, 0),
         last_shot(std::chrono::system_clock::now()), 
-        current_weapon(nullptr){
+        current_weapon(nullptr)
+{
   std::cout << "Calling Player constructor" << std::endl;
   weapons_inventory[(int)eWeapon::Shotgun] = std::make_unique<Shotgun>();
   weapons_inventory[(int)eWeapon::Fire] = std::make_unique<Fire>();
@@ -25,7 +27,8 @@ Player::Player(std::string name_, int x_, int y_, Vec2di size_) :
   current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
 }
 
-Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
+Vec2df 
+Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::array<bool, 255>& mouse_buttons_down_,
         GameData* game_data_,
         const Vec2df& camera_, const Vec2di& mouse_position_in_world_,
@@ -103,7 +106,8 @@ Vec2df Player::receiveInput(const std::map<eKey, bool>& keys_down_,
   return movement;
 }
 
-void Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
+void 
+Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
 {
   float angle = std::atan2(
               mouse_position_in_world_.y - (pos.y + size.y / 2.0f), 
@@ -136,15 +140,3 @@ void Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
     }
   }
 }
-/*
-void Player::shootFire(GameData* game_data_, const Vec2df& player_center_, 
-        const float angle_)
-{
-  Vec2df origin = {player_center_.x + std::cos(angle_) * 32,
-                   player_center_.y + std::sin(angle_) * 32};
-  std::uniform_int_distribution<int> rand(-400, 400);
-
-    game_data_->createProjectile(origin, angle_, 
-                                 weapons_inventory[current_weapon].bullets_speed,
-                                 weapons_inventory[current_weapon].damage);
-}*/

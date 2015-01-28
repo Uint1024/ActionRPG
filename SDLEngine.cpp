@@ -14,21 +14,26 @@ SDLEngine::SDLEngine(){};
 SDLEngine::SDLEngine(const char* window_name_, 
         const int window_width, 
         const int window_height) :
-zoom_level(1){
+zoom_level(1)
+{
   std::cout << "Starting Engine" << std::endl;
-  if (SDL_Init(SDL_INIT_VIDEO) != 0){
+  if (SDL_Init(SDL_INIT_VIDEO) != 0)
+  {
     throw std::runtime_error (SDL_GetError());
   }
  //IMG_Init(IMG_INIT_PNG);
   //std::cout << IMG_Init(IMG_INIT_PNG) << std::endl;
-  if(IMG_Init(IMG_INIT_PNG) < 0){
+  if(IMG_Init(IMG_INIT_PNG) < 0)
+  {
     throw std::runtime_error (SDL_GetError());
   }
   
-  if(TTF_Init() < 0){
+  if(TTF_Init() < 0)
+  {
     throw std::runtime_error (SDL_GetError());
   }
-  else{
+  else
+  {
     std::cout << "TTF initialized" << std::endl;
   }
   
@@ -38,24 +43,28 @@ zoom_level(1){
 											window_width,
 											window_height,
 											SDL_WINDOW_SHOWN);
-  if(window == NULL){
+  if(window == NULL)
+  {
     throw std::runtime_error (SDL_GetError());
   }        
 
   pixel_format = SDL_GetWindowPixelFormat(window);
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-  if(renderer == NULL){
+  if(renderer == NULL)
+  {
       throw std::runtime_error (SDL_GetError());
   }  
   
   characters_texture = IMG_LoadTexture(renderer, "images/characters.png");
-  if(characters_texture == NULL){
+  if(characters_texture == NULL)
+  {
      throw std::runtime_error (SDL_GetError());
   }
   
   walls_texture = IMG_LoadTexture(renderer, "images/walls.png");
-  if(walls_texture == NULL){
+  if(walls_texture == NULL)
+  {
      throw std::runtime_error (SDL_GetError());
   }
   
@@ -77,12 +86,10 @@ zoom_level(1){
           SDL_Rect{256, 0, 32, 32};
   dynamic_texture_src_rect[eTexture::Projectile][eDirection::Back] = 
           SDL_Rect{256, 0, 32, 32};
-  
-
-
 }
         
-SDLEngine::~SDLEngine(){
+SDLEngine::~SDLEngine()
+{
   std::cout << "Deleting engine." << std::endl;
   SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
@@ -92,7 +99,9 @@ SDLEngine::~SDLEngine(){
 	SDL_Quit();
 }
 
-void SDLEngine::render(GameData& game_data_){
+void 
+SDLEngine::render(GameData& game_data_)
+{
   SDL_SetRenderDrawColor(renderer, 210, 210, 210, 255);
   SDL_RenderClear(renderer);
 
