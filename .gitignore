@@ -8,7 +8,7 @@ bin/
 build/
 dist/
 nbproject/
-images/*.xcf 
+images/
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
