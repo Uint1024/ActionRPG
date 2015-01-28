@@ -6,6 +6,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <cmath>
+#include <chrono>
 
 Player::Player() : Character()
 {
@@ -22,7 +23,9 @@ Player::Player(std::string name_, int x_, int y_, Vec2di size_) :
   weapons_inventory[(int)eWeapon::Fire] = std::make_unique<Fire>();
   
   current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
-}
+  
+  conditions_states[State_Burning] = new ConditionState{50000, 5000};
+}         
 
 Vec2df 
 Player::receiveInput(const std::map<eKey, bool>& keys_down_,
@@ -32,7 +35,7 @@ Player::receiveInput(const std::map<eKey, bool>& keys_down_,
         const std::vector<std::unique_ptr<Wall>>& walls_vector_)
 { 
   Vec2df movement{0,0};
-  float speed = 500 * g_delta_t;
+  float speed = 50 * g_delta_t;
   float speed_diagonal = sqrt((speed * speed)/2);
   
   if( (keys_down_.at(eKey::Down) && keys_down_.at(eKey::Right) ) ||

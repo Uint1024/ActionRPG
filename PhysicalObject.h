@@ -27,6 +27,13 @@ public:
           const Vec2df& camera_,
           const float zoom_level_) const;
   
+  void render_burning_flames(SDL_Renderer* renderer_,
+          SDL_Texture* texture_,
+          const std::map<eTexture, std::map<eDirection, SDL_Rect>>& 
+                          dynamic_texture_src_rect_,
+          const std::map<eTexture, Vec2di>& textures_render_size_,
+          const Vec2df& camera_) const;
+  
   const Vec2df move(const float angle_, const float speed, 
                     const std::vector<std::unique_ptr<Wall>>& walls_vector_,
                     const std::vector<std::unique_ptr<NPC>>& npcs_vector_);

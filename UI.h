@@ -18,6 +18,7 @@ public:
   ~UI();
   void initUI(Player* player_);
   void render(SDL_Renderer* renderer_);
+  void update(Player& player_);
 private:
   std::string hp;
   std::string mp;

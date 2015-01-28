@@ -16,6 +16,12 @@ Character::Character(int x_, int y_, eTexture texture_id_,
   {
     weapons_inventory[i] = std::unique_ptr<Weapon>();
   }
+  
+  for(int i = 0 ; i < State_Count ; i++)
+  {
+    conditions_states[i] = nullptr;
+  }
+  
   std::cout << "Calling Character constructor" << std::endl;
 }
 
@@ -31,6 +37,20 @@ Character::addWeaponToInventory(eWeapon type_, std::unique_ptr<Weapon> weapon_)
   weapons_inventory[(int)type_] = std::move(weapon_);
 }
 
+void Character::updateConditionState() 
+{
+  if(conditions_states[State_Burning])
+  {
+    hp -= 1;
+    conditions_states[State_Burning]->time_left -= (int)(g_delta_t * 100);
+    std::cout << conditions_states[State_Burning]->time_left << std::endl;
+    if(conditions_states[State_Burning]->time_left <= 0)
+    {
+      delete conditions_states[State_Burning];
+      conditions_states[State_Burning] = nullptr;
+    }
+  }
+}
 
 bool 
 Character::isDead() const
@@ -48,4 +68,10 @@ int
 Character::getMp() const
 {
   return mp;
+}
+
+const std::array<ConditionState*, State_Count>&
+Character::getConditionsStates() const 
+{
+  return conditions_states;
 }

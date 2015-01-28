@@ -7,10 +7,9 @@
 #ifndef CHARACTER_H
 #define	CHARACTER_H
 #include "Utils.h"
-
-
 #include "PhysicalObject.h"
 #include "Weapon.h"
+#include "ConditionState.h"
 
 #include <map>
 #include <string>
@@ -26,9 +25,11 @@ public:
             Vec2di size_, int hp_, int strength_);
   bool checkCollisionWithProjectile(Projectile* projectile_);
   void addWeaponToInventory(eWeapon type_, std::unique_ptr<Weapon> weapon_);
+  void updateConditionState();
   bool isDead() const;
   int getHp() const;
   int getMp() const;
+  const std::array<ConditionState*, State_Count>& getConditionsStates() const;
 protected:
   std::string name;
   int hp;
@@ -37,6 +38,6 @@ protected:
   int strength;
   eDirection shooting_direction;
   std::unique_ptr<Weapon> weapons_inventory[(int)eWeapon::Weapon_count];
-  
+  std::array<ConditionState*, State_Count> conditions_states;
 };
 #endif	/* CHARACTER_H */

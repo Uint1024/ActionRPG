@@ -28,3 +28,14 @@ differenceTimes(std::chrono::system_clock::time_point now,
   
   return diff.count();
 }
+
+SDL_Rect 
+getRectOfSprite(const Vec2df pos_, const Vec2df& camera_,
+                const Vec2di& texture_size_)
+{
+  return SDL_Rect{(int)((pos_.x - camera_.x)), 
+          (int)((pos_.y - camera_.y)), 
+          (int)(texture_size_.x), 
+          (int)(texture_size_.y)};
+          
+}

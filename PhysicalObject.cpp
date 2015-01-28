@@ -22,11 +22,9 @@ PhysicalObject::render_dynamic(SDL_Renderer* renderer_, SDL_Texture* texture_,
                       const std::map<eTexture,Vec2di>& textures_render_size_, 
                       const Vec2df& camera_, const float zoom_level_) const
 {
-  SDL_Rect dest_rect = SDL_Rect{(int)((pos.x - camera_.x) * zoom_level_), 
-          (int)((pos.y - camera_.y) * zoom_level_), 
-          (int)(textures_render_size_.at(texture_id).x * zoom_level_), 
-          (int)(textures_render_size_.at(texture_id).y * zoom_level_)};
-          
+  SDL_Rect dest_rect = getRectOfSprite(pos, camera_, 
+                    textures_render_size_.at(texture_id));
+         
   
   if(direction_facing == eDirection::DownLeft)
   {
@@ -69,16 +67,29 @@ PhysicalObject::render_static(SDL_Renderer* renderer_,
         const std::map<eTexture, Vec2di>& textures_render_size_, 
         const Vec2df& camera_, const float zoom_level_) const 
 {
-  SDL_Rect dest_rect = SDL_Rect{(int)((pos.x - camera_.x) * zoom_level_), 
-          (int)((pos.y - camera_.y) * zoom_level_), 
-          (int)(textures_render_size_.at(texture_id).x * zoom_level_), 
-          (int)(textures_render_size_.at(texture_id).y * zoom_level_)};
+  SDL_Rect dest_rect = getRectOfSprite(pos, camera_, 
+                    textures_render_size_.at(texture_id));
           
   SDL_RenderCopy(renderer_, texture_, 
             &static_texture_src_rect.at(texture_id), 
             &dest_rect);
 }
 
+void
+PhysicalObject::render_burning_flames(SDL_Renderer* renderer_, 
+        SDL_Texture* texture_, 
+        const std::map<eTexture, std::map<eDirection, SDL_Rect>>& 
+                          dynamic_texture_src_rect_,
+        const std::map<eTexture,Vec2di>& textures_render_size_, 
+        const Vec2df& camera_) const
+{
+  SDL_Rect dest_rect = getRectOfSprite(pos, camera_, 
+                    textures_render_size_.at(texture_id));
+          
+  SDL_RenderCopy(renderer_, texture_, 
+            &dynamic_texture_src_rect_.at(eTexture::Burning).at(eDirection::Front), 
+            &dest_rect);
+}
 
 
 bool 

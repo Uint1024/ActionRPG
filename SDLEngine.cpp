@@ -21,8 +21,7 @@ zoom_level(1)
   {
     throw std::runtime_error (SDL_GetError());
   }
- //IMG_Init(IMG_INIT_PNG);
-  //std::cout << IMG_Init(IMG_INIT_PNG) << std::endl;
+
   if(IMG_Init(IMG_INIT_PNG) < 0)
   {
     throw std::runtime_error (SDL_GetError());
@@ -68,8 +67,6 @@ zoom_level(1)
      throw std::runtime_error (SDL_GetError());
   }
   
-  
-
   //walls.png
   static_texture_src_rect.emplace(eTexture::Wall, SDL_Rect{0, 0, 128, 128});
   
@@ -82,10 +79,15 @@ zoom_level(1)
           SDL_Rect{128, 0, 128, 128};
   dynamic_texture_src_rect[eTexture::Zombie][eDirection::Back] = 
           SDL_Rect{128, 128, 128, 128};
+  dynamic_texture_src_rect[eTexture::Burning][eDirection::Front] = 
+          SDL_Rect{256, 128, 128, 128};
+  dynamic_texture_src_rect[eTexture::Burning][eDirection::Back] = 
+          SDL_Rect{256, 128, 128, 128};
   dynamic_texture_src_rect[eTexture::Projectile][eDirection::Front] = 
           SDL_Rect{256, 0, 32, 32};
   dynamic_texture_src_rect[eTexture::Projectile][eDirection::Back] = 
           SDL_Rect{256, 0, 32, 32};
+          
 }
         
 SDLEngine::~SDLEngine()

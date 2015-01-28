@@ -63,6 +63,11 @@ GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
 {
   player.render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
+  if(player.getConditionsStates()[State_Burning])
+  {
+    player.render_burning_flames(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+          textures_render_size, camera);
+  }
   
   for(auto &npc : npcs_vector)
   {
@@ -120,7 +125,12 @@ GameData::createWall(const Vec2di& mouse_position_in_world_)
 
 
 void 
-GameData::update(){
+GameData::update()
+{
+  g_UI.update(player);
+  
+  player.updateConditionState();
+  
   for(auto projectile = projectiles_vector.begin() ; 
           projectile != projectiles_vector.end() ;
           ++projectile)
@@ -140,6 +150,7 @@ GameData::update(){
     else
     {
       (*npc)->update(player, walls_vector, npcs_vector);
+      (*npc)->updateConditionState();
       ++npc;
     }
   }

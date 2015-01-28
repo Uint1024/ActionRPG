@@ -2,7 +2,7 @@
 #include "GameData.h"
 
 Fire::Fire() :
-Weapon(1500, 400, 5, 0)
+Weapon(1500, 40, 5, 0)
 {
  
 }
