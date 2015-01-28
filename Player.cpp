@@ -7,9 +7,6 @@
 #include <SDL.h>
 #include <cmath>
 
-std::chrono::system_clock::time_point (&currentTime)() = 
-        std::chrono::system_clock::now;
-
 Player::Player() : Character()
 {
 
@@ -84,24 +81,16 @@ Player::receiveInput(const std::map<eKey, bool>& keys_down_,
   pos.y += movement.y;
  
   updateBoundingBox(bounding_box, movement);
-  
-  
-  int difference_now_and_last_shot = differenceTimes(currentTime(), last_shot);
-  
-  bool enough_time_passed_to_shoot = difference_now_and_last_shot > 
-                          current_weapon->getShootingDelay();
-  
-  if(enough_time_passed_to_shoot)
-  {  
-    if(mouse_buttons_down_[SDL_BUTTON_LEFT])
-    {
-      shoot(game_data_, mouse_position_in_world_);
-    }
-    else
-    {
-      setDirectionFacing(movement);
-    }
+   
+  if(mouse_buttons_down_[SDL_BUTTON_LEFT])
+  {
+    shoot(game_data_, mouse_position_in_world_);
   }
+  else
+  {
+    setDirectionFacing(movement);
+  }
+  
  
   return movement;
 }
@@ -113,8 +102,6 @@ Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
               mouse_position_in_world_.y - (pos.y + size.y / 2.0f), 
               mouse_position_in_world_.x - (pos.x + size.x / 2.0f));
   
-  last_shot = currentTime();
-
   Vec2df player_center = {bounding_box.left + size.x/2.0f,
                           bounding_box.top +  size.y/2.0f};
   

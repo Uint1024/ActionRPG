@@ -9,6 +9,9 @@
 #include <chrono>
 #include <random>
 
+std::chrono::system_clock::time_point (&currentTime)() = 
+        std::chrono::system_clock::now;
+
 std::random_device g_random_device;
 std::mt19937 g_mt19937(g_random_device()); 
 float g_delta_t = 0.1f;

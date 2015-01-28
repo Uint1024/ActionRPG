@@ -8,6 +8,7 @@
 #ifndef WEAPON_H
 #define	WEAPON_H
 #include "Utils.h"
+#include <chrono>
 
 class GameData;
 
@@ -19,11 +20,13 @@ public:
 protected:
   Weapon();
   Weapon(int shooting_delay_, int bullets_speed_, int damage_, float spread_);
+  bool canShoot() const;
   
   int shooting_delay;
   int bullets_speed;
   int damage;
   float spread;
+  std::chrono::system_clock::time_point last_shot;
 };
 
 #endif	/* WEAPON_H */

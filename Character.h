@@ -36,7 +36,6 @@ protected:
   int speed;
   int strength;
   eDirection shooting_direction;
-  //std::map<eWeapon, std::unique_ptr<Weapon>> weapons_inventory;
   std::unique_ptr<Weapon> weapons_inventory[(int)eWeapon::Weapon_count];
   
 };

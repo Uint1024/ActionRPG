@@ -88,5 +88,7 @@ void updateBoundingBox(Rect& bounding_box, const Vec2df& movement);
 
 int differenceTimes(std::chrono::system_clock::time_point now, 
         std::chrono::system_clock::time_point before);
+
+extern std::chrono::system_clock::time_point (&currentTime)();
 #endif	/* UTILS_H */
 

@@ -1,4 +1,6 @@
 #include "Weapon.h"
+#include <iostream>
+
 
 Weapon::Weapon():
 shooting_delay(0), bullets_speed(0),
@@ -19,4 +21,10 @@ int
 Weapon::getShootingDelay() const 
 {
   return shooting_delay;
+}
+
+bool
+Weapon::canShoot() const
+{
+  return differenceTimes(currentTime(), last_shot) > shooting_delay;
 }
