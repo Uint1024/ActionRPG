@@ -12,6 +12,7 @@
 #include "Projectile.h"
 #include "NPC.h"
 #include "Wall.h"
+#include "Weapon.h"
 #include <SDL.h>
 #include <map>
 #include <vector>
@@ -35,7 +36,8 @@ public:
   
   void update();
   void createProjectile(const Vec2df origin_, const float angle_,
-                        const int speed_, const int damage_);
+                        const int speed_, const int damage_,
+                        Weapon* shot_by_);
   const Vec2df& getCamera() const;
 private:
   Player player;

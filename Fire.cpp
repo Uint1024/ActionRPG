@@ -1,10 +1,12 @@
 #include "Fire.h"
 #include "GameData.h"
+#include "Utils.h"
+#include "ConditionState.h"
 
 Fire::Fire() :
 Weapon(1500, 1.0f, 5, 0)
 {
- 
+  conditions_states[State_Burning] = new ConditionState{5000, 30};
 }
 
 void
@@ -17,7 +19,7 @@ Fire::shoot(GameData* game_data_, const Vec2df player_center_,
                      player_center_.y + std::sin(angle_) * 22};
     game_data_->createProjectile(origin, angle_, 
                                  bullets_speed,
-                                 damage);
+                                 damage, this);
     
     last_shot = currentTime();
   }

@@ -14,7 +14,10 @@ Weapon::Weapon(int shooting_delay_, int bullets_speed_,
 shooting_delay(shooting_delay_), bullets_speed(bullets_speed_),
 damage(damage_), spread(spread_)
 {
-  
+  for(int i = 0 ; i < State_Count ; i++)
+  {
+    conditions_states[i] = nullptr;
+  }
 }
 
 int 
@@ -27,4 +30,10 @@ bool
 Weapon::canShoot() const
 {
   return differenceTimes(currentTime(), last_shot) > shooting_delay;
+}
+
+const std::array<ConditionState*, State_Count>&
+Weapon::getConditionsStates() const 
+{
+  return conditions_states;
 }

@@ -14,7 +14,10 @@
 int p = 0;
 
 GameData::GameData(int screen_width_, int screen_height_) :
-camera{0,0}, wave(1)
+camera{0,0}, wave(1),
+player("John", screen_width_/2.0f - 64/2, 
+          screen_height_/2.0f - 64/2,
+          Vec2di{64,64})        
 {
   walls_size = 64;
   map_size = {32, 32};
@@ -25,9 +28,9 @@ camera{0,0}, wave(1)
   textures_render_size.emplace(eTexture::Wall, Vec2di{64,64});
   textures_render_size.emplace(eTexture::Projectile, Vec2di{16, 16});
   
-  player = Player("John", screen_width_/2 - 64/2, 
+  /*player = Player("John", screen_width_/2 - 64/2, 
           screen_height_/2 - 64/2,
-          textures_render_size[eTexture::Player]);
+          textures_render_size[eTexture::Player]);*/
 
   npcs_vector.emplace_back(std::make_unique<Zombie>(200, 200, 
           "John John", textures_render_size[eTexture::Zombie]));
@@ -61,23 +64,28 @@ GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
         const std::map<eTexture, SDL_Rect>& static_texture_src_rect,
         float zoom_level_)
 {
-  player.render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+  player.renderDynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   if(player.getConditionsStates()[State_Burning])
   {
-    player.render_burning_flames(renderer_, characters_texture_, dynamic_texture_src_rect_, 
-          textures_render_size, camera);
+    player.renderBurningFlames(renderer_, characters_texture_,
+            dynamic_texture_src_rect_, textures_render_size, camera);
   }
   
   for(auto &npc : npcs_vector)
   {
-    npc->render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+    npc->renderDynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
+    if(npc->getConditionsStates()[State_Burning])
+    {
+      npc->renderBurningFlames(renderer_, characters_texture_, 
+              dynamic_texture_src_rect_, textures_render_size, camera);
+    }
   }
   
   for (auto& i : projectiles_vector)
   {
-    i->render_dynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+    i->renderDynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
   
@@ -85,7 +93,7 @@ GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
   {
     if(wall)
     {
-      wall->render_static(renderer_, walls_texture_, static_texture_src_rect, 
+      wall->renderStatic(renderer_, walls_texture_, static_texture_src_rect, 
             textures_render_size, camera, zoom_level_);
     }
   }
@@ -156,7 +164,7 @@ GameData::update()
   }
    
   
-  if(npcs_vector.empty())
+  if(npcs_vector.size() < 10)
   {
     std::uniform_int_distribution<int> y_top(-300, 0);
     std::uniform_int_distribution<int> x_top_bottom(-100, 900);
@@ -164,13 +172,13 @@ GameData::update()
     std::uniform_int_distribution<int> x_right(900, 1100);
     std::uniform_int_distribution<int> y_bottom(900, 1100);
     std::uniform_int_distribution<int> y_left_right(0, 900);
-    std::uniform_int_distribution<int> which_side(0, 3);
+    std::uniform_int_distribution<int> which_side(0, 1);
     int p = x_right(g_mt19937);
     
     switch(wave)
     {
       case 1:
-        for(int i = 0 ; i < 100 ; ++i){
+        for(int i = 0 ; i < 10 ; ++i){
           int side = which_side(g_mt19937);
           int x = 0;
           int y = 0;
@@ -210,11 +218,9 @@ GameData::update()
 
 void 
 GameData::createProjectile(const Vec2df origin_, const float angle_,
-                                const int speed_, const int damage_)
+                           const int speed_, const int damage_,
+                           Weapon* shot_by_)
 {
-  //float x = origin_.x + textures_render_size[eTexture::Player].x/2;
-  //float y = origin_.y + textures_render_size[eTexture::Player].y/2;
-  
   auto dead_projectile = std::find_if(projectiles_vector.begin(), 
                                 projectiles_vector.end(), 
                                 [](auto &projec) {
@@ -225,11 +231,12 @@ GameData::createProjectile(const Vec2df origin_, const float angle_,
   if(dead_projectile != projectiles_vector.end()){
     (*dead_projectile)->renew(origin_.x, origin_.y, false, speed_, angle_, 
                               damage_, eElement::Fire,
-                              textures_render_size[eTexture::Projectile]);
+                              textures_render_size[eTexture::Projectile],
+                              shot_by_);
   }
   else
   {
-    std::cout << "No dead projectile available!" << std::endl;
+    std::cout << "Error, no dead projectile available!" << std::endl;
   }
 }
 

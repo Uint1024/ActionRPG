@@ -3,7 +3,7 @@
 
 
 Shotgun::Shotgun() :
-Weapon(600, 1.0f, 5, 400)
+Weapon(600, 1.0f, 2500, 400)
 {
   
 }
@@ -23,7 +23,7 @@ Shotgun::shoot(GameData* game_data_, const Vec2df player_center_,
       float x = rand(g_mt19937) / 1000.0f;
       game_data_->createProjectile(origin, angle_ + x, 
                                    bullets_speed,
-                                   damage);
+                                   damage, this);
     }
     
     last_shot = currentTime();

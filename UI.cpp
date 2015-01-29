@@ -44,6 +44,5 @@ void
 UI::update(Player& player_)
 {
   hp = std::to_string(player_.getHp());
-  std::cout << hp << std::endl;
 }
 

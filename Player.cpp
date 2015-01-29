@@ -24,7 +24,7 @@ Player::Player(std::string name_, int x_, int y_, Vec2di size_) :
   
   current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
   
-  conditions_states[State_Burning] = new ConditionState{50000, 5000};
+  conditions_states[State_Burning] = new ConditionState{5000, 5000};
 }         
 
 Vec2df 
@@ -78,7 +78,7 @@ Player::receiveInput(const std::map<eKey, bool>& keys_down_,
     }
   }
   
-  checkCollisionWithStuff(walls_vector_, movement, bounding_box);
+  //checkCollisionWithStuff(walls_vector_, movement, bounding_box);
   
   pos.x += movement.x;
   pos.y += movement.y;

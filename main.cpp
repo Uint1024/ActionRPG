@@ -39,7 +39,7 @@ int main(int argc, char **argv)
   
   //game_data contains all the objects of the game
   //and the objects templates loaded from the config files
-  auto game_data = GameData(screen_width, screen_height);
+  GameData game_data(screen_width, screen_height);
   
   //input_manager receive input events and send them to the game objects
   auto input_manager = Input();

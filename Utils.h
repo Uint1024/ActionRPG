@@ -8,8 +8,13 @@
 #ifndef UTILS_H
 #define	UTILS_H
 #include "UI.h"
+
 #include <random>
 #include <chrono>
+#include <memory>
+
+class NPC;
+class Wall;
 using uint = unsigned int;
 
 struct Vec2df{
@@ -76,7 +81,7 @@ extern UI g_UI;
 
 bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second);
 void updateBoundingBox(Rect& bounding_box, const Vec2df& movement);
-
+float distanceBetween2Points(Vec2df one_, Vec2df two_);
 
 int differenceTimes(std::chrono::system_clock::time_point now, 
         std::chrono::system_clock::time_point before);
@@ -84,5 +89,10 @@ int differenceTimes(std::chrono::system_clock::time_point now,
 SDL_Rect getRectOfSprite(const Vec2df pos_, const Vec2df& camera_,
         const Vec2di& texture_size_);
 extern std::chrono::system_clock::time_point (&currentTime)();
+
+using NPCUniquePtrVector = std::vector<std::unique_ptr<NPC>>;
+using WallUniquePtrVector = std::vector<std::unique_ptr<Wall>>;
+
+
 #endif	/* UTILS_H */
 

@@ -1,5 +1,7 @@
 #include "Utils.h"
 #include <iostream>
+#include "NPC.h"
+#include "Wall.h"
 
 bool 
 checkCollisionBetweenBoxes(const Rect& first, const Rect& second)
@@ -38,4 +40,12 @@ getRectOfSprite(const Vec2df pos_, const Vec2df& camera_,
           (int)(texture_size_.x), 
           (int)(texture_size_.y)};
           
+}
+
+float distanceBetween2Points(Vec2df one_, Vec2df two_)
+{
+  float x_dist = two_.x - one_.x;
+  float y_dist = two_.y - one_.y;
+  
+  return sqrt(x_dist * x_dist + y_dist * y_dist);
 }

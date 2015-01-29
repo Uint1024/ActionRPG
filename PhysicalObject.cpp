@@ -13,10 +13,12 @@ PhysicalObject::PhysicalObject(int x_, int y_,
 {  
   bounding_box = Rect{(float)x_, (float)y_, 
           (float)(x_ + size_.x), (float)(y_ + size_.y)};
+  center = {x_ + size_.x/2.0f, y_ + size_.y/2.0f};
 }
 
+
 void 
-PhysicalObject::render_dynamic(SDL_Renderer* renderer_, SDL_Texture* texture_, 
+PhysicalObject::renderDynamic(SDL_Renderer* renderer_, SDL_Texture* texture_, 
                       const std::map<eTexture, std::map<eDirection, SDL_Rect>>& 
                           dynamic_texture_src_rect_,
                       const std::map<eTexture,Vec2di>& textures_render_size_, 
@@ -57,11 +59,12 @@ PhysicalObject::render_dynamic(SDL_Renderer* renderer_, SDL_Texture* texture_,
                     (int)(bounding_box.top - camera_.y), 
                     size.x, size.y};
   SDL_RenderDrawRect(renderer_, &bbox);
+
   
 }
 
 void 
-PhysicalObject::render_static(SDL_Renderer* renderer_, 
+PhysicalObject::renderStatic(SDL_Renderer* renderer_, 
         SDL_Texture* texture_, 
         const std::map<eTexture, SDL_Rect>& static_texture_src_rect, 
         const std::map<eTexture, Vec2di>& textures_render_size_, 
@@ -76,7 +79,7 @@ PhysicalObject::render_static(SDL_Renderer* renderer_,
 }
 
 void
-PhysicalObject::render_burning_flames(SDL_Renderer* renderer_, 
+PhysicalObject::renderBurningFlames(SDL_Renderer* renderer_, 
         SDL_Texture* texture_, 
         const std::map<eTexture, std::map<eDirection, SDL_Rect>>& 
                           dynamic_texture_src_rect_,
@@ -106,77 +109,6 @@ PhysicalObject::checkCollision(const Rect& bounding_box_) const
           bounding_box_.right < bounding_box.left ||
           bounding_box_.top > bounding_box.bottom ||
           bounding_box_.bottom < bounding_box.top);
-}
-
-
-/*Move PhysicalObject and update its bounding box
- return the movement*/
-const Vec2df 
-PhysicalObject::move(const float angle_, const float speed, 
-        const std::vector<std::unique_ptr<Wall>>& walls_vector_,
-        const std::vector<std::unique_ptr<NPC>>& npcs_vector_) 
-{
-  Vec2df movement = { std::cos(angle_) * speed,
-                    std::sin(angle_) * speed };
-  setDirectionFacing(movement);
-  checkCollisionWithStuff(walls_vector_, movement, bounding_box);
-  checkCollisionWithStuff(npcs_vector_, movement, bounding_box);
-  
-  
-  pos.x += movement.x;
-  pos.y += movement.y;
-  
-  updateBoundingBox(bounding_box, movement);
-  
-  return movement;
-}
-
-template <typename T>
-void 
-PhysicalObject::checkCollisionWithStuff(
-      const std::vector<T>& stuff_vector_, 
-       Vec2df& movement_, 
-       const Rect& bounding_box_) 
-{
-  Rect future_bbox = bounding_box_;
-  updateBoundingBox(future_bbox, movement_);
-  
-  const Rect* stuff_direction[4] = {nullptr, nullptr, nullptr, nullptr};
-  
-  eDirection blocked_direction = eDirection::None;
-  
-  for(auto &stuff : stuff_vector_){ 
-    if(stuff){
-      const Rect* blocked_by = checkCollisionWithBoundingBox(future_bbox, 
-                                              stuff->getBoundingBox(), 
-                                              blocked_direction);
-
-      if(blocked_direction != eDirection::None){
-        stuff_direction[(int)blocked_direction] = blocked_by;
-      }
-    }
-  }
-  
-  if(stuff_direction[(int)eDirection::Right]){
-    movement_.x = stuff_direction[(int)eDirection::Right]->left -
-            bounding_box.right;
-  }
-  if(stuff_direction[(int)eDirection::Left]){
-    movement_.x = 
-            stuff_direction[(int)eDirection::Left]->right -
-            bounding_box.left; 
-  }
-  if(stuff_direction[(int)eDirection::Up]){
-    movement_.y = 
-            stuff_direction[(int)eDirection::Up]->bottom -
-            bounding_box.top;
-            
-  }
-  if(stuff_direction[(int)eDirection::Down]){
-    movement_.y = stuff_direction[(int)eDirection::Down]->top -
-            bounding_box.bottom;
-  }
-  
 }
 
 const Rect* 
@@ -345,5 +277,11 @@ const Rect&
 PhysicalObject::getBoundingBox() const
 {
   return bounding_box;
+}
+
+Vec2df 
+PhysicalObject::getCenter() const
+{
+  return {pos.x + size.x/2.0f, pos.y + size.y/2.0f};
 }
 
