@@ -6,7 +6,7 @@
 Fire::Fire() :
 Weapon(1500, 1.0f, 5, 0)
 {
-  conditions_states[State_Burning] = new ConditionState{5000, 30};
+  conditions_states[State_Burning] = new ConditionState{10000, 10000, 30};
 }
 
 void

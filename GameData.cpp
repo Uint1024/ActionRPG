@@ -178,7 +178,7 @@ GameData::update()
     switch(wave)
     {
       case 1:
-        for(int i = 0 ; i < 10 ; ++i){
+        for(int i = 0 ; i < 300 ; ++i){
           int side = which_side(g_mt19937);
           int x = 0;
           int y = 0;

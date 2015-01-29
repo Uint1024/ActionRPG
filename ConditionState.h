@@ -20,6 +20,7 @@ enum eState
 
 struct ConditionState{
   //std::chrono::system_clock::time_point time_end;
+  int duration;
   int time_left;//in milliseconds
   int effect_power;
 };

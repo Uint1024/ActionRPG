@@ -26,7 +26,7 @@ Zombie::update(const Player& player,
   
   transmit_conditions_timer += g_delta_t;
   /*25% chance of transmitting conditions every 500 ms*/
-  if(transmit_conditions_timer > 500)
+  if(transmit_conditions_timer > transmit_conditions_timer_default)
   {
     transmitConditionsToNearbyNPCs(npcs_vector_);
     

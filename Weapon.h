@@ -30,7 +30,7 @@ protected:
   float spread;
   std::chrono::system_clock::time_point last_shot;
   std::array<ConditionState*, State_Count> conditions_states; 
-  
+  int ammos;  
 };
 
 #endif	/* WEAPON_H */

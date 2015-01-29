@@ -3,6 +3,7 @@
 #include "NPC.h"
 #include "Wall.h"
 #include <algorithm>
+#include <random>
 
 Character::Character() : 
 name(" "), hp(0), mp(0), speed(0), strength(0), 
@@ -13,9 +14,10 @@ shooting_direction(eDirection::None)
 Character::Character(int x_, int y_, eTexture texture_id_,
             Vec2di size_, int hp_, int strength_) :
             PhysicalObject(x_, y_, texture_id_, size_), 
-            hp(hp_), strength(strength_), shooting_direction(eDirection::None),
-        transmit_conditions_timer(0)
+            hp(hp_), strength(strength_), shooting_direction(eDirection::None)
 {
+  std::uniform_int_distribution<int> rand(300, 600);
+  transmit_conditions_timer_default = transmit_conditions_timer = rand(g_mt19937);
   for(int i = 0 ; i < (int)eWeapon::Weapon_count ; i++)
   {
     weapons_inventory[i] = std::unique_ptr<Weapon>();
@@ -53,7 +55,10 @@ void Character::changeConditions(const ConditionStatesArray& conditions_states_)
   //TODO : compare current effect, don't replace if effect is weaker
   if(conditions_states_[State_Burning])
   {
-    conditions_states[State_Burning] = new ConditionState{5000, conditions_states_[State_Burning]->effect_power};
+    ConditionState* burning = conditions_states_[State_Burning];
+    conditions_states[State_Burning] = new ConditionState{burning->duration, 
+            burning->duration, 
+            burning->effect_power};
     //conditions_states[State_Burning]->time_left = 1000;
   }  
 }
@@ -83,14 +88,14 @@ void
 Character::transmitConditionsToNearbyNPCs(const NPCUniquePtrVector& npc_vector_)
 {
   Vec2df center1 = {pos.x + size.x/2.0f, pos.y + size.y/2.0f};
-  std::uniform_int_distribution<int> rand(0, 10);
+  std::uniform_int_distribution<int> rand(0, 100);
   
   for(auto &npc : npc_vector_)
   {
     if(npc)
     {
       int random_number = rand(g_mt19937);
-      if(random_number == 0)
+      if(random_number < 6)
       {
         if(distanceBetween2Points(center1, npc->getCenter()) < 100)
         {

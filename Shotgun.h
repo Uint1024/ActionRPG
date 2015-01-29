@@ -14,6 +14,9 @@ public:
   Shotgun();
   void shoot(GameData* game_data_, const Vec2df player_center_,
           float angle_) override;
+private:
+  int magazine_size;
+  int current_magazine;
 };
 
 #endif	/* SHOTGUN_H */

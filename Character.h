@@ -54,6 +54,8 @@ protected:
   eDirection shooting_direction;
   std::unique_ptr<Weapon> weapons_inventory[(int)eWeapon::Weapon_count];
   ConditionStatesArray conditions_states;
+  
   int transmit_conditions_timer;
+  int transmit_conditions_timer_default;
 };
 #endif	/* CHARACTER_H */
