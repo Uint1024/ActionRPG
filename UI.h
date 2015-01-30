@@ -22,6 +22,8 @@ public:
 private:
   std::string hp;
   std::string mp;
+  std::string ammo_string;
+ 
   Player* player;
   TTF_Font* font;
 };

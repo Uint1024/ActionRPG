@@ -16,7 +16,7 @@ Player::Player() : Character()
 Player::Player(std::string name_, int x_, int y_, Vec2di size_) : 
         Character(x_, y_, eTexture::Player, size_, 100, 0),
         last_shot(std::chrono::system_clock::now()), 
-        current_weapon(nullptr)
+        current_weapon(nullptr), reloading(false)
 {
   std::cout << "Calling Player constructor" << std::endl;
   weapons_inventory[(int)eWeapon::Shotgun] = std::make_unique<Shotgun>(this);
@@ -32,12 +32,30 @@ Player::update()
 {
   updateConditionState();
   current_weapon->update();
+  if(reloading)
+  {
+    reload();
+  }
 }
 
 void
 Player::reload()
 {
-  
+  if(!reloading)
+  {
+    reloading = true;
+  }
+  else
+  {
+
+    current_weapon->reload();
+  }
+}
+
+void
+Player::stopReloading()
+{
+  reloading = false;
 }
 
 
@@ -115,6 +133,8 @@ Player::receiveInput(const std::map<eKey, bool>& keys_down_,
 void 
 Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
 {
+  stopReloading();
+  
   float angle = std::atan2(
               mouse_position_in_world_.y - (pos.y + size.y / 2.0f), 
               mouse_position_in_world_.x - (pos.x + size.x / 2.0f));
@@ -143,4 +163,10 @@ Player::shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_)
       direction_facing = eDirection::UpLeft;
     }
   }
+}
+
+std::pair<int, int> 
+Player::getAmmo() const 
+{
+  return current_weapon->getAmmo();
 }

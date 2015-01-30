@@ -35,6 +35,17 @@ UI::render(SDL_Renderer* renderer_)
   
   SDL_RenderCopy(renderer_, texture, NULL, &rect);
   
+  
+  
+  surface = TTF_RenderText_Solid(font, ammo_string.c_str(), black);
+
+  texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  TTF_SizeText(font, ammo_string.c_str(), &h, &w);
+  rect = {700, 600, h, w};
+  
+  SDL_RenderCopy(renderer_, texture, NULL, &rect);
+  
+  
   SDL_FreeSurface(surface);
   SDL_DestroyTexture(texture);
   
@@ -44,5 +55,11 @@ void
 UI::update(Player& player_)
 {
   hp = std::to_string(player_.getHp());
+  
+  std::pair<int, int> ammo = player_.getAmmo();
+  
+  ammo_string = std::to_string(ammo.first) + " " + std::to_string(ammo.second);
+  
+  
 }
 

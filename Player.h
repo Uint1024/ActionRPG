@@ -14,6 +14,7 @@
 #include <SDL.h>
 #include <map>
 #include <memory>
+#include <utility>
 class GameData;
 struct Vec2df;
 class Wall;
@@ -31,6 +32,9 @@ public:
   void update();
   void reload();
   void shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_);
+  void stopReloading();
+  std::pair<int, int> getAmmo() const;
+  
 private:
     std::chrono::system_clock::time_point last_shot;
     Weapon* current_weapon;

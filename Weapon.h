@@ -22,10 +22,13 @@ public:
   Milliseconds getShootingDelay() const;
   virtual void update() = 0;
   const std::array<ConditionState*, State_Count>& getConditionsStates() const;
+  virtual void reload();
+  std::pair<int, int> getAmmo() const;
+  
 protected:
   Weapon();
   Weapon(int shooting_delay_, int bullets_speed_, int damage_, float spread_,
-  Player* player_);
+  Player* player_, int ammo_, int magazine_size_, int reload_time_ms_);
   bool canShoot() const;
   
   Milliseconds shooting_delay;
@@ -35,6 +38,12 @@ protected:
   std::chrono::system_clock::time_point last_shot;
   std::array<ConditionState*, State_Count> conditions_states; 
   Player* player;
+  
+  int ammo;
+  int magazine_size;
+  int current_magazine;
+  int reload_time_ms;//reload time per ammo
+  int reload_timer;
 };
 
 #endif	/* WEAPON_H */

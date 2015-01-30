@@ -4,7 +4,7 @@
 #include "ConditionState.h"
 
 Fire::Fire(Player* player_) :
-Weapon(1500, 1.0f, 5, 0, player_)
+Weapon(1500, 1.0f, 5, 0, player_, 80, 70, 500)
 {
   conditions_states[State_Burning] = new ConditionState{10000, 10000, 30};
 }
