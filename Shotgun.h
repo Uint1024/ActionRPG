@@ -9,12 +9,16 @@
 #define	SHOTGUN_H
 #include "Weapon.h"
 
+class Player;
+
 class Shotgun : public Weapon {
 public:
-  Shotgun();
+  Shotgun(Player* player_);
   void shoot(GameData* game_data_, const Vec2df player_center_,
           float angle_) override;
+  void update() override;
 private:
+  int ammo;
   int magazine_size;
   int current_magazine;
 };

@@ -28,10 +28,13 @@ public:
             GameData* game_data_,
             const Vec2df& camera_, const Vec2di& mouse_position_in_world_,
             const std::vector<std::unique_ptr<Wall>>& walls_vector_);
+  void update();
+  void reload();
   void shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_);
 private:
     std::chrono::system_clock::time_point last_shot;
     Weapon* current_weapon;
+    bool reloading;
 };
 
 #endif	/* PLAYER_H */

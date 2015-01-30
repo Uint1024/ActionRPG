@@ -57,5 +57,6 @@ protected:
   
   int transmit_conditions_timer;
   int transmit_conditions_timer_default;
+  bool reloading;
 };
 #endif	/* CHARACTER_H */

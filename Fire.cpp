@@ -3,8 +3,8 @@
 #include "Utils.h"
 #include "ConditionState.h"
 
-Fire::Fire() :
-Weapon(1500, 1.0f, 5, 0)
+Fire::Fire(Player* player_) :
+Weapon(1500, 1.0f, 5, 0, player_)
 {
   conditions_states[State_Burning] = new ConditionState{10000, 10000, 30};
 }
@@ -24,4 +24,9 @@ Fire::shoot(GameData* game_data_, const Vec2df player_center_,
     last_shot = currentTime();
   }
 }
+
+void Fire::update() {
+
+}
+
 

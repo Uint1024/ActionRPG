@@ -137,7 +137,7 @@ GameData::update()
 {
   g_UI.update(player);
   
-  player.updateConditionState();
+  player.update();
   
   for(auto projectile = projectiles_vector.begin() ; 
           projectile != projectiles_vector.end() ;

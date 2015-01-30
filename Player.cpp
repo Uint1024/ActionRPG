@@ -19,13 +19,27 @@ Player::Player(std::string name_, int x_, int y_, Vec2di size_) :
         current_weapon(nullptr)
 {
   std::cout << "Calling Player constructor" << std::endl;
-  weapons_inventory[(int)eWeapon::Shotgun] = std::make_unique<Shotgun>();
-  weapons_inventory[(int)eWeapon::Fire] = std::make_unique<Fire>();
+  weapons_inventory[(int)eWeapon::Shotgun] = std::make_unique<Shotgun>(this);
+  weapons_inventory[(int)eWeapon::Fire] = std::make_unique<Fire>(this);
   
   current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
   
   conditions_states[State_Burning] = new ConditionState{5000, 5000};
-}         
+}
+
+void 
+Player::update() 
+{
+  updateConditionState();
+  current_weapon->update();
+}
+
+void
+Player::reload()
+{
+  
+}
+
 
 Vec2df 
 Player::receiveInput(const std::map<eKey, bool>& keys_down_,

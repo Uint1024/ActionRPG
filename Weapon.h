@@ -13,24 +13,28 @@
 #include <array>
 class GameData;
 
+class Player;
+
 class Weapon{
 public:
   virtual void shoot(GameData* game_data_, const Vec2df player_center_,
                       float angle_) = 0;
-  int getShootingDelay() const;
+  Milliseconds getShootingDelay() const;
+  virtual void update() = 0;
   const std::array<ConditionState*, State_Count>& getConditionsStates() const;
 protected:
   Weapon();
-  Weapon(int shooting_delay_, int bullets_speed_, int damage_, float spread_);
+  Weapon(int shooting_delay_, int bullets_speed_, int damage_, float spread_,
+  Player* player_);
   bool canShoot() const;
   
-  int shooting_delay;
+  Milliseconds shooting_delay;
   int bullets_speed;
   int damage;
   float spread;
   std::chrono::system_clock::time_point last_shot;
   std::array<ConditionState*, State_Count> conditions_states; 
-  int ammos;  
+  Player* player;
 };
 
 #endif	/* WEAPON_H */
