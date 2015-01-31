@@ -15,6 +15,8 @@ Input::Input() : selected_editor_object(eEditorObject::None)
   keymap.emplace(SDL_SCANCODE_N, eKey::GreenGround);
   keymap.emplace(SDL_SCANCODE_B, eKey::GreyGround);
   keymap.emplace(SDL_SCANCODE_V, eKey::Wall);
+  keymap.emplace(SDL_SCANCODE_O, eKey::Quick_Save);
+  keymap.emplace(SDL_SCANCODE_Y, eKey::Quick_Load);
   
   for(int i = 0 ; i < (int)eKey::All_keys ; i++)
   {

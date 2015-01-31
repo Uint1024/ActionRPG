@@ -64,7 +64,7 @@ enum class eTexture {
 
 enum class eKey { Up, Down, Left, Right, Main_Menu, WeaponShotgun,
                   WeaponFire, WeaponIce, GreyGround, GreenGround,
-                  Wall, All_keys };
+                  Wall, Quick_Save, Quick_Load, All_keys };
 
 enum class eDirection { Up, Down, Left, Right, DownLeft, DownRight,
                         UpLeft, UpRight, Front, Back, None };

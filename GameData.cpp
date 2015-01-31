@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <fstream>
 int p = 0;
 
 GameData::GameData(int screen_width_, int screen_height_) :
@@ -126,6 +127,41 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
  
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
+  
+  if(keys_down_.at(eKey::Quick_Save))
+  {
+    std::cout <<"saving" << std::endl;
+    std::ofstream out("quickSave.sav", std::ios::binary | std::ios::out);
+    
+    if(out.is_open())
+    {
+      for(auto &ground : ground_vector)
+      {
+        if(!ground)
+        {
+          int no_ground = 0;
+          out.write((char*) &no_ground, sizeof(no_ground));
+        }
+        else
+        {
+          int yes_ground = 1;
+          float position_x = ground->getPos().x;
+          float position_y = ground->getPos().y;
+          int size_x = ground->getSize().x;
+          int size_y = ground->getSize().y;
+          eTexture texture_id = ground->getTextureId();
+          
+          out.write((char*)&yes_ground, sizeof(yes_ground));
+          out.write((char*)&position_x, sizeof(position_x));
+          out.write((char*)&position_y, sizeof(position_y));
+          out.write((char*)&size_x, sizeof(size_x));
+          out.write((char*)&size_y, sizeof(size_y));
+          out.write((char*)&texture_id, sizeof(texture_id));
+        }
+      }
+    }
+    
+  }
   
   
 }

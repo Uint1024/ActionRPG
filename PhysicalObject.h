@@ -36,17 +36,17 @@ public:
           const std::map<eTexture, Vec2di>& textures_render_size_,
           const Vec2df& camera_) const;
   
-//#include "PhysicalObjectTemplates.hpp"
-  
-  
   const Rect* checkCollisionWithBoundingBox(const Rect& future_bbox_, 
                           const Rect& other_bbox, eDirection& direction_);
   
   const Vec2df& getPos() const;
+  
   const Vec2di& getSize() const;
+  eTexture getTextureId() const;
   Vec2df getCenter() const;
   const Rect& getBoundingBox() const;
   void setDirectionFacing(const Vec2df& movement_);
+  
   
 protected:
   //protected constructor ensures BaseObject can't be created alone

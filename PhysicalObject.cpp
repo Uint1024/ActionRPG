@@ -285,3 +285,8 @@ PhysicalObject::getCenter() const
   return {pos.x + size.x/2.0f, pos.y + size.y/2.0f};
 }
 
+eTexture 
+PhysicalObject::getTextureId() const 
+{
+  return texture_id;
+}
