@@ -140,7 +140,7 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
         if(!ground)
         {
           int no_ground = 0;
-          out.write((char*) &no_ground, sizeof(no_ground));
+          out.write(reinterpret_cast<char *>(&no_ground), sizeof(no_ground));
         }
         else
         {
@@ -151,19 +151,54 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
           int size_y = ground->getSize().y;
           eTexture texture_id = ground->getTextureId();
           
-          out.write((char*)&yes_ground, sizeof(yes_ground));
-          out.write((char*)&position_x, sizeof(position_x));
-          out.write((char*)&position_y, sizeof(position_y));
-          out.write((char*)&size_x, sizeof(size_x));
-          out.write((char*)&size_y, sizeof(size_y));
-          out.write((char*)&texture_id, sizeof(texture_id));
+          out.write(reinterpret_cast<char *>(&yes_ground), sizeof(yes_ground));
+          out.write(reinterpret_cast<char *>(&position_x), sizeof(position_x));
+          out.write(reinterpret_cast<char *>(&position_y), sizeof(position_y));
+          out.write(reinterpret_cast<char *>(&size_x), sizeof(size_x));
+          out.write(reinterpret_cast<char *>(&size_y), sizeof(size_y));
+          out.write(reinterpret_cast<char *>(&texture_id), sizeof(texture_id));
+        }
+      }
+    } 
+  }
+  
+  if(keys_down_.at(eKey::Quick_Load))
+  {
+    std::cout <<  "loading" << std::endl;
+    std::ifstream in("quickSave.sav", std::ios::binary | std::ios::in);
+    
+    if(in.is_open())
+    {
+      ground_vector.clear();
+      ground_vector.reserve(map_size.x * map_size.y);
+      for(int i = 0 ; i < map_size.x * map_size.y ; i++)
+      {
+        ground_vector.emplace_back(std::unique_ptr<Ground>());
+      }
+      
+      for(int i = 0 ; i < map_size.x * map_size.y ; i++)
+      {  
+        int is_ground = 0;
+        float position_x = 0;
+        float position_y = 0;
+        int size_x = 0;
+        int size_y = 0;
+        eTexture texture_id = eTexture::None;
+        
+        in.read((char*)&is_ground, sizeof(is_ground));
+        if(is_ground != 0)
+        {
+          in.read(reinterpret_cast<char *>(&position_x), sizeof(position_x));
+          in.read(reinterpret_cast<char *>(&position_y), sizeof(position_y));
+          in.read(reinterpret_cast<char *>(&size_x), sizeof(size_x));
+          in.read(reinterpret_cast<char *>(&size_y), sizeof(size_y));
+          in.read(reinterpret_cast<char *>(&texture_id), sizeof(texture_id)); 
+          ground_vector[i] = std::make_unique<Ground>(
+                  Vec2df{position_x, position_y});
         }
       }
     }
-    
   }
-  
-  
 }
 
 void 
