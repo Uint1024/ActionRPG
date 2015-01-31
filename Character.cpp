@@ -27,8 +27,6 @@ Character::Character(const Vec2df& position_, const eTexture texture_id_,
   {
     conditions_states[i] = nullptr;
   }
-  
-  std::cout << "Calling Character constructor" << std::endl;
 }
 
 Character::~Character()

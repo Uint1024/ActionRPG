@@ -18,6 +18,7 @@ public:
           const float angle_) override;
   void update() override;
   void reload() override;
+  virtual std::string getAmmoString() const;
 private:
 
 };

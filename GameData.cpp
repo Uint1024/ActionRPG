@@ -3,6 +3,7 @@
 #include "Weapon.h"
 #include "Utils.h"
 #include "Shotgun.h"
+#include "Ground.h"
 
 #include "Zombie.h"
 #include "NPC.h"
@@ -17,25 +18,27 @@ GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}, wave(1),
 player(std::string("John"), Vec2df{screen_width_/2.0f - 64/2, 
           screen_height_/2.0f - 64/2},
-          Vec2di{64,64})        
+          Vec2di{64,64}) , map_size{32, 32}       
 {
   walls_size = 64;
-  map_size = {32, 32};
-  std::cout << "Starting GameData" << std::endl;
   
+  //TODO: move to SDLEngine... maybe
   textures_render_size.emplace(eTexture::Player, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Zombie, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Wall, Vec2di{64,64});
-  textures_render_size.emplace(eTexture::Projectile, Vec2di{16, 16});
-  
-  /*player = Player("John", screen_width_/2 - 64/2, 
-          screen_height_/2 - 64/2,
-          textures_render_size[eTexture::Player]);*/
+  textures_render_size.emplace(eTexture::Projectile, Vec2di{32, 32});
+  textures_render_size.emplace(eTexture::GroundGrey, Vec2di{64, 64});
   
   walls_vector.reserve(map_size.x * map_size.y);
   for(int i = 0 ; i < map_size.x * map_size.y ; i++)
   {
     walls_vector.emplace_back(std::unique_ptr<Wall>());
+  } 
+  
+  ground_vector.reserve(map_size.x * map_size.y);
+  for(int i = 0 ; i < map_size.x * map_size.y ; i++)
+  {
+    ground_vector.emplace_back(std::unique_ptr<Ground>());
   }  
   
   g_UI.initUI(&player);
@@ -46,7 +49,7 @@ player(std::string("John"), Vec2df{screen_width_/2.0f - 64/2,
   {
     projectiles_vector.emplace_back(
               std::make_unique<Projectile>(true));
-  }
+  }  
 }
 
 void 
@@ -56,7 +59,17 @@ GameData::render(SDL_Renderer* renderer_, SDL_Texture** texture_sheets_,
         const std::map<eTexture, SDL_Rect>& static_texture_src_rect,
         float zoom_level_)
 {
-  
+     
+  for(auto &ground : ground_vector)
+  {
+    if(ground)
+    {
+      ground->renderStatic(renderer_, texture_sheets_[TextureSheet_Ground], 
+              static_texture_src_rect, 
+            textures_render_size, camera, zoom_level_);
+    }
+  }
+    
   player.renderDynamic(renderer_, texture_sheets_[TextureSheet_Characters], 
           dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
@@ -94,6 +107,7 @@ GameData::render(SDL_Renderer* renderer_, SDL_Texture** texture_sheets_,
             textures_render_size, camera, zoom_level_);
     }
   }
+
 }
 
 void 
@@ -107,24 +121,39 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
   
   if(mouse_buttons_down_[SDL_BUTTON_RIGHT])
   {
-    createWall(mouse_position_in_world_);
+    createObject(mouse_position_in_world_, eEditorObject::GreyGround);
   }
  
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
+  
+  
 }
 
 void 
-GameData::createWall(const Vec2di& mouse_position_in_world_)
+GameData::createObject(const Vec2di& mouse_position_in_world_,
+                        const eEditorObject type_)
 {
   Vec2di tile = {mouse_position_in_world_.x / walls_size,
                   mouse_position_in_world_.y / walls_size};
   
+  std::cout << tile.x << " " << tile.y << " " << map_size.x << " " << map_size.y << std::endl;
+  
   if (tile.x > 0 && tile.x < map_size.x && tile.y > 0 && tile.y < map_size.y)
   {
+    
     int position_in_array = tile.y * map_size.x + tile.x;
-    Vec2di position_of_wall = {tile.x * walls_size, tile.y * walls_size};
-    walls_vector[position_in_array] = std::make_unique<Wall>(position_of_wall);
+    Vec2df position_of_wall = {static_cast<float>(tile.x * walls_size), 
+                              static_cast<float>(tile.y * walls_size)};
+    if(type_ == eEditorObject::Wall)
+    {
+      walls_vector[position_in_array] = std::make_unique<Wall>(position_of_wall);
+    }
+    if(type_ == eEditorObject::GreyGround)
+    {
+      
+      ground_vector[position_in_array] = std::make_unique<Ground>(position_of_wall);
+    }
   }
  }
 
@@ -132,6 +161,7 @@ GameData::createWall(const Vec2di& mouse_position_in_world_)
 void 
 GameData::update()
 {
+
   g_UI.update(player);
   
   player.update();

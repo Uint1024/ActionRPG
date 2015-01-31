@@ -2,9 +2,10 @@
 #include "GameData.h"
 #include "Utils.h"
 #include "ConditionState.h"
+#include <sstream>
 
 Fire::Fire(Player* const player_) :
-Weapon(50, 1.0f, 5, 0, player_, 80, 70, 500), temperature(0)
+Weapon(50, 1.0f, 5, 0, player_, 800, 70, 500, false), temperature(0)
 {
   conditions_states[State_Burning] = new ConditionState(10000, 10000, 300, 160);
 }
@@ -13,7 +14,7 @@ void
 Fire::shoot(GameData* game_data_, const Vec2df player_center_, 
                    const float angle_) 
 {
-  if(temperature < 1000 && ammo > 0 && canShoot())
+  if(!overheating && ammo > 0 && canShoot())
   {
     --ammo;
     temperature += 30;
@@ -27,10 +28,43 @@ Fire::shoot(GameData* game_data_, const Vec2df player_center_,
   }
 }
 
-void Fire::update() {
-  if(temperature > 0)
+void Fire::update() 
+{
+  auto next_possible_shot = last_shot + shooting_delay;
+  auto current_time = currentTime();
+  if(current_time > next_possible_shot && temperature > 0)
   {
-    --temperature;
+    temperature -= 0.2 * g_delta_t;
+  }
+  
+  if(temperature < 0) temperature = 0;
+  
+
+  if(temperature >= 1000)
+  {
+    overheating = true;
+  }
+  
+  if(overheating && temperature == 0)
+  {
+    overheating = false;
+  }
+}
+
+std::string
+Fire::getAmmoString() const 
+{
+  std::ostringstream oss;
+  
+  if(overheating)
+  {
+    oss << ammo << "/" << (int)temperature << " !OVERHEAT!";
+    return oss.str();
+  }
+  else
+  {
+    oss << ammo << "/" << (int)temperature << "C";
+    return oss.str();
   }
 }
 

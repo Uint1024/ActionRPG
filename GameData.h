@@ -13,11 +13,14 @@
 #include "NPC.h"
 #include "Wall.h"
 #include "Weapon.h"
+#include "Ground.h"
 #include <SDL.h>
 #include <map>
 #include <vector>
 #include <memory>
 #include <random>
+
+
 
 class GameData{
 public:
@@ -31,19 +34,22 @@ public:
               const std::array<bool, 255>& mouse_buttons_down_,
               const Vec2di& mouse_position_, 
               const Vec2di& mouse_position_in_world_);
-  void createWall(const Vec2di& mouse_position_in_world_);
+  void createObject(const Vec2di& mouse_position_in_world_,
+                    const eEditorObject type_);
   
   void update();
   void createProjectile(const Vec2df origin_, const float angle_,
                         const int speed_, const int damage_,
                         Weapon* shot_by_);
   const Vec2df& getCamera() const;
+  
+  Vec2di getMapSize() const { return map_size; }
 private:
   Player player;
   std::map<eTexture, Vec2di> textures_render_size;
   std::vector<std::unique_ptr<NPC>> npcs_vector;
   std::vector<std::unique_ptr<Wall>> walls_vector;
-  //std::vector<std::unique_ptr<Ground>> ground_vector;
+  std::vector<std::unique_ptr<Ground>> ground_vector;
   Vec2df camera;
   std::vector<std::unique_ptr<Projectile>> projectiles_vector;
   uint wave;

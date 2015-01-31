@@ -18,9 +18,12 @@ public:
   void shoot(GameData* game_data_, const Vec2df player_center_,
           const float angle_) override;
   void update() override;
+  virtual std::string getAmmoString() const;
+
   
 private:
-  int temperature;
+  float temperature;
+  bool overheating;
 };
 
 #endif	/* FIRE_H */

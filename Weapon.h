@@ -25,11 +25,15 @@ public:
   virtual void reload();
   std::pair<int, int> getAmmo() const;
   
+  
+  //some weapon have magazines, some don't, some can overheat etc.
+  virtual std::string getAmmoString() const = 0;
+  
 protected:
   Weapon(const int shooting_delay_, const int bullets_speed_, 
           const int damage_, const float spread_,
           Player* const player_, const int ammo_, const  int magazine_size_, 
-          const int reload_time_ms_);
+          const int reload_time_ms_, const bool currently_equipped_);
   bool canShoot() const;
   
   Milliseconds shooting_delay;
@@ -45,6 +49,7 @@ protected:
   int current_magazine;
   int reload_time_ms;//reload time per ammo
   int reload_timer;
+  bool currently_equipped;
   
 };
 

@@ -15,7 +15,7 @@
 class Wall : public PhysicalObject{
   public:
   Wall();
-  Wall(Vec2df position_);
+  Wall(const Vec2df& position_);
 };
 
 #endif	/* WALL_H */

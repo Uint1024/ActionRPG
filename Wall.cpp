@@ -6,7 +6,7 @@ Wall::Wall()
   
 }
 
-Wall::Wall(Vec2df position_) : 
+Wall::Wall(const Vec2df& position_) : 
 PhysicalObject(position_, eTexture::Wall, Vec2di{64, 64})
 {
   std::cout << "Creating wall" << std::endl;

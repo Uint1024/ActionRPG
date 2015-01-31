@@ -5,12 +5,13 @@
 
 Weapon::Weapon(const int shooting_delay_, const int bullets_speed_, 
         const int damage_, const float spread_, Player* const player_, 
-        const int ammo_, const int magazine_size_, const int reload_time_ms_): 
+        const int ammo_, const int magazine_size_, const int reload_time_ms_,
+        const bool currently_equipped_): 
 shooting_delay(Milliseconds(shooting_delay_)), bullets_speed(bullets_speed_),
         damage(damage_), spread(spread_), player(player_),
         magazine_size(magazine_size_), current_magazine(magazine_size_),
         ammo(ammo_), reload_time_ms(reload_time_ms_), 
-        reload_timer(reload_time_ms_)
+        reload_timer(reload_time_ms_), currently_equipped(currently_equipped_)
 {
   for(int i = 0 ; i < State_Count ; i++)
   {

@@ -1,9 +1,9 @@
 #include "Shotgun.h"
 #include "GameData.h"
-
+#include <sstream>
 
 Shotgun::Shotgun(Player* const player_) :
-Weapon(600, 1.0f, 2500, 400, player_, 80, 8, 200)
+Weapon(600, 1.0f, 2500, 400, player_, 80, 8, 400, true)
 {
   
 }
@@ -36,19 +36,19 @@ Shotgun::shoot(GameData* game_data_, const Vec2df player_center_,
 void
 Shotgun::update()
 {
-  auto k = last_shot + shooting_delay + Milliseconds{500};
+  auto reloading_delay = Milliseconds{500}; 
+  auto next_possible_shot = last_shot + shooting_delay + reloading_delay;
   auto current_time = currentTime();
-  if(current_time > k && current_magazine < magazine_size)
+  if(current_time > next_possible_shot && current_magazine < magazine_size)
   {
     player->reload();
   }
-  
-  //std::cout << current_time.time_since_epoch().count() << " " << k.time_since_epoch().count() << std::endl;
 }
 
 void
 Shotgun::reload()
 {
+  
   reload_timer -= g_delta_t;
       
   if(reload_timer <= 0)
@@ -64,4 +64,11 @@ Shotgun::reload()
       player->stopReloading();
     }
   }
+}
+
+std::string Shotgun::getAmmoString() const 
+{
+  std::ostringstream oss;
+  oss << current_magazine << "/" << ammo;
+  return oss.str();
 }

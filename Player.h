@@ -35,6 +35,7 @@ public:
   void shoot(GameData* game_data_, const Vec2di& mouse_position_in_world_);
   void stopReloading();
   std::pair<int, int> getAmmo() const;
+  Weapon* getCurrentWeapon() const;
   
 private:
     std::chrono::system_clock::time_point last_shot;

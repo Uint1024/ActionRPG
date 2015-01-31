@@ -56,10 +56,9 @@ UI::update(Player& player_)
 {
   hp = std::to_string(player_.getHp());
   
-  std::pair<int, int> ammo = player_.getAmmo();
+  //std::pair<int, int> ammo = player_.getAmmo();
   
-  ammo_string = std::to_string(ammo.first) + " " + std::to_string(ammo.second);
-  
+  ammo_string = player_.getCurrentWeapon()->getAmmoString();  
   
 }
 

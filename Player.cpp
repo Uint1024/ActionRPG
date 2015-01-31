@@ -37,6 +37,9 @@ Player::update()
   {
     reload();
   }
+  
+  //cool down weapons that can overheat
+  weapons_inventory[(int)eWeapon::Fire]->update();
 }
 
 void
@@ -48,7 +51,6 @@ Player::reload()
   }
   else
   {
-
     current_weapon->reload();
   }
 }
@@ -111,7 +113,7 @@ Player::receiveInput(const std::map<eKey, bool>& keys_down_,
     }
   }
   
-  //checkCollisionWithStuff(walls_vector_, movement, bounding_box);
+  checkCollisionWithWalls(walls_vector_, movement);
   
   pos.x += movement.x;
   pos.y += movement.y;
@@ -170,4 +172,9 @@ std::pair<int, int>
 Player::getAmmo() const 
 {
   return current_weapon->getAmmo();
+}
+
+Weapon* Player::getCurrentWeapon() const 
+{
+  return current_weapon;
 }

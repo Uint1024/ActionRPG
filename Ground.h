@@ -13,7 +13,8 @@
 
 class Ground : public PhysicalObject
 {
-  Ground(Vec2df& position_);
+public:
+  Ground(const Vec2df& position_);
 };
 
 #endif	/* GROUND_H */

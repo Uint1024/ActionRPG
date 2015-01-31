@@ -20,7 +20,7 @@ UI g_UI;
 //TODO: global delta_t
 int main(int argc, char **argv)
 {
-  int screen_width = 1200;
+  int screen_width = 1280;
   int screen_height = 720;
   
   //the engine contains the SDL stuff, the textures, and is in charge of
@@ -40,7 +40,6 @@ int main(int argc, char **argv)
   //game_data contains all the objects of the game
   //and the objects templates loaded from the config files
   GameData game_data(screen_width, screen_height);
-  
   //input_manager receive input events and send them to the game objects
   auto input_manager = Input();
    
@@ -54,6 +53,9 @@ int main(int argc, char **argv)
   std::chrono::nanoseconds diff;
   std::chrono::milliseconds diff_ms;
   
+  
+  
+  
   float fps = 0.0f;
 	while (running)
 	{
@@ -65,7 +67,6 @@ int main(int argc, char **argv)
     
     running = input_manager.pollEvents(game_data);
     game_data.update();
-    
     engine->render(game_data);
   
     diff_ms = std::chrono::milliseconds(0);

@@ -39,6 +39,11 @@ using Clock = std::chrono::system_clock;
 using TimePoint = std::chrono::system_clock::time_point;
 using Milliseconds = std::chrono::milliseconds;
 
+enum class eEditorObject {
+  GreyGround,
+  Wall,
+  None
+};
 
 enum class eTexture { 
   Player, 
@@ -58,7 +63,8 @@ enum class eTexture {
 };*/
 
 enum class eKey { Up, Down, Left, Right, Main_Menu, WeaponShotgun,
-                  WeaponFire, WeaponIce, All_keys };
+                  WeaponFire, WeaponIce, GreyGround, GreenGround,
+                  Wall, All_keys };
 
 enum class eDirection { Up, Down, Left, Right, DownLeft, DownRight,
                         UpLeft, UpRight, Front, Back, None };

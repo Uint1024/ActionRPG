@@ -27,6 +27,8 @@ private:
   std::map<eKey, bool> keys_up;
   Vec2di mouse_position; //mouse position in the window
   Vec2di mouse_position_in_world;
+  
+  eEditorObject selected_editor_object;
 };
 
 #endif	/* INPUT_H */
