@@ -124,10 +124,17 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
   {
     createObject(mouse_position_in_world_, eEditorObject::GreyGround);
   }
+  if(mouse_buttons_down_[SDL_BUTTON_MIDDLE])
+  {
+    createObject(mouse_position_in_world_, eEditorObject::Wall);
+  }
  
   camera.x += camera_movement.x;
   camera.y += camera_movement.y;
   
+  /*
+   * Saving map
+   */
   if(keys_down_.at(eKey::Quick_Save))
   {
     std::cout <<"saving" << std::endl;
@@ -135,33 +142,85 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
     
     if(out.is_open())
     {
+      out.write(reinterpret_cast<char *>(&map_size.x), sizeof(map_size.x));
+      out.write(reinterpret_cast<char *>(&map_size.y), sizeof(map_size.y));
+      
       for(auto &ground : ground_vector)
       {
         if(!ground)
         {
-          int no_ground = 0;
-          out.write(reinterpret_cast<char *>(&no_ground), sizeof(no_ground));
+          bool is_ground = false;
+          out.write(reinterpret_cast<char *>(&is_ground), sizeof(is_ground));
         }
         else
         {
-          int yes_ground = 1;
-          float position_x = ground->getPos().x;
-          float position_y = ground->getPos().y;
-          int size_x = ground->getSize().x;
-          int size_y = ground->getSize().y;
+          bool is_ground = true;
+          Vec2df position = ground->getPos();
+          Vec2di size = ground->getSize();
           eTexture texture_id = ground->getTextureId();
           
-          out.write(reinterpret_cast<char *>(&yes_ground), sizeof(yes_ground));
+          out.write(reinterpret_cast<char *>(&is_ground), sizeof(is_ground));
+          out.write(reinterpret_cast<char *>(&position.x), sizeof(position.x));
+          out.write(reinterpret_cast<char *>(&position.y), sizeof(position.y));
+          out.write(reinterpret_cast<char *>(&size.x), sizeof(size.x));
+          out.write(reinterpret_cast<char *>(&size.y), sizeof(size.y));
+          out.write(reinterpret_cast<char *>(&texture_id), sizeof(texture_id));
+        }
+      }
+      
+      for(auto &wall : walls_vector)
+      {
+        if(!wall)
+        {
+          bool is_wall = false;
+          out.write(reinterpret_cast<char *>(&is_wall), sizeof(is_wall));
+        }
+        else
+        {
+          bool is_wall = true;
+          Vec2df position = wall->getPos();
+          Vec2di size = wall->getSize();
+          eTexture texture_id = wall->getTextureId();
+          
+          out.write(reinterpret_cast<char *>(&is_wall), sizeof(is_wall));
+          out.write(reinterpret_cast<char *>(&position.x), sizeof(position.x));
+          out.write(reinterpret_cast<char *>(&position.y), sizeof(position.y));
+          out.write(reinterpret_cast<char *>(&size.x), sizeof(size.x));
+          out.write(reinterpret_cast<char *>(&size.y), sizeof(size.y));
+          out.write(reinterpret_cast<char *>(&texture_id), sizeof(texture_id));
+        }
+      }
+      
+      /*for(auto &npc : npcs_vector)
+      {
+        if(!npc)
+        {
+          int no_npc = 0;
+          out.write(reinterpret_cast<char *>(&no_npc), sizeof(no_npc));
+        }
+        else
+        {
+          int yes_wall = 1;
+          float position_x = wall->getPos().x;
+          float position_y = wall->getPos().y;
+          int size_x = wall->getSize().x;
+          int size_y = wall->getSize().y;
+          eTexture texture_id = wall->getTextureId();
+          
+          out.write(reinterpret_cast<char *>(&yes_wall), sizeof(yes_wall));
           out.write(reinterpret_cast<char *>(&position_x), sizeof(position_x));
           out.write(reinterpret_cast<char *>(&position_y), sizeof(position_y));
           out.write(reinterpret_cast<char *>(&size_x), sizeof(size_x));
           out.write(reinterpret_cast<char *>(&size_y), sizeof(size_y));
           out.write(reinterpret_cast<char *>(&texture_id), sizeof(texture_id));
         }
-      }
+      }*/
     } 
   }
   
+  /*
+   * Loading map
+   */
   if(keys_down_.at(eKey::Quick_Load))
   {
     std::cout <<  "loading" << std::endl;
@@ -169,6 +228,8 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
     
     if(in.is_open())
     {
+      in.read(reinterpret_cast<char *>(&map_size.x), sizeof(map_size.x));
+      in.read(reinterpret_cast<char *>(&map_size.y), sizeof(map_size.y));
       ground_vector.clear();
       ground_vector.reserve(map_size.x * map_size.y);
       for(int i = 0 ; i < map_size.x * map_size.y ; i++)
@@ -178,23 +239,48 @@ GameData::receiveInput(const std::map<eKey, bool>& keys_down_,
       
       for(int i = 0 ; i < map_size.x * map_size.y ; i++)
       {  
-        int is_ground = 0;
-        float position_x = 0;
-        float position_y = 0;
-        int size_x = 0;
-        int size_y = 0;
-        eTexture texture_id = eTexture::None;
-        
+        bool is_ground = false;
         in.read((char*)&is_ground, sizeof(is_ground));
-        if(is_ground != 0)
+        if(is_ground)
         {
-          in.read(reinterpret_cast<char *>(&position_x), sizeof(position_x));
-          in.read(reinterpret_cast<char *>(&position_y), sizeof(position_y));
-          in.read(reinterpret_cast<char *>(&size_x), sizeof(size_x));
-          in.read(reinterpret_cast<char *>(&size_y), sizeof(size_y));
+          Vec2df position = {0.0f, 0.0f};
+          Vec2di size = {0, 0};
+          eTexture texture_id = eTexture::None;
+          
+          in.read(reinterpret_cast<char *>(&position.x), sizeof(position.x));
+          in.read(reinterpret_cast<char *>(&position.y), sizeof(position.y));
+          
+          in.read(reinterpret_cast<char *>(&size.x), sizeof(size.x));
+          in.read(reinterpret_cast<char *>(&size.y), sizeof(size.y));
           in.read(reinterpret_cast<char *>(&texture_id), sizeof(texture_id)); 
-          ground_vector[i] = std::make_unique<Ground>(
-                  Vec2df{position_x, position_y});
+          ground_vector[i] = std::make_unique<Ground>(position);
+        }
+      }
+      
+      walls_vector.clear();
+      walls_vector.reserve(map_size.x * map_size.y);
+      for(int i = 0 ; i < map_size.x * map_size.y ; i++)
+      {
+        walls_vector.emplace_back(std::unique_ptr<Wall>());
+      }
+      
+      for(int i = 0 ; i < map_size.x * map_size.y ; i++)
+      {  
+        bool is_wall = false;
+        in.read((char*)&is_wall, sizeof(is_wall));
+        
+        if(is_wall)
+        {
+          Vec2df position = {0.0f, 0.0f};
+          Vec2di size = {0, 0};
+          eTexture texture_id = eTexture::None;
+          in.read(reinterpret_cast<char *>(&position.x), sizeof(position.x));
+          in.read(reinterpret_cast<char *>(&position.y), sizeof(position.y));
+          
+          in.read(reinterpret_cast<char *>(&size.x), sizeof(size.x));
+          in.read(reinterpret_cast<char *>(&size.y), sizeof(size.y));
+          in.read(reinterpret_cast<char *>(&texture_id), sizeof(texture_id)); 
+          walls_vector[i] = std::make_unique<Wall>(position);
         }
       }
     }
