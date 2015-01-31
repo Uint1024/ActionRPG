@@ -24,12 +24,13 @@ using ConditionStatesArray = std::array<ConditionState*, State_Count>;
 class Character : public PhysicalObject{
 public:
   Character();
-  Character(int x_, int y_, eTexture texture_id_,
-            Vec2di size_, int hp_, int strength_);
+  Character(const Vec2df& position_, const eTexture texture_id_,
+            const Vec2di& size_, const int hp_, const int strength_);
   ~Character();
   void takeDamage(const int damage_, 
           const ConditionStatesArray& conditions_states_);
-  void changeConditions(const ConditionStatesArray& conditions_states_);
+  void changeConditions(const ConditionState* condition_state_,
+                                const eState state_id);
   void addWeaponToInventory(eWeapon type_, std::unique_ptr<Weapon> weapon_);
   void updateConditionState();
   void checkCollisionWithNPCs(const NPCUniquePtrVector& npc_vector_, 

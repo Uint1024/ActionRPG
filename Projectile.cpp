@@ -7,10 +7,10 @@
 Projectile::Projectile() {};
 
 Projectile::Projectile(bool dead_) : 
-        PhysicalObject(0, 0, eTexture::Projectile, Vec2di{0,0}),
+        PhysicalObject(Vec2df{0,0}, eTexture::Projectile, Vec2di{0,0}),
         speed(0), angle(0), damage(0), 
         element_type(eElement::Life), can_hurt_player(false),
-        has_hit(false), distance_travelled(0.0f), dead(dead_)
+        has_hit(false), distance_travelled(0.0f), dead(dead_), shot_by(nullptr)
 {
 }
 
@@ -68,11 +68,12 @@ Projectile::move(const float angle_, const float speed,
 }
 
 void 
-Projectile::renew(int x_, int y_, bool can_hurt_player_, int speed_, 
-        float angle_, int damage_, eElement element_type_, Vec2di size_,
-        Weapon* shot_by_)
+Projectile::renew(const Vec2df& position_, const bool can_hurt_player_, 
+        const int speed_, const float angle_, const int damage_, 
+        const eElement element_type_, const Vec2di& size_, 
+        Weapon* const shot_by_)
 {
-  pos = {(float)x_, (float)y_};
+  pos = position_;
   can_hurt_player = can_hurt_player_;
   speed = speed_;
   angle = angle_;
@@ -83,8 +84,8 @@ Projectile::renew(int x_, int y_, bool can_hurt_player_, int speed_,
   dead = false;
   distance_travelled = 0;
   has_hit = false;
-  bounding_box = Rect{(float)x_, (float)y_, 
-          (float)(x_ + size_.x), (float)(y_ + size_.y)};
+  bounding_box = Rect{pos.x, pos.y, 
+          pos.x + size_.x, pos.y + size_.y};
           
   shot_by = shot_by_;
 }

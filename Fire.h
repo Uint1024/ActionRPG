@@ -14,10 +14,13 @@ class Player;
 class Fire : public Weapon
 {
 public:
-  Fire(Player* player_);
+  Fire(Player* const  player_);
   void shoot(GameData* game_data_, const Vec2df player_center_,
-          float angle_) override;
+          const float angle_) override;
   void update() override;
+  
+private:
+  int temperature;
 };
 
 #endif	/* FIRE_H */

@@ -51,7 +51,8 @@ public:
 protected:
   //protected constructor ensures BaseObject can't be created alone
   PhysicalObject();
-  PhysicalObject(int x_, int y_, eTexture texture_id_, Vec2di size_);
+  PhysicalObject(const Vec2df& position_, const eTexture texture_id_, 
+                  const Vec2di size_);
   bool checkCollision(const PhysicalObject& other_) const;
   bool checkCollision(const Rect& bounding_box_) const;
   

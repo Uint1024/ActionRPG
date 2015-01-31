@@ -20,8 +20,9 @@ public:
                   const std::vector<std::unique_ptr<NPC>>& npcs_vector_);
 protected:
   NPC();
-  NPC(int x_, int y_, std::string name_, eTexture texture_id_, Vec2di size_,
-          int hp_, int strength_);
+  NPC(const Vec2df& position_, const std::string& name_, 
+      const eTexture texture_id_, const Vec2di& size_, 
+      const int hp_, const int strength_);
   bool angry;
   int hp;
 };

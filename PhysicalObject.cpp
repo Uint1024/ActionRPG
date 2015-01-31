@@ -6,14 +6,14 @@
 
 PhysicalObject::PhysicalObject(){}
 
-PhysicalObject::PhysicalObject(int x_, int y_, 
-        eTexture texture_id_, Vec2di size_) : 
-        pos{(float)x_, (float)y_}, texture_id(texture_id_), size(size_),
+PhysicalObject::PhysicalObject(const Vec2df& position_, 
+        const eTexture texture_id_, const Vec2di size_) : 
+        pos(position_), texture_id(texture_id_), size(size_),
         direction_facing(eDirection::DownLeft)
 {  
-  bounding_box = Rect{(float)x_, (float)y_, 
-          (float)(x_ + size_.x), (float)(y_ + size_.y)};
-  center = {x_ + size_.x/2.0f, y_ + size_.y/2.0f};
+  bounding_box = Rect{pos.x, pos.y, 
+          (float)(pos.x + size_.x), (float)(pos.y + size_.y)};
+  center = {pos.x + size_.x/2.0f, pos.y + size_.y/2.0f};
 }
 
 

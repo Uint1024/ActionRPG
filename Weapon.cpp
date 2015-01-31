@@ -2,16 +2,10 @@
 #include <iostream>
 
 
-Weapon::Weapon():
-shooting_delay(0), bullets_speed(0),
-damage(0), spread(0.0f)
-{
-  
-}
 
-Weapon::Weapon(int shooting_delay_, int bullets_speed_, int damage_, 
-        float spread_, Player* player_, int ammo_, int magazine_size_, 
-        int reload_time_ms_): 
+Weapon::Weapon(const int shooting_delay_, const int bullets_speed_, 
+        const int damage_, const float spread_, Player* const player_, 
+        const int ammo_, const int magazine_size_, const int reload_time_ms_): 
 shooting_delay(Milliseconds(shooting_delay_)), bullets_speed(bullets_speed_),
         damage(damage_), spread(spread_), player(player_),
         magazine_size(magazine_size_), current_magazine(magazine_size_),

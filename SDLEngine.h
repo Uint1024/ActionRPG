@@ -26,16 +26,14 @@ private:
   SDL_Window* window;
   SDL_Renderer* renderer;
   Uint32 pixel_format; //pixel format of the window, used with SDL_RenderCopy
-  SDL_Texture* characters_texture;
-  SDL_Texture* walls_texture;
   
+  //sprite that can be rendered in multiple directions
   std::map<eTexture, std::map<eDirection, SDL_Rect>> dynamic_texture_src_rect;
+  
+  //sprite that have only 1 possible direction (walls)
   std::map<eTexture, SDL_Rect> static_texture_src_rect;
   
-  //link an eTexture enum to a Texture struct that contains front and back
-  //texture enums
-  //std::map<eTexture, eTexture> texture_front;
-  //std::map<eTexture, eTexture> texture_back;
+  SDL_Texture* texture_sheets[TextureSheet_Count];
   float zoom_level;
 };
 

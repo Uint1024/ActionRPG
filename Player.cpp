@@ -13,8 +13,9 @@ Player::Player() : Character()
 
 }
 
-Player::Player(std::string name_, int x_, int y_, Vec2di size_) : 
-        Character(x_, y_, eTexture::Player, size_, 100, 0),
+Player::Player(const std::string& name_, const Vec2df& position_, 
+        const Vec2di& size_) : 
+        Character(position_, eTexture::Player, size_, 100, 0),
         last_shot(std::chrono::system_clock::now()), 
         current_weapon(nullptr), reloading(false)
 {
@@ -24,7 +25,7 @@ Player::Player(std::string name_, int x_, int y_, Vec2di size_) :
   
   current_weapon = &*weapons_inventory[(int)eWeapon::Shotgun];
   
-  conditions_states[State_Burning] = new ConditionState{5000, 5000};
+ // conditions_states[State_Burning] = new ConditionState{5000, 5000};
 }
 
 void 

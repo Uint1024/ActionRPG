@@ -22,8 +22,7 @@
 class GameData{
 public:
   GameData(int screen_width_, int screen_height_);
-  void render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
-              SDL_Texture* walls_texture_,
+  void render(SDL_Renderer* renderer_, SDL_Texture** texture_sheets_,
               const std::map<eTexture, std::map<eDirection, SDL_Rect>>&
                   dynamic_texture_src_rect_,
               const std::map<eTexture, SDL_Rect>& static_texture_src_rect,
@@ -44,6 +43,7 @@ private:
   std::map<eTexture, Vec2di> textures_render_size;
   std::vector<std::unique_ptr<NPC>> npcs_vector;
   std::vector<std::unique_ptr<Wall>> walls_vector;
+  //std::vector<std::unique_ptr<Ground>> ground_vector;
   Vec2df camera;
   std::vector<std::unique_ptr<Projectile>> projectiles_vector;
   uint wave;

@@ -23,6 +23,18 @@ struct ConditionState{
   int duration;
   int time_left;//in milliseconds
   int effect_power;
+  int projectile_transmission_probability; //min 0, max 10000, so 1000 is 10%, 100 is 1%
+  int contact_transmission_probability;
+  
+  ConditionState(int duration_, int effect_power_, 
+  int projectile_transmission_probability_, 
+  int contact_transmission_probability_) :
+  duration(duration_), time_left(duration_), effect_power(effect_power_),
+  projectile_transmission_probability(projectile_transmission_probability_),
+  contact_transmission_probability(contact_transmission_probability_)
+  {
+    
+  }
 };
 
 #endif	/* CONDITIONSTATE_H */

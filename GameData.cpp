@@ -15,8 +15,8 @@ int p = 0;
 
 GameData::GameData(int screen_width_, int screen_height_) :
 camera{0,0}, wave(1),
-player("John", screen_width_/2.0f - 64/2, 
-          screen_height_/2.0f - 64/2,
+player(std::string("John"), Vec2df{screen_width_/2.0f - 64/2, 
+          screen_height_/2.0f - 64/2},
           Vec2di{64,64})        
 {
   walls_size = 64;
@@ -31,13 +31,6 @@ player("John", screen_width_/2.0f - 64/2,
   /*player = Player("John", screen_width_/2 - 64/2, 
           screen_height_/2 - 64/2,
           textures_render_size[eTexture::Player]);*/
-
-  npcs_vector.emplace_back(std::make_unique<Zombie>(200, 200, 
-          "John John", textures_render_size[eTexture::Zombie]));
- npcs_vector.emplace_back(std::make_unique<Zombie>(300, 200, 
-          "John John", textures_render_size[eTexture::Zombie]));
-  npcs_vector.emplace_back(std::make_unique<Zombie>(400, 200, 
-          "John John", textures_render_size[eTexture::Zombie]));
   
   walls_vector.reserve(map_size.x * map_size.y);
   for(int i = 0 ; i < map_size.x * map_size.y ; i++)
@@ -57,35 +50,38 @@ player("John", screen_width_/2.0f - 64/2,
 }
 
 void 
-GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
-        SDL_Texture* walls_texture_,
+GameData::render(SDL_Renderer* renderer_, SDL_Texture** texture_sheets_,
         const std::map<eTexture, std::map<eDirection, SDL_Rect>>&
                   dynamic_texture_src_rect_,
         const std::map<eTexture, SDL_Rect>& static_texture_src_rect,
         float zoom_level_)
 {
-  player.renderDynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+  
+  player.renderDynamic(renderer_, texture_sheets_[TextureSheet_Characters], 
+          dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   if(player.getConditionsStates()[State_Burning])
   {
-    player.renderBurningFlames(renderer_, characters_texture_,
+    player.renderBurningFlames(renderer_, texture_sheets_[TextureSheet_Characters],
             dynamic_texture_src_rect_, textures_render_size, camera);
   }
   
   for(auto &npc : npcs_vector)
   {
-    npc->renderDynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+    npc->renderDynamic(renderer_, texture_sheets_[TextureSheet_Characters], 
+            dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
     if(npc->getConditionsStates()[State_Burning])
     {
-      npc->renderBurningFlames(renderer_, characters_texture_, 
+      npc->renderBurningFlames(renderer_, texture_sheets_[TextureSheet_Characters], 
               dynamic_texture_src_rect_, textures_render_size, camera);
     }
   }
   
   for (auto& i : projectiles_vector)
   {
-    i->renderDynamic(renderer_, characters_texture_, dynamic_texture_src_rect_, 
+    i->renderDynamic(renderer_, texture_sheets_[TextureSheet_Characters], 
+            dynamic_texture_src_rect_, 
           textures_render_size, camera, zoom_level_);
   }
   
@@ -93,7 +89,8 @@ GameData::render(SDL_Renderer* renderer_, SDL_Texture* characters_texture_,
   {
     if(wall)
     {
-      wall->renderStatic(renderer_, walls_texture_, static_texture_src_rect, 
+      wall->renderStatic(renderer_, texture_sheets_[TextureSheet_Walls], 
+              static_texture_src_rect, 
             textures_render_size, camera, zoom_level_);
     }
   }
@@ -205,7 +202,8 @@ GameData::update()
               break;  
           }
           
-          npcs_vector.emplace_back(std::make_unique<Zombie>(x, y, 
+          npcs_vector.emplace_back(std::make_unique<Zombie>(
+                    Vec2df{(float)x, (float)y}, 
                     "John John", textures_render_size[eTexture::Zombie]));
         }
         break;
@@ -229,7 +227,7 @@ GameData::createProjectile(const Vec2df origin_, const float angle_,
                                 
                                 
   if(dead_projectile != projectiles_vector.end()){
-    (*dead_projectile)->renew(origin_.x, origin_.y, false, speed_, angle_, 
+    (*dead_projectile)->renew(origin_, false, speed_, angle_, 
                               damage_, eElement::Fire,
                               textures_render_size[eTexture::Projectile],
                               shot_by_);

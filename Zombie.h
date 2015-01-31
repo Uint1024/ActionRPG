@@ -17,7 +17,7 @@
 class Zombie : public NPC{
   public:
     Zombie();
-    Zombie(int x_, int y_, std::string name_, Vec2di size_);
+    Zombie(const Vec2df& position_, const std::string& name_, const Vec2di& size_);
     void update(const Player& player, 
                 const std::vector<std::unique_ptr<Wall>>& walls_vector_,
                 const std::vector<std::unique_ptr<NPC>>& npcs_vector_) override;

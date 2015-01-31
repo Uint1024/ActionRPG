@@ -3,8 +3,9 @@
 #include "Wall.h"
 Zombie::Zombie(){};
 
-Zombie::Zombie(int x_, int y_, std::string name_, Vec2di size_):
-NPC(x_, y_, name_, eTexture::Zombie, size_, 5000, 5)
+Zombie::Zombie(const Vec2df& position_, const std::string& name_,
+        const Vec2di& size_):
+NPC(position_, name_, eTexture::Zombie, size_, 5000, 5)
 {
   std::cout << "calling Zombie constructor" << std::endl;
 }

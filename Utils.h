@@ -46,6 +46,9 @@ enum class eTexture {
   Projectile, 
   Wall,
   Burning,
+  
+  GroundGrey,
+  GroundGrass,
   None 
 };
   
@@ -70,6 +73,18 @@ enum class eWeapon {
   Poison, 
   Earth,
   Weapon_count
+};
+
+enum class eWeaponState {
+  Overheating,
+  Reloading
+};
+
+enum eTextureSheet {
+  TextureSheet_Walls,
+  TextureSheet_Characters,
+  TextureSheet_Ground,
+  TextureSheet_Count
 };
 
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };

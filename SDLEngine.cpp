@@ -55,14 +55,23 @@ zoom_level(1)
       throw std::runtime_error (SDL_GetError());
   }  
   
-  characters_texture = IMG_LoadTexture(renderer, "images/characters.png");
-  if(characters_texture == NULL)
+  texture_sheets[TextureSheet_Characters] = 
+          IMG_LoadTexture(renderer, "images/characters.png");
+  if(texture_sheets[TextureSheet_Characters] == NULL)
   {
      throw std::runtime_error (SDL_GetError());
   }
   
-  walls_texture = IMG_LoadTexture(renderer, "images/walls.png");
-  if(walls_texture == NULL)
+  texture_sheets[TextureSheet_Walls] = 
+          IMG_LoadTexture(renderer, "images/walls.png");
+  if(texture_sheets[TextureSheet_Walls] == NULL)
+  {
+     throw std::runtime_error (SDL_GetError());
+  }
+  
+  texture_sheets[TextureSheet_Ground] = 
+          IMG_LoadTexture(renderer, "images/ground.png");
+  if(texture_sheets[TextureSheet_Ground] == NULL)
   {
      throw std::runtime_error (SDL_GetError());
   }
@@ -88,6 +97,9 @@ zoom_level(1)
   dynamic_texture_src_rect[eTexture::Projectile][eDirection::Back] = 
           SDL_Rect{256, 0, 32, 32};
           
+  //ground.png
+  static_texture_src_rect[eTexture::GroundGrey] = SDL_Rect{0, 0, 256, 256};        
+  static_texture_src_rect[eTexture::GroundGrass] = SDL_Rect{0, 256, 256, 256};       
 }
         
 SDLEngine::~SDLEngine()
@@ -108,8 +120,7 @@ SDLEngine::render(GameData& game_data_)
   SDL_RenderClear(renderer);
 
   SDL_SetRenderDrawColor(renderer, 110, 233, 0, 255);
-  game_data_.render(renderer, characters_texture, 
-          walls_texture, dynamic_texture_src_rect, static_texture_src_rect,
+  game_data_.render(renderer, texture_sheets, dynamic_texture_src_rect, static_texture_src_rect,
           zoom_level);
   g_UI.render(renderer);
   SDL_RenderDrawLine(renderer, 50, 100, 100, 200);

@@ -18,8 +18,10 @@ class Projectile : public PhysicalObject{
 public:
   Projectile();
    Projectile(bool dead_);
-  void renew(int x_, int y_, bool can_hurt_player_, int speed_, float angle_, 
-          int damage_, eElement element_type_, Vec2di size_, Weapon* shot_by_);
+  void renew(const Vec2df& position_, const bool can_hurt_player_, 
+              const int speed_, const float angle_, 
+              const int damage_, const eElement element_type_, 
+              const Vec2di& size_, Weapon* const shot_by_);
   void update(const std::vector<std::unique_ptr<Wall>>& walls_vector_,
         const std::vector<std::unique_ptr<NPC>>& npcs_vector_);
   bool checkCollisionWithCharacter(const Rect& bounding_box_, int& hp);

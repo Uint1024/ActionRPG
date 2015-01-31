@@ -2,7 +2,7 @@
 #include "GameData.h"
 
 
-Shotgun::Shotgun(Player* player_) :
+Shotgun::Shotgun(Player* const player_) :
 Weapon(600, 1.0f, 2500, 400, player_, 80, 8, 200)
 {
   
@@ -10,7 +10,7 @@ Weapon(600, 1.0f, 2500, 400, player_, 80, 8, 200)
 
 void
 Shotgun::shoot(GameData* game_data_, const Vec2df player_center_, 
-                   float angle_) 
+                   const float angle_) 
 {
   
   if(current_magazine > 0 && canShoot())
