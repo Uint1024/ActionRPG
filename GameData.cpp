@@ -4,8 +4,9 @@
 #include "Utils.h"
 #include "Shotgun.h"
 #include "Ground.h"
-
+#include "FastOrange.h"
 #include "Zombie.h"
+#include "Bomber.h"
 #include "NPC.h"
 #include "UI.h"
 
@@ -26,6 +27,8 @@ player(std::string("John"), Vec2df{screen_width_/2.0f - 64/2,
   //TODO: move to SDLEngine... maybe
   textures_render_size.emplace(eTexture::Player, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Zombie, Vec2di{64, 64});
+  textures_render_size.emplace(eTexture::FastOrange, Vec2di{64, 64});
+  textures_render_size.emplace(eTexture::Bomber, Vec2di{64, 64});
   textures_render_size.emplace(eTexture::Wall, Vec2di{64,64});
   textures_render_size.emplace(eTexture::Projectile, Vec2di{32, 32});
   textures_render_size.emplace(eTexture::GroundGrey, Vec2di{64, 64});
@@ -389,9 +392,8 @@ GameData::update()
               break;  
           }
           
-          npcs_vector.emplace_back(std::make_unique<Zombie>(
-                    Vec2df{(float)x, (float)y}, 
-                    "John John", textures_render_size[eTexture::Zombie]));
+          npcs_vector.emplace_back(std::make_unique<Bomber>(
+                    Vec2df{(float)x, (float)y}, textures_render_size[eTexture::FastOrange]));
         }
         break;
       default:

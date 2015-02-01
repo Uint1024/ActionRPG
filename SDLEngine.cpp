@@ -88,6 +88,14 @@ zoom_level(1)
           SDL_Rect{128, 0, 128, 128};
   dynamic_texture_src_rect[eTexture::Zombie][eDirection::Back] = 
           SDL_Rect{128, 128, 128, 128};
+  dynamic_texture_src_rect[eTexture::FastOrange][eDirection::Front] = 
+          SDL_Rect{768, 0, 128, 128};
+  dynamic_texture_src_rect[eTexture::FastOrange][eDirection::Back] = 
+          SDL_Rect{768, 128, 128, 128};
+  dynamic_texture_src_rect[eTexture::Bomber][eDirection::Front] = 
+          SDL_Rect{512, 256, 128, 128};
+  dynamic_texture_src_rect[eTexture::Bomber][eDirection::Back] = 
+          SDL_Rect{512, 384, 128, 128};
   dynamic_texture_src_rect[eTexture::Burning][eDirection::Front] = 
           SDL_Rect{256, 128, 128, 128};
   dynamic_texture_src_rect[eTexture::Burning][eDirection::Back] = 

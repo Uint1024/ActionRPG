@@ -48,6 +48,8 @@ enum class eEditorObject {
 enum class eTexture { 
   Player, 
   Zombie,
+  FastOrange,
+  Bomber,
   Projectile, 
   Wall,
   Burning,
@@ -62,12 +64,39 @@ enum class eTexture {
   eTexture back;
 };*/
 
-enum class eKey { Up, Down, Left, Right, Main_Menu, WeaponShotgun,
-                  WeaponFire, WeaponIce, GreyGround, GreenGround,
-                  Wall, Quick_Save, Quick_Load, All_keys };
+enum class eKey { 
+  Up, 
+  Down, 
+  Left, 
+  Right, 
+  Main_Menu, 
+  WeaponShotgun,
+                  
+  WeaponFire, 
+  WeaponIce, 
+  GreyGround, 
+  GreenGround,
+                  
+  Wall, 
+  Quick_Save, 
+  Quick_Load, 
+  All_keys 
+};
 
-enum class eDirection { Up, Down, Left, Right, DownLeft, DownRight,
-                        UpLeft, UpRight, Front, Back, None };
+enum class eDirection { 
+  Up, 
+  Down, 
+  Left, 
+  Right, 
+  DownLeft, 
+  DownRight,
+  
+  UpLeft,   
+  UpRight, 
+  Front, 
+  Back, 
+  None 
+};
 
 
 
