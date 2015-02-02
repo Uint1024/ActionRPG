@@ -1,6 +1,6 @@
 #include "FastOrange.h"
 #include "Player.h"
-
+#include "Globals.h"
 FastOrange::FastOrange(const Vec2df& position_, const Vec2di& size_):
 NPC(position_, " ", eTexture::FastOrange, size_, 5000, 5) 
 {

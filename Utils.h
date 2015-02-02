@@ -7,12 +7,12 @@
 
 #ifndef UTILS_H
 #define	UTILS_H
-#include "UI.h"
+//#include "UI.h"
 
 #include <random>
 #include <chrono>
 #include <memory>
-
+#include <SDL.h>
 class NPC;
 class Wall;
 using uint = unsigned int;
@@ -56,6 +56,10 @@ enum class eTexture {
   
   GroundGrey,
   GroundGrass,
+  
+  UI_Shotgun,
+  UI_FireWeapon,
+  UI_IceWeapon,
   None 
 };
   
@@ -80,6 +84,9 @@ enum class eKey {
   Wall, 
   Quick_Save, 
   Quick_Load, 
+  
+  Inventory,
+  Character_Sheet,
   All_keys 
 };
 
@@ -119,15 +126,13 @@ enum eTextureSheet {
   TextureSheet_Walls,
   TextureSheet_Characters,
   TextureSheet_Ground,
+  TextureSheet_UI,
   TextureSheet_Count
 };
 
 enum class eElement { Fire, Water, Earth, Nature, Air, Life, Death };
                       
-extern float g_delta_t;
-extern std::random_device g_random_device;
-extern std::mt19937 g_mt19937;
-extern UI g_UI;
+
 
 bool checkCollisionBetweenBoxes(const Rect& first, const Rect& second);
 void updateBoundingBox(Rect& bounding_box, const Vec2df& movement);
@@ -142,7 +147,6 @@ extern std::chrono::system_clock::time_point (&currentTime)();
 
 using NPCUniquePtrVector = std::vector<std::unique_ptr<NPC>>;
 using WallUniquePtrVector = std::vector<std::unique_ptr<Wall>>;
-
 
 #endif	/* UTILS_H */
 

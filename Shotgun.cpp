@@ -1,4 +1,5 @@
 #include "Shotgun.h"
+#include "Globals.h"
 #include "GameData.h"
 #include <sstream>
 

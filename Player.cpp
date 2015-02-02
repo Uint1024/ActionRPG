@@ -3,6 +3,7 @@
 #include "Shotgun.h"
 #include "Fire.h"
 #include "GameData.h"
+#include "Globals.h"
 #include <iostream>
 #include <SDL.h>
 #include <cmath>

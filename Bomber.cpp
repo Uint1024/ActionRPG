@@ -1,6 +1,6 @@
 #include "Bomber.h"
 #include "Player.h"
-
+#include "Globals.h"
 Bomber::Bomber(const Vec2df& position_, const Vec2di& size_):
 NPC(position_, " ", eTexture::Bomber, size_, 5000, 5) 
 {

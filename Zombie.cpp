@@ -1,6 +1,7 @@
 #include "Zombie.h"
 #include "PhysicalObject.h"
 #include "Wall.h"
+#include "Globals.h"
 Zombie::Zombie(){};
 
 Zombie::Zombie(const Vec2df& position_, const std::string& name_,

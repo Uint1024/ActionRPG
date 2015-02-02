@@ -2,6 +2,7 @@
 #include "Projectile.h"
 #include "NPC.h"
 #include "Wall.h"
+#include "Globals.h"
 #include <algorithm>
 #include <random>
 

@@ -1,6 +1,7 @@
 #include "Fire.h"
 #include "GameData.h"
 #include "Utils.h"
+#include "Globals.h"
 #include "ConditionState.h"
 #include <sstream>
 

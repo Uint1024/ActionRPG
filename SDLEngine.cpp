@@ -1,5 +1,6 @@
 #include "SDLEngine.h"
 #include "GameData.h"
+#include "Globals.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -76,6 +77,13 @@ zoom_level(1)
      throw std::runtime_error (SDL_GetError());
   }
   
+  texture_sheets[TextureSheet_UI] = 
+          IMG_LoadTexture(renderer, "images/ui.png");
+  if(texture_sheets[TextureSheet_UI] == NULL)
+  {
+     throw std::runtime_error (SDL_GetError());
+  }
+  
   //walls.png
   static_texture_src_rect.emplace(eTexture::Wall, SDL_Rect{0, 0, 128, 128});
   
@@ -107,7 +115,11 @@ zoom_level(1)
           
   //ground.png
   static_texture_src_rect[eTexture::GroundGrey] = SDL_Rect{0, 0, 256, 256};        
-  static_texture_src_rect[eTexture::GroundGrass] = SDL_Rect{0, 256, 256, 256};       
+  static_texture_src_rect[eTexture::GroundGrass] = SDL_Rect{0, 256, 256, 256};  
+  
+  //ui.png
+  static_texture_src_rect[eTexture::UI_Shotgun] = SDL_Rect{0, 0, 256, 128};       
+  static_texture_src_rect[eTexture::UI_FireWeapon] = SDL_Rect{0, 128, 256, 128};       
 }
         
 SDLEngine::~SDLEngine()
@@ -130,7 +142,7 @@ SDLEngine::render(GameData& game_data_)
   SDL_SetRenderDrawColor(renderer, 110, 233, 0, 255);
   game_data_.render(renderer, texture_sheets, dynamic_texture_src_rect, static_texture_src_rect,
           zoom_level);
-  g_UI.render(renderer);
+  g_UI.render(renderer, texture_sheets, static_texture_src_rect);
   SDL_RenderDrawLine(renderer, 50, 100, 100, 200);
 
   SDL_RenderPresent(renderer);

@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "NPC.h"
 #include "Wall.h"
+#include "Globals.h"
 #include <cmath>
 Projectile::Projectile() {};
 

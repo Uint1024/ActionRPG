@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "GameData.h"
 #include "UI.h"
+#include "Globals.h"
 #include <SDL.h>
 
 #include <iostream>

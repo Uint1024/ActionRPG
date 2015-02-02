@@ -9,7 +9,7 @@
 #include "Bomber.h"
 #include "NPC.h"
 #include "UI.h"
-
+#include "Globals.h"
 #include <vector>
 #include <algorithm>
 #include <memory>

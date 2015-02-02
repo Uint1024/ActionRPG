@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "GameData.h"
+#include "Globals.h"
 #include <SDL.h>
 #include <iostream>
 
@@ -15,8 +16,10 @@ Input::Input() : selected_editor_object(eEditorObject::None)
   keymap.emplace(SDL_SCANCODE_N, eKey::GreenGround);
   keymap.emplace(SDL_SCANCODE_B, eKey::GreyGround);
   keymap.emplace(SDL_SCANCODE_V, eKey::Wall);
-  keymap.emplace(SDL_SCANCODE_O, eKey::Quick_Save);
-  keymap.emplace(SDL_SCANCODE_Y, eKey::Quick_Load);
+  keymap.emplace(SDL_SCANCODE_F5, eKey::Quick_Save);
+  keymap.emplace(SDL_SCANCODE_F9, eKey::Quick_Load);
+  keymap.emplace(SDL_SCANCODE_I, eKey::Inventory);
+  keymap.emplace(SDL_SCANCODE_C, eKey::Character_Sheet);
   
   for(int i = 0 ; i < (int)eKey::All_keys ; i++)
   {
@@ -80,6 +83,8 @@ Input::pollEvents(GameData& game_data_)
     selected_editor_object = eEditorObject::Wall;
   }
   game_data_.receiveInput(keys_down, mouse_buttons_down, mouse_position,
+          mouse_position_in_world);
+  g_UI.receiveInput(keys_down, mouse_buttons_down, mouse_position,
           mouse_position_in_world);
   
   return true;
